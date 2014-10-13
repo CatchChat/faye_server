@@ -38,3 +38,14 @@ gem 'spring',        group: :development
 # Use debugger
 # gem 'debugger', group: [:development, :test]
 
+group :development, :test do
+  gem "pry"
+  gem 'rspec-rails'
+  gem 'rspec-expectations'
+  gem 'factory_girl_rails'
+  gem 'database_cleaner'
+  gem 'vcr'
+  gem 'webmock'
+  gem 'guard-rspec'
+end
+
