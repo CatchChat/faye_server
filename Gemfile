@@ -47,5 +47,6 @@ group :development, :test do
   gem 'vcr'
   gem 'webmock'
   gem 'guard-rspec'
+  gem 'sqlite3'
 end
 
