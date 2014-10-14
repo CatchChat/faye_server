@@ -20,6 +20,7 @@ class QiniuCdn
         options.fetch(:key),        # 最终资源名，可省略，即缺省为“创建”语义
         options.fetch(:expires_in, 3600) # 相对有效期，可省略，缺省为3600秒后 uptoken 过期
     )
+    put_policy.callback_url = options.fetch :callback_url
     Qiniu::Auth.generate_uptoken(put_policy)
 
   end

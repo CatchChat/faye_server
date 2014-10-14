@@ -18,8 +18,9 @@ describe Cdn do
   it "provide upload token for qiniu" do
     cdn = Cdn.new(@qiniu_client, @init_hash)
     qiniu_upload_token = cdn.get_upload_token bucket: 'test-bucket',
-                                                 key: 'test-key'
-    expect(qiniu_upload_token).to eq "BBHE3ccYQ8VQhEIvZbJARrte1U3ic2Om6CW7mxvN:2QT_sgcTpWFpAbieIFTAYKeDilQ=:eyJzY29wZSI6InRlc3QtYnVja2V0OnRlc3Qta2V5IiwiZGVhZGxpbmUiOjEzODg1MDkyMDB9"
+                                                 key: 'test-key',
+                                        callback_url: 'http://localhost/callback'
+    expect(qiniu_upload_token).to eq "BBHE3ccYQ8VQhEIvZbJARrte1U3ic2Om6CW7mxvN:PjdZY4UCUxMfZ-obI1TaXbgd2dg=:eyJzY29wZSI6InRlc3QtYnVja2V0OnRlc3Qta2V5IiwiY2FsbGJhY2tVcmwiOiJodHRwOi8vbG9jYWxob3N0L2NhbGxiYWNrIiwiZGVhZGxpbmUiOjEzODg1MDkyMDB9"
   end
 
   it "provide download url for qiniu" do
