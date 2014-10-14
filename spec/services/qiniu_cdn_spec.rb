@@ -1,6 +1,7 @@
 require 'rails_helper'
 require 'timecop'
 require 'vcr_helper'
+require 'services_helper'
 describe Cdn do
   before do
 
