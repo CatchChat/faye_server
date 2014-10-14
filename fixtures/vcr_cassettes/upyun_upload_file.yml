@@ -1,0 +1,48 @@
+---
+http_interactions:
+- request:
+    method: put
+    uri: http://v0.api.upyun.com/ruanwz-public/abc.jpg
+    body:
+      encoding: UTF-8
+      string: ''
+    headers:
+      User-Agent:
+      - Faraday v0.9.0
+      Authorization:
+      - UpYun david:d98416c59a032045d6733e91b798e6cb
+      Date:
+      - Tue, 14 Oct 2014 16:18:30 GMT
+      Content-Length:
+      - '0'
+      Content-Type:
+      - application/x-www-form-urlencoded
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+      Accept:
+      - "*/*"
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Server:
+      - vivi/0.3
+      Date:
+      - Tue, 14 Oct 2014 16:18:30 GMT
+      Content-Type:
+      - text/html
+      Transfer-Encoding:
+      - chunked
+      Connection:
+      - keep-alive
+      X-Request-Id:
+      - dabc1746d61a68fa0cf1d671c9bc7e0d
+      Access-Control-Allow-Origin:
+      - "*"
+    body:
+      encoding: UTF-8
+      string: ''
+    http_version: 
+  recorded_at: Tue, 14 Oct 2014 16:18:30 GMT
+recorded_with: VCR 2.9.3

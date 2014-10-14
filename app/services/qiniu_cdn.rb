@@ -4,7 +4,7 @@ class QiniuCdn
   def initialize(keys)
     @access_key = keys.fetch :access_key
     @secret_key = keys.fetch :secret_key
-    @options ||= {}
+    @options ||= keys
     Qiniu.establish_connection! access_key: @access_key,
                                 secret_key: @secret_key
   end
@@ -31,7 +31,6 @@ class QiniuCdn
   end
 
   def get_download_url(args)
-
     @options.merge! args
         url = options.fetch(:url)
     Qiniu::Auth.authorize_download_url(url)

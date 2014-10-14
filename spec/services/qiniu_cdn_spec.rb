@@ -19,7 +19,6 @@ describe Cdn do
       secret_key = ENV["qiniu_secret_key"]
       @init_hash = {access_key: access_key,
                    secret_key: secret_key}
-      puts @init_hash
       @qiniu_client = QiniuCdn.new @init_hash
       @cdn = Cdn.new(@qiniu_client, @init_hash)
 
@@ -53,4 +52,5 @@ describe Cdn do
 
     end
   end
+
 end
