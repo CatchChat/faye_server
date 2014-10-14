@@ -1,31 +1,56 @@
 require 'rails_helper'
 require 'timecop'
+require 'vcr_helper'
 describe Cdn do
   before do
 
     Timecop.freeze(Time.local(2014))
 
-    access_key = ENV["qiniu_access_key"]
-    secret_key = ENV["qiniu_secret_key"]
-    @init_hash = {access_key: access_key,
-                 secret_key: secret_key}
-    @qiniu_client = QiniuCdn.new @init_hash
   end
 
   after do
     Timecop.return
   end
-  it "provide upload token for qiniu" do
-    cdn = Cdn.new(@qiniu_client, @init_hash)
-    qiniu_upload_token = cdn.get_upload_token bucket: 'test-bucket',
-                                                 key: 'test-key',
-                                        callback_url: 'http://localhost/callback'
-    expect(qiniu_upload_token).to eq "BBHE3ccYQ8VQhEIvZbJARrte1U3ic2Om6CW7mxvN:PjdZY4UCUxMfZ-obI1TaXbgd2dg=:eyJzY29wZSI6InRlc3QtYnVja2V0OnRlc3Qta2V5IiwiY2FsbGJhY2tVcmwiOiJodHRwOi8vbG9jYWxob3N0L2NhbGxiYWNrIiwiZGVhZGxpbmUiOjEzODg1MDkyMDB9"
-  end
 
-  it "provide download url for qiniu" do
-    cdn = Cdn.new(@qiniu_client, @init_hash)
-    qiniu_download_url = cdn.get_download_url url: "http://hello.qiniu.com/a/b/c.jpg"
-    expect(qiniu_download_url).to eq "http://hello.qiniu.com/a/b/c.jpg?e=1388509200&token=BBHE3ccYQ8VQhEIvZbJARrte1U3ic2Om6CW7mxvN:Ff38tdgiw8yFLjzLHrKzwABSogc="
+  context 'qiniu' do
+    before do
+
+      access_key = ENV["qiniu_access_key"]
+      secret_key = ENV["qiniu_secret_key"]
+      @init_hash = {access_key: access_key,
+                   secret_key: secret_key}
+      puts @init_hash
+      @qiniu_client = QiniuCdn.new @init_hash
+      @cdn = Cdn.new(@qiniu_client, @init_hash)
+
+    end
+
+    subject {@cdn}
+
+    it "provide upload token for qiniu" do
+      qiniu_upload_token = subject.get_upload_token bucket: 'ruanwz-public',
+                                                       key: 'test-key',
+                                              callback_url: 'http://localhost/callback'
+      expect(qiniu_upload_token).to eq "BBHE3ccYQ8VQhEIvZbJARrte1U3ic2Om6CW7mxvN:v_Naq9XbxeY_i7HFCniOkR1pOgU=:eyJzY29wZSI6InJ1YW53ei1wdWJsaWM6dGVzdC1rZXkiLCJjYWxsYmFja1VybCI6Imh0dHA6Ly9sb2NhbGhvc3QvY2FsbGJhY2siLCJkZWFkbGluZSI6MTM4ODUwOTIwMH0="
+    end
+
+    it "provide download url for qiniu" do
+      qiniu_download_url = subject.get_download_url url: "http://hello.qiniu.com/a/b/c.jpg"
+      expect(qiniu_download_url).to eq "http://hello.qiniu.com/a/b/c.jpg?e=1388509200&token=BBHE3ccYQ8VQhEIvZbJARrte1U3ic2Om6CW7mxvN:Ff38tdgiw8yFLjzLHrKzwABSogc="
+    end
+
+    it "upload file for qiniu" do
+      Timecop.return
+
+      t = Tempfile.new 'abc'
+      VCR.use_cassette('qiniu_upload_file') do
+        code = subject.upload_file file_location: t.path,
+        bucket: 'ruanwz-public',
+        key: 'test-key'
+
+        expect(code).to eq 200
+      end
+
+    end
   end
 end
