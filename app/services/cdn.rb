@@ -5,7 +5,7 @@ class Cdn
   def_delegators :@provider, :get_upload_token, :get_download_token, :get_download_url, :upload_file
   attr_accessor :options, :provider
   def initialize(provider, options)
-    @options = options
+    @options  = options
     @provider = provider
     provider.prepare(self)
   end

@@ -4,7 +4,7 @@ class QiniuCdn
   def initialize(keys)
     @access_key = keys.fetch :access_key
     @secret_key = keys.fetch :secret_key
-    @options ||= keys
+    @options  ||= keys
     Qiniu.establish_connection! access_key: @access_key,
                                 secret_key: @secret_key
   end
@@ -15,10 +15,9 @@ class QiniuCdn
 
   def get_upload_token(args={})
     options.merge! args
-    put_policy = get_put_policy
+    put_policy              = get_put_policy
     put_policy.callback_url = options.fetch :callback_url
     Qiniu::Auth.generate_uptoken(put_policy)
-
   end
 
   def get_put_policy
@@ -32,7 +31,7 @@ class QiniuCdn
 
   def get_download_url(args)
     @options.merge! args
-        url = options.fetch(:url)
+    url = options.fetch(:url)
     Qiniu::Auth.authorize_download_url(url)
   end
 

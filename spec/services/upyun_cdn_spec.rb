@@ -4,9 +4,7 @@ require 'vcr_helper'
 require 'services_helper'
 describe Cdn do
   before do
-
     Timecop.freeze(Time.local(2014,10,15,0,20))
-
   end
 
   after do
@@ -16,12 +14,11 @@ describe Cdn do
   context 'upyun' do
     before do
 
-      username = ENV["upyun_username"]
-      password = ENV["upyun_password"]
-      @init_hash = {username: username,
-                    password: password}
+      username      = ENV["upyun_username"]
+      password      = ENV["upyun_password"]
+      @init_hash    = {username: username, password: password}
       @upyun_client = UpyunCdn.new @init_hash
-      @cdn = Cdn.new(@upyun_client, @init_hash)
+      @cdn          = Cdn.new(@upyun_client, @init_hash)
 
     end
 
@@ -32,6 +29,7 @@ describe Cdn do
                                                  file_path: '/abc.jpg',
                                                file_length: 100,
                                               callback_url: 'http://localhost/callback'
+
       expect(upyun_upload_token).to eq "UpYun david:388f0cc6e47895ab40180a9fd06148f9"
     end
 
@@ -46,21 +44,14 @@ describe Cdn do
 
       t = Tempfile.new 'abc.jpg'
 
-      upyun_upload_token = subject.get_upload_token bucket: 'ruanwz-public',
-                                                 file_path: '/abc.jpg',
-                                               file_length: 0,
-                                              callback_url: 'http://localhost/callback'
-      subject.get_upload_token
       VCR.use_cassette('upyun_upload_file') do
         code = subject.upload_file file_location: t.path,
-        bucket: 'ruanwz-public',
-        file_path: '/abc.jpg',
-        file_length: File.read(t).length,
-        callback_url: 'http://localhost/callback'
-
+                                          bucket: 'ruanwz-public',
+                                       file_path: '/abc.jpg',
+                                     file_length: File.read(t).length,
+                                    callback_url: 'http://localhost/callback'
         expect(code).to eq 200
       end
-
     end
   end
 

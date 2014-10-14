@@ -4,9 +4,7 @@ require 'vcr_helper'
 require 'services_helper'
 describe Cdn do
   before do
-
     Timecop.freeze(Time.local(2014))
-
   end
 
   after do
@@ -15,14 +13,11 @@ describe Cdn do
 
   context 'qiniu' do
     before do
-
-      access_key = ENV["qiniu_access_key"]
-      secret_key = ENV["qiniu_secret_key"]
-      @init_hash = {access_key: access_key,
-                   secret_key: secret_key}
+      access_key    = ENV["qiniu_access_key"]
+      secret_key    = ENV["qiniu_secret_key"]
+      @init_hash    = {access_key: access_key, secret_key: secret_key}
       @qiniu_client = QiniuCdn.new @init_hash
-      @cdn = Cdn.new(@qiniu_client, @init_hash)
-
+      @cdn          = Cdn.new(@qiniu_client, @init_hash)
     end
 
     subject {@cdn}
@@ -45,8 +40,8 @@ describe Cdn do
       t = Tempfile.new 'abc'
       VCR.use_cassette('qiniu_upload_file') do
         code = subject.upload_file file_location: t.path,
-        bucket: 'ruanwz-public',
-        key: 'test-key'
+                                          bucket: 'ruanwz-public',
+                                             key: 'test-key'
 
         expect(code).to eq 200
       end
