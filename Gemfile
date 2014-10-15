@@ -29,6 +29,7 @@ gem 'spring',        group: :development
 gem 'qiniu'
 gem 'faraday'
 gem 'fog'
+gem 'jpush', '~> 3.1.1'
 # Use ActiveModel has_secure_password
 # gem 'bcrypt', '~> 3.1.7'
 
