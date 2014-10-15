@@ -49,7 +49,6 @@ group :test do
   gem 'vcr'
   gem 'webmock'
   gem 'guard-rspec'
-  gem 'timecop'
   gem 'rspec-rails'
 
   gem 'rspec-expectations'
