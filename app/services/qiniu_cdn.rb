@@ -44,7 +44,4 @@ class QiniuCdn
     code
   end
 
-
-
-
 end
