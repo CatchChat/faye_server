@@ -1,0 +1,38 @@
+---
+http_interactions:
+- request:
+    method: post
+    uri: http://api:key-4eb4b5a344a74b2d1a4671e32a2cc46f@sms-api.luosimao.com/v1/send.json
+    body:
+      encoding: UTF-8
+      string: message=Test+Message+%E3%80%90%E7%A7%92%E8%A7%86%E3%80%91&mobile=15626044835
+    headers:
+      User-Agent:
+      - Faraday v0.9.0
+      Content-Type:
+      - application/x-www-form-urlencoded
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+      Accept:
+      - "*/*"
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Server:
+      - nginx/1.4.2
+      Date:
+      - Wed, 15 Oct 2014 06:41:58 GMT
+      Content-Type:
+      - application/json
+      Transfer-Encoding:
+      - chunked
+      Connection:
+      - keep-alive
+    body:
+      encoding: UTF-8
+      string: '{"error":0,"msg":"ok"}'
+    http_version: 
+  recorded_at: Tue, 31 Dec 2013 16:00:00 GMT
+recorded_with: VCR 2.9.3
