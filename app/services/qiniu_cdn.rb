@@ -10,7 +10,7 @@ class QiniuCdn
   end
 
   def prepare(cdn)
-    options = cdn.options
+    self.options = cdn.options
   end
 
   def get_upload_token(args={})

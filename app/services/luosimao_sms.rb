@@ -12,7 +12,7 @@ class LuosimaoSms
   end
 
   def prepare(sms)
-    options = sms.options
+    self.options = sms.options
   end
 
   def send_sms(args)
