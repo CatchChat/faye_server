@@ -42,14 +42,18 @@ gem 'faraday'
 
 group :development, :test do
   gem "pry"
-  gem 'rspec-rails'
-  gem 'rspec-expectations'
-  gem 'factory_girl_rails'
-  gem 'database_cleaner'
+  gem 'sqlite3'
+end
+
+group :test do
   gem 'vcr'
   gem 'webmock'
   gem 'guard-rspec'
-  gem 'sqlite3'
+  gem 'timecop'
+  gem 'rspec-rails'
+
+  gem 'rspec-expectations'
+  gem 'factory_girl_rails'
+  gem 'database_cleaner'
   gem 'timecop'
 end
-
