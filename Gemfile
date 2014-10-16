@@ -45,11 +45,13 @@ gem 'jpush', '~> 3.1.1'
 group :development, :test do
   gem "pry"
   gem 'sqlite3'
+  gem 'rubocop', require: false
+  gem 'guard-rubocop'
 end
 
 group :test do
-  gem 'vcr'
-  gem 'webmock'
+  gem 'vcr', require: false
+  gem 'webmock', require: false
   gem 'guard-rspec'
   gem 'rspec-rails'
 
