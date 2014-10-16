@@ -28,8 +28,9 @@ describe Cdn do
       qiniu_upload_token = subject.get_upload_token bucket: 'ruanwz-public',
                                                        test: 'abc',
                                                        key: 'test-key',
-                                              callback_url: 'http://localhost/callback'
-      expect(qiniu_upload_token).to eq "BBHE3ccYQ8VQhEIvZbJARrte1U3ic2Om6CW7mxvN:v_Naq9XbxeY_i7HFCniOkR1pOgU=:eyJzY29wZSI6InJ1YW53ei1wdWJsaWM6dGVzdC1rZXkiLCJjYWxsYmFja1VybCI6Imh0dHA6Ly9sb2NhbGhvc3QvY2FsbGJhY2siLCJkZWFkbGluZSI6MTM4ODUwOTIwMH0="
+                                              callback_url: 'http://catchchat-callback.herokuapp.com/hi',
+                                              callback_body: "name=fname&hash=myhash"
+      expect(qiniu_upload_token).to eq "BBHE3ccYQ8VQhEIvZbJARrte1U3ic2Om6CW7mxvN:cSkUKZglWsifwHuII-_gM2cD-EI=:eyJzY29wZSI6InJ1YW53ei1wdWJsaWM6dGVzdC1rZXkiLCJjYWxsYmFja1VybCI6Imh0dHA6Ly9jYXRjaGNoYXQtY2FsbGJhY2suaGVyb2t1YXBwLmNvbS9oaSIsImNhbGxiYWNrQm9keSI6Im5hbWU9Zm5hbWVcdTAwMjZoYXNoPW15aGFzaCIsImRlYWRsaW5lIjoxMzg4NTA5MjAwfQ=="
     end
 
     it "provide download url for qiniu" do
@@ -44,7 +45,9 @@ describe Cdn do
       VCR.use_cassette('qiniu_upload_file') do
         code = subject.upload_file file_location: t.path,
                                           bucket: 'ruanwz-public',
-                                             key: 'test-key'
+                                             key: 'test-key',
+                                    callback_url: 'http://catchchat-callback.herokuapp.com/hi',
+                                    callback_body: "name=fname&hash=myhash"
 
         expect(code).to eq 200
       end
