@@ -15,22 +15,18 @@ class UpyunCdn
   end
 
   def get_upload_token(args = {})
-    verify_upload_token(args)
+    verify_upload_args(args)
     options.merge! args
 
     o = OpenStruct.new options
     o.http_method    ||= 'PUT'
-    # api_host  = options.fetch :api_host
-
-    # url = "#{api_host}/#{bucket}#{file_path}"
-    # uri = URI.parse(URI.encode(url))
 
     sign o.http_method, gmt_date, "/#{o.bucket}#{o.file_path}",
          o.file_length, o.password
   end
 
   def get_download_token(args = {})
-    verify_download_token(args)
+    verify_download_args(args)
     options.merge! args
     o = OpenStruct.new options
     o.http_method    ||= 'GET'
@@ -42,7 +38,7 @@ class UpyunCdn
   end
 
   def upload_file(args = {})
-    verify_upload_token(args)
+    verify_upload_args(args)
     token         = get_upload_token(args)
     o = OpenStruct.new options
 
@@ -65,13 +61,13 @@ class UpyunCdn
 
   private
 
-  def verify_download_token(args)
+  def verify_download_args(args)
     [:bucket, :file_path].each do |k|
       fail "missing key #{k}" unless args.key? k
     end
   end
 
-  def verify_upload_token(args)
+  def verify_upload_args(args)
     [:bucket, :file_path, :file_length,
      :callback_url, :callback_body].each do |k|
       fail "missing key #{k}" unless args.key? k

@@ -14,8 +14,10 @@ class QiniuCdn
   end
 
   def get_upload_token(args = {})
+    verify_upload_args(args)
     options.merge! args
-    put_policy.callback_url = options.fetch :callback_url
+    o = OpenStruct.new options
+    put_policy.callback_url = o.callback_url
     Qiniu::Auth.generate_uptoken(put_policy)
   end
 
@@ -31,9 +33,10 @@ class QiniuCdn
   end
 
   def get_download_url(args)
+    verify_download_args(args)
     options.merge! args
-    url = options.fetch(:url)
-    Qiniu::Auth.authorize_download_url(url)
+    o = OpenStruct.new options
+    Qiniu::Auth.authorize_download_url(o.url)
   end
 
   def upload_file(args)
@@ -43,5 +46,19 @@ class QiniuCdn
     code, _result, _response_headers = Qiniu::Storage.upload_with_put_policy(
       put_policy, file_location, 'test-key')
     code
+  end
+
+  private
+
+  def verify_upload_args(args)
+    [:callback_url, :callback_body].each do |k|
+      fail "missing key #{k}" unless args.key? k
+    end
+  end
+
+  def verify_download_args(args)
+    [:url].each do |k|
+      fail "missing key #{k}" unless args.key? k
+    end
   end
 end
