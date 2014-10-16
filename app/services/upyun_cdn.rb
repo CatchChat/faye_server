@@ -15,57 +15,68 @@ class UpyunCdn
   end
 
   def get_upload_token(args = {})
+    verify_upload_token(args)
     options.merge! args
 
-    method    = options.fetch :method, 'PUT'
-    bucket    = options.fetch :bucket
-    file_path = options.fetch :file_path
-    length    = options.fetch :file_length
-    password  = options.fetch :password
+    o = OpenStruct.new options
+    o.http_method    ||= 'PUT'
     # api_host  = options.fetch :api_host
 
     # url = "#{api_host}/#{bucket}#{file_path}"
     # uri = URI.parse(URI.encode(url))
 
-    sign method, gmt_date, "/#{bucket}#{file_path}", length, password
+    sign o.http_method, gmt_date, "/#{o.bucket}#{o.file_path}",
+         o.file_length, o.password
   end
 
   def get_download_token(args = {})
+    verify_download_token(args)
     options.merge! args
-
-    method    = options.fetch :method, 'GET'
-    bucket    = options.fetch :bucket
-    file_path = options.fetch :file_path
-    length    = '0'
-    password  = options.fetch :password
-    sign method, gmt_date, "/#{bucket}#{file_path}", length, password
+    o = OpenStruct.new options
+    o.http_method    ||= 'GET'
+    o.content_length    = '0'
+    sign o.http_method,
+         gmt_date,
+         "/#{o.bucket}#{o.file_path}",
+         o.content_length, o.password
   end
 
   def upload_file(args = {})
+    verify_upload_token(args)
     token         = get_upload_token(args)
-    api_host      = options.fetch :api_host
-    bucket        = options.fetch :bucket
-    file_path     = options.fetch :file_path
-    file_location = options.fetch :file_location
+    o = OpenStruct.new options
 
-    url = "#{api_host}/#{bucket}#{file_path}"
+    url = "#{o.api_host}/#{o.bucket}#{o.file_path}"
     url_path = URI.parse(URI.encode(url))
 
-    conn = Faraday.new(url: api_host) do |faraday|
+    conn = Faraday.new(url: o.api_host) do |faraday|
       faraday.request :url_encoded
       # faraday.response :logger
       faraday.adapter Faraday.default_adapter
     end
 
-    resp = conn.put url_path, File.read(file_location) do |req|
+    resp = conn.put url_path, File.read(o.file_location) do |req|
       req.headers['Authorization']  = token
       req.headers['Date']           = gmt_date
-      req.headers['Content-Length'] = File.read(file_location).length.to_s
+      req.headers['Content-Length'] = File.read(o.file_location).length.to_s
     end
     resp.status
   end
 
   private
+
+  def verify_download_token(args)
+    [:bucket, :file_path].each do |k|
+      fail "missing key #{k}" unless args.key? k
+    end
+  end
+
+  def verify_upload_token(args)
+    [:bucket, :file_path, :file_length,
+     :callback_url, :callback_body].each do |k|
+      fail "missing key #{k}" unless args.key? k
+    end
+  end
 
   def sign(method, date, url, length, password)
     str =

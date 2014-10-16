@@ -10,9 +10,9 @@ http_interactions:
       User-Agent:
       - Faraday v0.9.0
       Authorization:
-      - UpYun david:d98416c59a032045d6733e91b798e6cb
+      - UpYun david:5288240276e5bbfbfdfe31814e945ddc
       Date:
-      - Tue, 14 Oct 2014 16:18:30 GMT
+      - Thu, 16 Oct 2014 06:13:00 GMT
       Content-Length:
       - '0'
       Content-Type:
@@ -29,7 +29,7 @@ http_interactions:
       Server:
       - vivi/0.3
       Date:
-      - Tue, 14 Oct 2014 16:18:30 GMT
+      - Thu, 16 Oct 2014 06:16:12 GMT
       Content-Type:
       - text/html
       Transfer-Encoding:
@@ -37,12 +37,12 @@ http_interactions:
       Connection:
       - keep-alive
       X-Request-Id:
-      - dabc1746d61a68fa0cf1d671c9bc7e0d
+      - 1c11622653d4ca679086b7c93e2c7893
       Access-Control-Allow-Origin:
       - "*"
     body:
       encoding: UTF-8
       string: ''
     http_version: 
-  recorded_at: Tue, 14 Oct 2014 16:18:30 GMT
+  recorded_at: Thu, 16 Oct 2014 06:13:00 GMT
 recorded_with: VCR 2.9.3
