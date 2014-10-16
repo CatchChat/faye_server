@@ -46,7 +46,6 @@ gem 'settingslogic', '~> 2.0.8'
 
 group :development, :test do
   gem "pry"
-  gem 'sqlite3'
   gem 'rubocop', require: false
   gem 'guard-rubocop'
 end
