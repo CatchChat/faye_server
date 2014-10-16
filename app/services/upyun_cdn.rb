@@ -6,13 +6,12 @@ class UpyunCdn
     @username = keys.fetch :username
     @password = keys.fetch :password
 
-
-    @options ||= keys
+    @options = keys
     @options[:api_host] ||= 'http://v0.api.upyun.com'
   end
 
   def prepare(cdn)
-    self.options = cdn.options
+    options.merge! cdn.options
   end
 
   def get_upload_token(args={})

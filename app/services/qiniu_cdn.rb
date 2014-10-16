@@ -4,13 +4,13 @@ class QiniuCdn
   def initialize(keys)
     @access_key = keys.fetch :access_key
     @secret_key = keys.fetch :secret_key
-    @options  ||= keys
+    @options    = keys
     Qiniu.establish_connection! access_key: @access_key,
                                 secret_key: @secret_key
   end
 
   def prepare(cdn)
-    self.options = cdn.options
+    options.merge! cdn.options
   end
 
   def get_upload_token(args={})
@@ -30,7 +30,7 @@ class QiniuCdn
   end
 
   def get_download_url(args)
-    @options.merge! args
+    options.merge! args
     url = options.fetch(:url)
     Qiniu::Auth.authorize_download_url(url)
   end

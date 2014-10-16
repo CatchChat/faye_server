@@ -6,13 +6,13 @@ class LuosimaoSms
     @username = keys.fetch :username
     @apikey   = keys.fetch :apikey
 
-    @options ||= keys
-    @options[:api_host] ||= 'http://sms-api.luosimao.com'
-    @options[:api_send_url] ||="http://sms-api.luosimao.com/v1/send.json"
+    @options                   = keys
+    @options[:api_host]      ||= 'http://sms-api.luosimao.com'
+    @options[:api_send_url]  ||= "http://sms-api.luosimao.com/v1/send.json"
   end
 
   def prepare(sms)
-    self.options = sms.options
+    options.merge! sms.options
   end
 
   def send_sms(args)
@@ -37,6 +37,6 @@ class LuosimaoSms
     conn.basic_auth username, apikey
     resp = conn.post url_path, {mobile: mobile, message: message} do |req|
     end
-    resp.status
+    [resp.status, resp.body]
   end
 end

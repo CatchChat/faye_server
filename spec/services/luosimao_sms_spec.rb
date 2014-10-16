@@ -24,7 +24,10 @@ describe Sms do
 
     it "send sms message" do
       VCR.use_cassette('luosimao_send_sms') do
-        @sms.send_sms mobile: '15626044835', message: 'Test Message'
+        code, body = @sms.send_sms mobile: '15626044835', message: 'Test Message'
+        expect(code).to eq 200
+        expect(body).to eq "{\"error\":0,\"msg\":\"ok\"}"
+
       end
     end
   end
