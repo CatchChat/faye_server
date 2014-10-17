@@ -1,4 +1,7 @@
 require 'faraday'
+require 'base64'
+require 'securerandom'
+require 'mime/types'
 class UpyunCdn
   attr_accessor :options
 
@@ -39,11 +42,12 @@ class UpyunCdn
 
   def upload_file(args = {})
     verify_upload_args(args)
+    options.merge! args
     token         = get_upload_token(args)
     o = OpenStruct.new options
 
     url = "#{o.api_host}/#{o.bucket}#{o.file_path}"
-    url_path = URI.parse(URI.encode(url))
+    url_path = URI.parse(URI.encode(url)).path
 
     conn = Faraday.new(url: o.api_host) do |faraday|
       faraday.request :url_encoded
@@ -59,6 +63,30 @@ class UpyunCdn
     resp.status
   end
 
+  def callback_upload_file(args = {})
+    verify_callback_upload_args(args)
+    options.merge! args
+
+    o = OpenStruct.new options
+
+    conn = Faraday.new(url: o.api_host) do |faraday|
+      faraday.request :multipart
+      faraday.request :url_encoded
+      #faraday.adapter :net_http
+      faraday.adapter Faraday.default_adapter
+    end
+    mime_type =  MIME::Types.type_for(o.file_location).first
+
+    payload = {
+      policy: policy,
+      signature: form_api_sign,
+      file: Faraday::UploadIO.new(o.file_location, mime_type.content_type)
+    }
+
+    resp = conn.post o.bucket, payload
+    resp.status
+  end
+
   private
 
   def verify_download_args(args)
@@ -68,10 +96,36 @@ class UpyunCdn
   end
 
   def verify_upload_args(args)
-    [:bucket, :file_path, :file_length,
-     :callback_url, :callback_body].each do |k|
+    [:bucket, :file_path, :file_length].each do |k|
       fail "missing key #{k}" unless args.key? k
     end
+  end
+
+  def verify_callback_upload_args(args)
+    [:bucket, :file_path,:notify_url].each do |k|
+      fail "missing key #{k}" unless args.key? k
+    end
+  end
+
+  def form_api_sign
+    Digest::MD5.hexdigest("#{policy}&#{form_api_secret}")
+  end
+
+  def policy
+    o = OpenStruct.new options
+    hash = {
+      :bucket => o.bucket,
+      :"save-key" => o.file_path,
+      :expiration => Time.now.to_i + 600,
+      :"return-url" => nil,
+      :"notify-url" => o.notify_url
+    }
+
+    Base64.encode64(hash.to_json).gsub(/\n/,'')
+  end
+
+  def form_api_secret
+    ENV['upyun_form_api_secret']
   end
 
   def sign(method, date, url, length, password)
