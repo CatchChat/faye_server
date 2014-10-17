@@ -23,7 +23,7 @@ http_interactions:
       Server:
       - nginx/1.4.2
       Date:
-      - Wed, 15 Oct 2014 06:41:58 GMT
+      - Fri, 17 Oct 2014 23:25:11 GMT
       Content-Type:
       - application/json
       Transfer-Encoding:

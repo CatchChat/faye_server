@@ -1,30 +1,28 @@
 require 'faraday'
+require 'vanguard'
+require 'virtus'
 class LuosimaoSms
-  attr_accessor :options
+  include Virtus
+  attribute :username, String
+  attribute :apikey, String
+  attribute :api_host, String, default: 'http://sms-api.luosimao.com'
+  attribute :api_send_url, String, default: 'http://sms-api.luosimao.com/v1/send.json'
+  attribute :mobile, String
+  attribute :message, String
 
   def initialize(keys)
-    @username = keys.fetch :username
-    @apikey   = keys.fetch :apikey
+    super
 
-    @options                   = keys
-    @options[:api_host]      ||= 'http://sms-api.luosimao.com'
-    @options[:api_send_url]  ||= 'http://sms-api.luosimao.com/v1/send.json'
   end
 
   def prepare(sms)
-    options.merge! sms.options
+    self.attributes = self.attributes.merge sms.options
   end
 
   def send_sms(args)
-    options.merge! args
+    self.attributes = self.attributes.merge args
 
-    username     = options.fetch :username
-    apikey       = options.fetch :apikey
-    api_host     = options.fetch :api_host
-    api_send_url = options.fetch :api_send_url
-    mobile       = options.fetch :mobile
-    message      = options.fetch :message
-    message     += ' 【秒视】'
+    message_with_suffix = message + ' 【秒视】'
 
     url_path = URI.parse(URI.encode(api_send_url))
 
@@ -35,7 +33,7 @@ class LuosimaoSms
     end
 
     conn.basic_auth username, apikey
-    resp = conn.post url_path, mobile: mobile, message: message
+    resp = conn.post url_path, mobile: mobile, message: message_with_suffix
     [resp.status, resp.body]
   end
 end

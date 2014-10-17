@@ -24,6 +24,12 @@ describe Cdn do
 
     subject {@cdn}
 
+    it "fail if validation not pass" do
+      expect {
+        subject.get_upload_token bucket: 'ruanwz-public'
+      }.to raise_error
+    end
+
     it "provide upload token for qiniu" do
       qiniu_upload_token = subject.get_upload_token bucket: 'ruanwz-public',
                                                        test: 'abc',

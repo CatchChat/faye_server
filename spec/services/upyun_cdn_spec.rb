@@ -4,7 +4,7 @@ require 'vcr_helper'
 require 'services_helper'
 describe Cdn do
   before do
-    Timecop.freeze(Time.local(2014,10,17,15,58))
+    Timecop.freeze(Time.local(2014,10,18,0,16))
   end
 
   after do
@@ -22,20 +22,26 @@ describe Cdn do
 
     subject {@cdn}
 
+    it "fail if validation not pass" do
+      expect {
+        subject.get_upload_token bucket: 'ruanwz-public'
+      }.to raise_error
+    end
+
     it "provide upload token for upyun" do
       upyun_upload_token = subject.get_upload_token bucket: 'ruanwz-public',
                                                  file_path: '/abc.jpg',
                                                file_length: 100,
                                                 notify_url: 'http://catchchat-callback.herokuapp.com/hi',
                                              callback_body: "name=fname&hash=myhash"
-      expect(upyun_upload_token).to eq "UpYun david:aaf303cbdefee121984223f904ef77cf"
+      expect(upyun_upload_token).to eq "UpYun david:80a440dd5d89b0ab95ec6d2e50cb1969"
     end
 
     it "provide download token for upyun" do
       upyun_download_token = subject.get_download_token  bucket: 'ruanwz-public',
                                                       file_path: '/abc.jpg'
 
-      expect(upyun_download_token).to eq "UpYun david:15cd72dfbc9be1a78d0f767d8d01c0e5"
+      expect(upyun_download_token).to eq "UpYun david:c842b673c53748ff268ed00a7a9d443b"
     end
 
     it "upload file for upyun" do
