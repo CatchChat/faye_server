@@ -1,124 +1,108 @@
 require 'faraday'
+require 'vanguard'
+require 'virtus'
 require 'base64'
 require 'securerandom'
 require 'mime/types'
 class UpyunCdn
-  attr_accessor :options
+  include Virtus
+  attribute :username, String
+  attribute :password, String
+  attribute :http_method, String
+  attribute :file_path, String
+  attribute :file_length, String
+  attribute :file_location, String
+  attribute :content_length, Integer
+  attribute :bucket, String
+  attribute :notify_url, String
+  attribute :api_host, String, default: 'http://v0.api.upyun.com'
 
   def initialize(keys)
-    @username = keys.fetch :username
-    @password = keys.fetch :password
-
-    @options = keys
-    @options[:api_host] ||= 'http://v0.api.upyun.com'
+    super
   end
 
   def prepare(cdn)
-    options.merge! cdn.options
+    self.attributes = self.attributes.merge cdn.options
   end
 
   def get_upload_token(args = {})
-    verify_upload_args(args)
-    options.merge! args
+    self.attributes = self.attributes.merge args
+    fail unless UPLOADVALIDATOR.call(self).valid?
 
-    o = OpenStruct.new options
-    o.http_method    ||= 'PUT'
+    http_method    ||= 'PUT'
 
-    sign o.http_method, gmt_date, "/#{o.bucket}#{o.file_path}",
-         o.file_length, o.password
+    sign http_method, gmt_date, "/#{bucket}#{file_path}",
+         file_length, password
   end
 
   def get_download_token(args = {})
-    verify_download_args(args)
-    options.merge! args
-    o = OpenStruct.new options
-    o.http_method    ||= 'GET'
-    o.content_length    = '0'
-    sign o.http_method,
+    self.attributes = self.attributes.merge args
+    fail unless DOWNLOADVALIDATOR.call(self).valid?
+    http_method    ||= 'GET'
+    content_length    = '0'
+    sign http_method,
          gmt_date,
-         "/#{o.bucket}#{o.file_path}",
-         o.content_length, o.password
+         "/#{bucket}#{file_path}",
+         content_length, password
   end
 
   def upload_file(args = {})
-    verify_upload_args(args)
-    options.merge! args
+    self.attributes = self.attributes.merge args
+    fail unless UPLOADVALIDATOR.call(self).valid?
     token         = get_upload_token(args)
-    o = OpenStruct.new options
 
-    url = "#{o.api_host}/#{o.bucket}#{o.file_path}"
+    url = "#{api_host}/#{bucket}#{file_path}"
     url_path = URI.parse(URI.encode(url)).path
 
-    conn = Faraday.new(url: o.api_host) do |faraday|
+    conn = Faraday.new(url: api_host) do |faraday|
       faraday.request :url_encoded
       # faraday.response :logger
       faraday.adapter Faraday.default_adapter
     end
 
-    resp = conn.put url_path, File.read(o.file_location) do |req|
+    resp = conn.put url_path, File.read(file_location) do |req|
       req.headers['Authorization']  = token
       req.headers['Date']           = gmt_date
-      req.headers['Content-Length'] = File.read(o.file_location).length.to_s
+      req.headers['Content-Length'] = File.read(file_location).length.to_s
     end
     resp.status
   end
 
   def callback_upload_file(args = {})
-    verify_callback_upload_args(args)
-    options.merge! args
+    self.attributes = self.attributes.merge args
+    fail unless CALLBACKUPLOADVALIDATOR.call(self).valid?
 
-    o = OpenStruct.new options
-
-    conn = Faraday.new(url: o.api_host) do |faraday|
+    conn = Faraday.new(url: api_host) do |faraday|
       faraday.request :multipart
       faraday.request :url_encoded
-      #faraday.adapter :net_http
+      # faraday.adapter :net_http
       faraday.adapter Faraday.default_adapter
     end
-    mime_type =  MIME::Types.type_for(o.file_location).first
+    mime_type =  MIME::Types.type_for(file_location).first
 
     payload = {
       policy: policy,
       signature: form_api_sign,
-      file: Faraday::UploadIO.new(o.file_location, mime_type.content_type)
+      file: Faraday::UploadIO.new(file_location, mime_type.content_type)
     }
 
-    resp = conn.post o.bucket, payload
+    resp = conn.post bucket, payload
     resp.status
   end
 
   private
-
-  def verify_download_args(args)
-    [:bucket, :file_path].each do |k|
-      fail "missing key #{k}" unless args.key? k
-    end
-  end
-
-  def verify_upload_args(args)
-    [:bucket, :file_path, :file_length].each do |k|
-      fail "missing key #{k}" unless args.key? k
-    end
-  end
-
-  def verify_callback_upload_args(args)
-    [:bucket, :file_path,:notify_url].each do |k|
-      fail "missing key #{k}" unless args.key? k
-    end
-  end
 
   def form_api_sign
     Digest::MD5.hexdigest("#{policy}&#{form_api_secret}")
   end
 
   def policy
-    o = OpenStruct.new options
     hash = {
-      :bucket => o.bucket,
-      :"save-key" => o.file_path,
+      :bucket => bucket,
+      :"save-key" => file_path,
       :expiration => Time.now.to_i + 600,
       :"return-url" => nil,
-      :"notify-url" => o.notify_url
+      :"notify-url" => notify_url
     }
 
     Base64.encode64(hash.to_json).gsub(/\n/,'')
@@ -137,5 +121,17 @@ class UpyunCdn
 
   def gmt_date
     @date ||= Time.now.utc.strftime('%a, %d %b %Y %H:%M:%S GMT')
+  end
+
+  DOWNLOADVALIDATOR = Vanguard::Validator.build do
+      validates_presence_of :bucket, :file_path
+  end
+
+  UPLOADVALIDATOR = Vanguard::Validator.build do
+      validates_presence_of :bucket, :file_path, :file_length
+  end
+
+  CALLBACKUPLOADVALIDATOR = Vanguard::Validator.build do
+      validates_presence_of :bucket, :file_path, :notify_url
   end
 end
