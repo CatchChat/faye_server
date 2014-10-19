@@ -31,7 +31,7 @@ module Xinge
     def initialize(options = {})
       options.assert_valid_keys(*VALID_KEYS)
       @options = options
-      generate_attrs_methods(VALID_KEYS, @options)
+      generate_attrs_methods(@options)
     end
   end
 end

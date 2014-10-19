@@ -17,27 +17,27 @@ module Xinge
     API_QUERY_DEVICE_NUM_BY_TAG    = 'http://openapi.xg.qq.com/v2/tags/query_tag_token_num'
 
     # iOS环境：生产环境
-    IOS_ENV_PRO = 1;
+    IOS_ENV_PRO = 1
     # iOS环境：开发环境
-    IOS_ENV_DEV = 2;
+    IOS_ENV_DEV = 2
 
     # 消息推送适配平台：不限
-    DEVICE_TYPE_ALL      = 0;
+    DEVICE_TYPE_ALL      = 0
     # 消息推送适配平台：浏览器
-    DEVICE_TYPE_BROWSER  = 1;
+    DEVICE_TYPE_BROWSER  = 1
     # 消息推送适配平台：PC
-    DEVICE_TYPE_PC       = 2;
+    DEVICE_TYPE_PC       = 2
     # 消息推送适配平台：Android
-    DEVICE_TYPE_ANDROID  = 3;
+    DEVICE_TYPE_ANDROID  = 3
     # 消息推送适配平台：iOS
-    DEVICE_TYPE_IOS      = 4;
+    DEVICE_TYPE_IOS      = 4
     # 消息推送适配平台：winPhone
-    DEVICE_TYPE_WINPHONE = 5;
+    DEVICE_TYPE_WINPHONE = 5
 
     # tag运算关系：AND
-    TAG_OPERATION_AND = 'AND';
+    TAG_OPERATION_AND = 'AND'
     # tag运算关系：OR
-    TAG_OPERATION_OR  = 'OR';
+    TAG_OPERATION_OR  = 'OR'
 
     attr_accessor :access_id, :secret_key
 
@@ -192,7 +192,7 @@ module Xinge
       push_ids = Array(push_ids).select(&:present?)
       fail 'push_ids is invalid' if push_ids.blank?
 
-      params = { push_ids: push_ids.map { |id| { push_id: id } } }.merge(common_params)
+      params = { push_ids: push_ids.map { |id| { push_id: id.to_s } }.to_json }.merge(common_params)
       send_api_request(API_QUERY_PUSH_STATUS, params, 'POST', @secret_key, @timeout, &block)
     end
 
@@ -232,9 +232,10 @@ module Xinge
     def set_tags(tags_tokens_hash, &block)
       verify_tags_tokens_hash(tags_tokens_hash)
 
-      tag_token_list = tags_tokens_hash.map do |tag, tokens|
-        tokens.map do |token|
-          [tag, token]
+      tag_token_list = []
+      tags_tokens_hash.each do |tag, tokens|
+        Array(tokens).each do |token|
+          tag_token_list << [tag, token]
         end
       end
 
@@ -249,9 +250,10 @@ module Xinge
       verify_tags_tokens_hash(tags_tokens_hash)
 
 
-      tag_token_list = tags_tokens_hash.map do |tag, tokens|
-        tokens.map do |token|
-          [tag, token]
+      tag_token_list = []
+      tags_tokens_hash.each do |tag, tokens|
+        Array(tokens).each do |token|
+          tag_token_list << [tag, token]
         end
       end
 
@@ -304,14 +306,10 @@ module Xinge
       end
     end
 
-    def verify_push_ids(push_ids)
-      push_ids = Array(push_ids).select()
-    end
-
     def verify_tags_tokens_hash(tags_tokens_hash)
       if tags_tokens_hash.blank? || tags_tokens_hash.values.size > 20 ||
         tags_tokens_hash.keys.select(&:blank?).present? ||
-        tags_tokens_hash.values.select(&:block?).present?
+        tags_tokens_hash.values.select(&:blank?).present?
         fail 'tags_tokens_hash is invalid'
       end
     end

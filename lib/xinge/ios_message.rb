@@ -28,7 +28,7 @@ module Xinge
     def initialize(options = {})
       options.assert_valid_keys(*VALID_KEYS)
       @options = options.reverse_merge(DEFAULT_OPTIONS)
-      generate_attrs_methods(VALID_KEYS, @options)
+      generate_attrs_methods(@options)
     end
 
     def format_send_time
@@ -41,7 +41,7 @@ module Xinge
       aps[:sound] = sound if sound.present?
 
       mess = custom_content || {}
-      mess[:accept_time] = accept_time if accept_time.present?
+      mess[:accept_time] = Array(accept_time).map(&:format) if accept_time.present?
       mess[:aps] = aps
 
       mess.to_json

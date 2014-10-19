@@ -5,13 +5,13 @@ module Xinge
 
       private
 
-      def generate_attrs_methods(attrs, options)
-        attrs.each do |method|
+      def generate_attrs_methods(options)
+        options.each do |method, _|
           self.class.send :define_method, method do
             options[method]
           end
 
-          self.class.send :define_method, "#{method.to_s}=" do |value|
+          self.class.send :define_method, "#{method}=" do |value|
             options[method] = value
           end
         end

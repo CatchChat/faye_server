@@ -22,8 +22,8 @@ module Xinge
 
     def format
       {
-        start: { hour: @start_hour, min: @start_min },
-        end: { hour: @end_hour, min: @end_min }
+        start: { hour: @start_hour.to_s.rjust(2, '0'), min: @start_min.to_s.rjust(2, '0') },
+        end: { hour: @end_hour.to_s.rjust(2, '0'), min: @end_min.to_s.rjust(2, '0') }
       }
     end
   end
