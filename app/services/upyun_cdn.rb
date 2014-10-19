@@ -72,11 +72,10 @@ class UpyunCdn
     self.attributes = self.attributes.merge args
     fail unless CALLBACKUPLOADVALIDATOR.call(self).valid?
 
-
     conn = Faraday.new(url: api_host) do |faraday|
       faraday.request :multipart
       faraday.request :url_encoded
-      #faraday.adapter :net_http
+      # faraday.adapter :net_http
       faraday.adapter Faraday.default_adapter
     end
     mime_type =  MIME::Types.type_for(file_location).first
@@ -90,7 +89,6 @@ class UpyunCdn
     resp = conn.post bucket, payload
     resp.status
   end
-
 
   private
 
@@ -124,7 +122,6 @@ class UpyunCdn
   def gmt_date
     @date ||= Time.now.utc.strftime('%a, %d %b %Y %H:%M:%S GMT')
   end
-
 
   DOWNLOADVALIDATOR = Vanguard::Validator.build do
       validates_presence_of :bucket, :file_path

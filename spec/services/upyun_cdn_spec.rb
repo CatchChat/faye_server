@@ -60,7 +60,7 @@ describe Cdn do
     it "upload file for upyun using form with callback" do
 
       t = Tempfile.new ['abcd', '.jpg']
-      t = File.open '/tmp/test.jpeg'
+      #t = File.open '/tmp/test.jpeg'
 
       VCR.use_cassette('upyun_callback_upload_file') do
         code = subject.callback_upload_file file_location: t.path,
