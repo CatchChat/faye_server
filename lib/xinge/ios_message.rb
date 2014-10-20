@@ -28,7 +28,7 @@ module Xinge
     def initialize(options = {})
       options.assert_valid_keys(*VALID_KEYS)
       @options = options.reverse_merge(DEFAULT_OPTIONS)
-      generate_attrs_methods(@options)
+      generate_attrs_methods(VALID_KEYS, @options)
     end
 
     def format_send_time

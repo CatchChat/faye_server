@@ -14,7 +14,7 @@ module Xinge
       # 状态栏图标文件，为空则是app icon
       :small_icon,
       # 通知栏图标文件类型，0是本地文件，1是网络图片
-      :icon_yype,
+      :icon_type,
       # 通知栏图片地址，可填本地文件名或图片http地址，为空则是app icon
       :icon_res,
       # 本地通知样式，含义参见终端SDK文档
@@ -31,7 +31,7 @@ module Xinge
     def initialize(options = {})
       options.assert_valid_keys(*VALID_KEYS)
       @options = options
-      generate_attrs_methods(@options)
+      generate_attrs_methods(VALID_KEYS, @options)
     end
   end
 end

@@ -48,7 +48,7 @@ module Xinge
     def initialize(options = {})
       options.assert_valid_keys(*VALID_KEYS)
       @options = options.reverse_merge(DEFAULT_OPTIONS)
-      generate_attrs_methods(@options)
+      generate_attrs_methods(VALID_KEYS, @options)
     end
 
     def format_send_time
@@ -62,7 +62,7 @@ module Xinge
 
       if type == MESSAGE_TYPE_NOTIFICATION
         mess[:action] = options[:action].format if options[:action].present?
-        mess.merge(options[:style].options)     if options[:style].present?
+        mess.merge!(options[:style].options)     if options[:style].present?
       end
 
       mess.to_json

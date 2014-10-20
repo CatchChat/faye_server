@@ -5,8 +5,8 @@ module Xinge
 
       private
 
-      def generate_attrs_methods(options)
-        options.each do |method, _|
+      def generate_attrs_methods(valid_keys, options)
+        valid_keys.each do |method|
           self.class.send :define_method, method do
             options[method]
           end

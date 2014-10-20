@@ -17,6 +17,7 @@ module Xinge
           faraday.adapter  Faraday.default_adapter  # make requests with Net::HTTP
         end
 
+        Rails.logger.debug "===> PARAMS IS #{params}."
         resp = conn.send method.downcase do |req|
           if method == 'GET'
             req.url uri.path, params
@@ -28,7 +29,7 @@ module Xinge
           req.options.timeout = timeout
         end
 
-        Rails.logger.debug "===> PARAMS IS #{params}."
+        Rails.logger.debug "===> RESPONSE IS #{resp.body}."
         response = Xinge::Response.new(resp.body)
         block.call(response) if block_given?
         response

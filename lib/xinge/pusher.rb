@@ -60,7 +60,7 @@ module Xinge
     # @param {string}   device_token          针对某一设备推送
     # @param {Message}  message               推送的消息
     # @param {int}      environment           向iOS设备推送时必填，1表示推送生产环境；2表示推送开发环境。Android可不填。
-    def push_to_single_device(device_token, message, environment = nil, &block)
+    def push_to_single_device(device_token, message, environment = IOS_ENV_PRO, &block)
       fail 'device_token is invalid' if device_token.blank?
       verify_message_and_environment(message, environment)
 

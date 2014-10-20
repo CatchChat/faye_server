@@ -1,6 +1,7 @@
 require 'spec_helper'
 require 'xinge'
 describe Xinge::Utils::ApiSender do
+
   class DummyClass
     include Xinge::Utils::ApiSender
   end

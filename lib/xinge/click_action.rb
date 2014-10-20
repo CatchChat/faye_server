@@ -55,7 +55,7 @@ module Xinge
     def initialize(options = {})
       options.assert_valid_keys(*VALID_KEYS)
       @options = options.reverse_merge(DEFAULT_OPTIONS)
-      generate_attrs_methods(@options)
+      generate_attrs_methods(VALID_KEYS, @options)
     end
 
     def format
@@ -63,33 +63,51 @@ module Xinge
 
       case action_type
       when ACTION_TYPE_ACTIVITY
-        action[:activity] = activity if activity.present?
-        if aty_attr[:if].present? || aty_attr[:pf].present?
-          action[:aty_attr] = {
-            if: aty_attr[:if],
-            pf: aty_attr[:pf]
-          }
-        end
+        activity_format(action)
       when ACTION_TYPE_BROWSER
-        if browser[:url].present?
-          action[:browser] = {
-            url: browser[:url],
-            confirm: browser[:confirm].to_i
-          }
-        end
+        browser_format(action)
       when ACTION_TYPE_INTENT
-        action[:intent] = intent if intent.present?
+        intent_format(action)
       when ACTION_TYPE_PACKAGE_NAME
-        if package_name[:packageName].present?
-          action[:package_name] = {
-            packageName: package_name[:packageName],
-            packageDownloadUrl: package_name[:packageDownloadUrl],
-            confirm: package_name[:confirm].to_i
-          }
-        end
+        package_name_format(action)
       end
 
       action
+    end
+
+    private
+
+    def activity_format(action)
+      action[:activity] = activity if activity.present?
+      if aty_attr[:if].present? || aty_attr[:pf].present?
+        action[:aty_attr] = {
+          if: aty_attr[:if],
+          pf: aty_attr[:pf]
+        }
+      end
+    end
+
+    def browser_format(action)
+      if browser[:url].present?
+        action[:browser] = {
+          url: browser[:url],
+          confirm: browser[:confirm].to_i
+        }
+      end
+    end
+
+    def intent_format(action)
+      action[:intent] = intent if intent.present?
+    end
+
+    def package_name_format(action)
+      if package_name[:packageName].present?
+        action[:package_name] = {
+          packageName: package_name[:packageName],
+          packageDownloadUrl: package_name[:packageDownloadUrl],
+          confirm: package_name[:confirm].to_i
+        }
+      end
     end
   end
 end
