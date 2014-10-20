@@ -39,6 +39,7 @@ module Xinge
     DEFAULT_OPTIONS = {
       expire_time: 0,
       send_time: 0,
+      type: MESSAGE_TYPE_NOTIFICATION,
       custom_content: {},
       accept_time: [],
       multi_pkg: 0

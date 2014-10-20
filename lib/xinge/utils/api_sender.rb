@@ -13,7 +13,7 @@ module Xinge
         uri = URI.parse(api)
         conn = Faraday.new(url: "#{uri.scheme}://#{uri.host}") do |faraday|
           faraday.request  :url_encoded             # form-encode POST params
-          faraday.response :logger                  # log requests to STDOUT
+          # faraday.response :logger                  # log requests to STDOUT
           faraday.adapter  Faraday.default_adapter  # make requests with Net::HTTP
         end
 

@@ -39,7 +39,7 @@ module Xinge
     # tag运算关系：OR
     TAG_OPERATION_OR  = 'OR'
 
-    attr_accessor :access_id, :secret_key
+    attr_accessor :access_id, :secret_key, :timeout
 
     def initialize(access_id, secret_key, timeout = 3)
       @access_id  = access_id
@@ -60,7 +60,7 @@ module Xinge
     # @param {string}   device_token          针对某一设备推送
     # @param {Message}  message               推送的消息
     # @param {int}      environment           向iOS设备推送时必填，1表示推送生产环境；2表示推送开发环境。Android可不填。
-    def push_to_single_device(device_token, message, environment = IOS_ENV_PRO, &block)
+    def push_to_single_device(device_token, message, environment: IOS_ENV_PRO, &block)
       fail 'device_token is invalid' if device_token.blank?
       verify_message_and_environment(message, environment)
 
@@ -88,7 +88,7 @@ module Xinge
     # @param {string}   account               账户或别名
     # @param {Message}  message               推送的消息
     # @param {int}      environment           向iOS设备推送时必填，1表示推送生产环境；2表示推送开发环境。Android可不填。
-    def push_to_single_account(device_type, account, message, environment = nil, &block)
+    def push_to_single_account(account, message, device_type: DEVICE_TYPE_ALL, environment: IOS_ENV_PRO, &block)
       fail 'account is invalid' if account.blank?
       verify_device_type(device_type)
       verify_message_and_environment(message, environment)
@@ -109,7 +109,7 @@ module Xinge
         params[:environment]  = environment
       end
 
-      send_api_request(API_PUSH_TO_SINGLE_ACCOUNT, params, 'POST', @secret_key, @timeout, block)
+      send_api_request(API_PUSH_TO_SINGLE_ACCOUNT, params, 'POST', @secret_key, @timeout, &block)
     end
 
     ##
@@ -117,7 +117,7 @@ module Xinge
     # @param {int}      device_type           消息推送的适配平台
     # @param {Message}  message               推送的消息
     # @param {int}      environment           向iOS设备推送时必填，1表示推送生产环境；2表示推送开发环境。Android可不填。
-    def push_to_all_devices(device_type, message, environment = nil, &block)
+    def push_to_all_devices(message, device_type: DEVICE_TYPE_ALL, environment: IOS_ENV_PRO, &block)
       verify_device_type(device_type)
       verify_message_and_environment(message, environment)
 
@@ -152,7 +152,7 @@ module Xinge
     # @param {string}   tag_operation         多个tag的运算关系，取值为AND或OR
     # @param {Message}  message               推送的消息
     # @param {int}      environment           向iOS设备推送时必填，1表示推送生产环境；2表示推送开发环境。Android可不填。
-    def push_by_tags(device_type, tags, tag_operation, message, environment = nil, &block)
+    def push_by_tags(message, tags, device_type: DEVICE_TYPE_ALL, tag_operation: nil, environment: IOS_ENV_PRO, &block)
       tags = Array(tags).select(&:present?)
 
       verify_device_type(device_type)
@@ -283,7 +283,7 @@ module Xinge
 
     private
 
-    def verify_message_and_environment(message, environment)
+    def verify_message_and_environment(message, environment = IOS_ENV_PRO)
       if !message.is_a?(Xinge::AndroidMessage) && !message.is_a?(Xinge::IOSMessage)
         fail 'message is invalid'
       end

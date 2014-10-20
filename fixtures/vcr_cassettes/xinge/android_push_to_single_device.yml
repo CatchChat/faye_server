@@ -1,0 +1,40 @@
+---
+http_interactions:
+- request:
+    method: post
+    uri: http://openapi.xg.qq.com/v2/push/single_device
+    body:
+      encoding: UTF-8
+      string: access_id=2100039866&device_token=0f58b34d634088ae4d0d9bc061c633f9b25432fe&expire_time=0&message=%7B%22content%22%3A%22this+is+a+test.%22%2C%22title%22%3A%22%E7%A7%92%E8%A7%86%22%7D&message_type=1&multi_pkg=0&send_time=1970-01-01+08%3A00%3A00&sign=20dcb3111d8910c09dc7e7541c5b2799&timestamp=1413787734&valid_time=600
+    headers:
+      User-Agent:
+      - Faraday v0.9.0
+      Content-Type:
+      - application/x-www-form-urlencoded; charset=utf-8
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+      Accept:
+      - "*/*"
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Server:
+      - nginx
+      Date:
+      - Mon, 20 Oct 2014 06:48:55 GMT
+      Content-Type:
+      - text/html; charset=utf-8
+      Transfer-Encoding:
+      - chunked
+      Connection:
+      - close
+      Vary:
+      - Accept-Encoding
+    body:
+      encoding: UTF-8
+      string: "\r\n{\"ret_code\":0}"
+    http_version: 
+  recorded_at: Mon, 20 Oct 2014 06:48:54 GMT
+recorded_with: VCR 2.9.3
