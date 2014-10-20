@@ -33,7 +33,7 @@ gem 'jpush', '~> 3.1.1'
 gem 'settingslogic', '~> 2.0.8'
 gem 'vanguard'
 gem 'virtus'
-gem 'aws-sdk-core'
+gem 'aws-sdk-v1'
 # Use ActiveModel has_secure_password
 # gem 'bcrypt', '~> 3.1.7'
 
