@@ -43,7 +43,7 @@ describe Xinge::Pusher do
     it 'ios' do
       device_token = '8c27dabc4c0f7810e078a9c286f2afeec2ad567016985b3e19c4f846a1acd8a8'
       VCR.use_cassette('xinge/ios_push_to_single_device') do
-        response = ios_pusher.push_to_single_device(device_token, ios_message, environment: Xinge::Pusher::IOS_ENV_DEV)
+        response = ios_pusher.push_to_single_device(device_token, ios_message, Xinge::Pusher::IOS_ENV_DEV)
         expect(response.success?).to eq true
       end
     end

@@ -3,7 +3,7 @@ require 'uri'
 module Xinge
   module Utils
     module ApiSender
-      def send_api_request(api, params, method, secret_key, timeout = 3, &block)
+      def send_api_request(api, params, method, secret_key)
         verify_method!(method)
 
         timeout = timeout.to_i
@@ -26,13 +26,12 @@ module Xinge
             req.body = params
             req.headers['Content-Type'] = 'application/x-www-form-urlencoded; charset=utf-8'
           end
-          req.options.timeout = timeout
+          req.options.timeout      = 30
+          req.options.open_timeout = 30
         end
 
         Rails.logger.debug "===> RESPONSE IS #{resp.body}."
-        response = Xinge::Response.new(resp.body)
-        block.call(response) if block_given?
-        response
+        Xinge::Response.new(resp.body)
       end
 
       def generate_sign(api, params, method, secret_key)

@@ -16,14 +16,14 @@ describe Xinge::Utils::AttrsMethodsGenerator do
 
   describe '#generate_attrs_methods' do
 
-    it '生成 attrs methods' do
+    it 'has attrs methods' do
       attrs_methods = options.keys
       expect(dummy_class.public_methods & attrs_methods).to eq []
       dummy_class.send :generate_attrs_methods, attrs_methods, dummy_class.options
       expect(dummy_class.public_methods & attrs_methods).to eq attrs_methods
     end
 
-    it '生成的 attrs read method 正确' do
+    it 'read method' do
       dummy_class.send :generate_attrs_methods, options.keys, dummy_class.options
       expect(dummy_class.a).to eq 1
       expect(dummy_class.b).to eq 2
@@ -31,7 +31,7 @@ describe Xinge::Utils::AttrsMethodsGenerator do
       expect(dummy_class.options).to eq(options)
     end
 
-    it '生成的 attrs write method 正确' do
+    it 'write method' do
       dummy_class.send :generate_attrs_methods, options.keys, dummy_class.options
       dummy_class.a = 10
       dummy_class.b = 20
