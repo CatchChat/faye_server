@@ -15,4 +15,9 @@ export qiniu_access_key
 export qiniu_secret_key
 export upyun_username
 export upyun_password
+export luosimao_username
+export luosimao_apikey
+export AWS_ACCESS_KEY_ID
+export AWS_SECRET_ACCESS_KEY
+export AWS_REGION='cn-north-1'
 ```
