@@ -72,7 +72,6 @@ class S3Cdn
     resp = conn.post nil, payload do |req|
       req.headers['Content-Type'] =  'multipart/form-data'
     end
-    binding.pry
     resp.status
   end
   DOWNLOADVALIDATOR = Vanguard::Validator.build do
