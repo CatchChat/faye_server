@@ -31,16 +31,6 @@ class QiniuCdn
     Qiniu::Auth.generate_uptoken(put_policy)
   end
 
-  def put_policy
-    @put_policy ||= Qiniu::Auth::PutPolicy.new(
-            bucket,     # 存储空间
-            key,        # 最终资源名，可省略，即缺省为“创建”语义
-            expires_in || 3600 # 相对有效期，可省略，缺省为3600秒后 uptoken 过期
-        )
-    @put_policy.callback_url = callback_url
-    @put_policy.callback_body = callback_body
-    @put_policy
-  end
 
   def get_download_url(args)
     self.attributes = self.attributes.merge args
@@ -64,4 +54,15 @@ class QiniuCdn
       validates_presence_of :callback_url, :callback_body
   end
 
+  private
+  def put_policy
+    @put_policy ||= Qiniu::Auth::PutPolicy.new(
+            bucket,     # 存储空间
+            key,        # 最终资源名，可省略，即缺省为“创建”语义
+            expires_in || 3600 # 相对有效期，可省略，缺省为3600秒后 uptoken 过期
+        )
+    @put_policy.callback_url = callback_url
+    @put_policy.callback_body = callback_body
+    @put_policy
+  end
 end
