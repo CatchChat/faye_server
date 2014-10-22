@@ -63,7 +63,7 @@ class S3Cdn
       "conditions" => [
         {"bucket" => "rails-test"},
         {"key" => "iwebcam.jpg"},
-        {"x-amz-credential"=> "AKIAOGBVMZAU5EZPGPIQ/20141021/cn-north-1/s3/aws4_request"},
+        {"x-amz-credential"=> "AKIAOGBVMZAU5EZPGPIQ/#{@date[0,8]}/cn-north-1/s3/aws4_request"},
         {"x-amz-algorithm"=> "AWS4-HMAC-SHA256"},
         {"x-amz-date"=> @date }
       ]
@@ -77,13 +77,14 @@ class S3Cdn
       :"X-Amz-Signature" => bin_to_hex(hmac(derive_key, policy)),
       #:"X-Amz-Date" => Time.now.strftime("%Y%m%dT%H%M%SZ"),
       :"X-Amz-Date" => @date,
-      :"X-Amz-Credential" => "AKIAOGBVMZAU5EZPGPIQ/20141021/cn-north-1/s3/aws4_request",
+      :"X-Amz-Credential" => "AKIAOGBVMZAU5EZPGPIQ/#{@date[0,8]}/cn-north-1/s3/aws4_request",
       :"Policy" => policy,
       file: Faraday::UploadIO.new(file_location, mime_type.content_type)
     }
     resp = conn.post nil, payload do |req|
       req.headers['Content-Type'] =  'multipart/form-data'
     end
+    binding.pry
     resp.status
   end
   DOWNLOADVALIDATOR = Vanguard::Validator.build do
