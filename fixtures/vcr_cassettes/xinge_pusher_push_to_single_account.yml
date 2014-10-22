@@ -1,0 +1,77 @@
+---
+http_interactions:
+- request:
+    method: post
+    uri: http://openapi.xg.qq.com/v2/push/single_device
+    body:
+      encoding: UTF-8
+      string: access_id=2200033949&device_token=8c27dabc4c0f7810e078a9c286f2afeec2ad567016985b3e19c4f846a1acd8a8&environment=2&expire_time=0&message=%7B%22key1%22%3A%22value1%22%2C%22key2%22%3A%22value2%22%2C%22aps%22%3A%7B%22alert%22%3A%22xxx%22%2C%22badge%22%3A10%7D%7D&message_type=0&send_time=1970-01-01+08%3A00%3A00&sign=80df8458d3e161ca5062e660b1165f61&timestamp=1413946655&valid_time=600
+    headers:
+      User-Agent:
+      - Faraday v0.9.0
+      Content-Type:
+      - application/x-www-form-urlencoded; charset=utf-8
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+      Accept:
+      - "*/*"
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Server:
+      - nginx
+      Date:
+      - Wed, 22 Oct 2014 02:57:36 GMT
+      Content-Type:
+      - text/html; charset=utf-8
+      Transfer-Encoding:
+      - chunked
+      Connection:
+      - close
+      Vary:
+      - Accept-Encoding
+    body:
+      encoding: UTF-8
+      string: "\r\n{\"ret_code\":0}"
+    http_version: 
+  recorded_at: Wed, 22 Oct 2014 02:57:36 GMT
+- request:
+    method: post
+    uri: http://openapi.xg.qq.com/v2/push/single_account
+    body:
+      encoding: UTF-8
+      string: access_id=2100039866&account=53951bc5c2bba5ca47361472&device_type=3&expire_time=0&message=%7B%22content%22%3A%22xxx%22%2C%22title%22%3A%22xxx%22%2C%22custom_content%22%3A%7B%22key1%22%3A%22value1%22%2C%22key2%22%3A%22value2%22%2C%22aps%22%3A%7B%22alert%22%3A%22xxx%22%2C%22badge%22%3A10%7D%7D%2C%22builder_id%22%3A1%2C%22ring%22%3A1%2C%22vibrate%22%3A1%2C%22clearable%22%3A1%2C%22n_id%22%3A0%7D&message_type=1&multi_pkg=0&send_time=1970-01-01+08%3A00%3A00&sign=a0d460926f6ff68fb9e7e25d79816b7d&timestamp=1413946656&valid_time=600
+    headers:
+      User-Agent:
+      - Faraday v0.9.0
+      Content-Type:
+      - application/x-www-form-urlencoded; charset=utf-8
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+      Accept:
+      - "*/*"
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Server:
+      - nginx
+      Date:
+      - Wed, 22 Oct 2014 02:57:36 GMT
+      Content-Type:
+      - text/html; charset=utf-8
+      Transfer-Encoding:
+      - chunked
+      Connection:
+      - close
+      Vary:
+      - Accept-Encoding
+    body:
+      encoding: UTF-8
+      string: "\r\n{\"ret_code\":0}"
+    http_version: 
+  recorded_at: Wed, 22 Oct 2014 02:57:36 GMT
+recorded_with: VCR 2.9.3

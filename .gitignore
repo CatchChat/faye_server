@@ -24,3 +24,5 @@
 .ruby-version
 .ruby-gemset
 /config/settings.yml
+# Sensitive information
+fixtures/vcr_cassettes/jpush_pusher_push_to_single_account.yml

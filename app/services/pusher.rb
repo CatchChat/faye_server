@@ -1,6 +1,4 @@
 require 'forwardable'
-require 'jpush_pusher'
-require 'xinge_pusher'
 class Pusher
   extend Forwardable
   def_delegators :@provider, :push_to_single_account

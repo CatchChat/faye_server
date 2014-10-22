@@ -36,7 +36,8 @@ class JpushPusher
       options: JPush::Options.new(apns_production: environment)
     )
 
-    JPush::JPushClient.new(@options[:id], @options[:key]).sendPush(payload)
+    result = JPush::JPushClient.new(@options[:id], @options[:key]).sendPush(payload)
+    result.isok
   end
 
   private

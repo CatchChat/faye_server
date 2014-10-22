@@ -28,15 +28,18 @@ class XingePusher
       environment = Xinge::Pusher::IOS_ENV_DEV
     end
 
+    responses = []
     if options[:device_token].present?
       pusher = Xinge::Pusher.new(@options[:ios][:id], @options[:ios][:key])
-      pusher.push_to_single_device(options[:device_token], generate_ios_notification(options), environment)
+      responses << pusher.push_to_single_device(options[:device_token], generate_ios_notification(options), environment)
     end
 
     if options[:account].present?
       pusher = Xinge::Pusher.new(@options[:android][:id], @options[:android][:key])
-      pusher.push_to_single_account(options[:account], generate_android_notification(options), device_type: Xinge::Pusher::DEVICE_TYPE_ANDROID)
+      responses << pusher.push_to_single_account(options[:account], generate_android_notification(options), device_type: Xinge::Pusher::DEVICE_TYPE_ANDROID)
     end
+
+    responses.all?(&:success?)
   end
 
   private
