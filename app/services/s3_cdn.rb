@@ -52,7 +52,7 @@ class S3Cdn
     conn = Faraday.new(url: url) do |faraday|
       faraday.request :multipart
       faraday.request :url_encoded
-      faraday.response :logger
+      #faraday.response :logger
       faraday.adapter Faraday.default_adapter
     end
 
@@ -84,7 +84,6 @@ class S3Cdn
     resp = conn.post nil, payload do |req|
       req.headers['Content-Type'] =  'multipart/form-data'
     end
-    binding.pry
     resp.status
   end
   DOWNLOADVALIDATOR = Vanguard::Validator.build do

@@ -1,0 +1,49 @@
+---
+http_interactions:
+- request:
+    method: post
+    uri: https://rails-test.s3.cn-north-1.amazonaws.com.cn/
+    body:
+      encoding: UTF-8
+      string: "-------------RubyMultipartPost\r\nContent-Disposition: form-data; name=\"key\"\r\n\r\niwebcam.jpg\r\n-------------RubyMultipartPost\r\nContent-Disposition:
+        form-data; name=\"X-Amz-Algorithm\"\r\n\r\nAWS4-HMAC-SHA256\r\n-------------RubyMultipartPost\r\nContent-Disposition:
+        form-data; name=\"X-Amz-Signature\"\r\n\r\ndd17c95d306965376827b698e80409875d85c7f38c8ff44b6660b7fe5cbeaee4\r\n-------------RubyMultipartPost\r\nContent-Disposition:
+        form-data; name=\"X-Amz-Date\"\r\n\r\n20141022T083500Z\r\n-------------RubyMultipartPost\r\nContent-Disposition:
+        form-data; name=\"X-Amz-Credential\"\r\n\r\nAKIAOGBVMZAU5EZPGPIQ/20141022/cn-north-1/s3/aws4_request\r\n-------------RubyMultipartPost\r\nContent-Disposition:
+        form-data; name=\"Policy\"\r\n\r\neyJleHBpcmF0aW9uIjoiMjAxNC0xMC0yMlQwOTozNTowMC4wMDBaIiwiY29uZGl0aW9ucyI6W3siYnVja2V0IjoicmFpbHMtdGVzdCJ9LHsia2V5IjoiaXdlYmNhbS5qcGcifSx7IngtYW16LWNyZWRlbnRpYWwiOiJBS0lBT0dCVk1aQVU1RVpQR1BJUS8yMDE0MTAyMi9jbi1ub3J0aC0xL3MzL2F3czRfcmVxdWVzdCJ9LHsieC1hbXotYWxnb3JpdGhtIjoiQVdTNC1ITUFDLVNIQTI1NiJ9LHsieC1hbXotZGF0ZSI6IjIwMTQxMDIyVDA4MzUwMFoifV19\r\n-------------RubyMultipartPost\r\nContent-Disposition:
+        form-data; name=\"file\"; filename=\"test-key20141022-25287-17dpznb.jpeg\"\r\nContent-Length:
+        0\r\nContent-Type: image/jpeg\r\nContent-Transfer-Encoding: binary\r\n\r\n\r\n-------------RubyMultipartPost--\r\n\r\n"
+    headers:
+      User-Agent:
+      - Faraday v0.9.0
+      Content-Type:
+      - multipart/form-data; boundary=-----------RubyMultipartPost
+      Content-Length:
+      - '1275'
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+      Accept:
+      - "*/*"
+  response:
+    status:
+      code: 204
+      message: No Content
+    headers:
+      X-Amz-Id-2:
+      - Z2ri6DbF95XFskulryFpkq2eB2tXCJIpEnpWHSZt7G8e/pF0FBb7f9zIDshJJk+8
+      X-Amz-Request-Id:
+      - FF40AF80B5AC2089
+      Date:
+      - Wed, 22 Oct 2014 00:37:17 GMT
+      Etag:
+      - '"d41d8cd98f00b204e9800998ecf8427e"'
+      Location:
+      - https://rails-test.s3.cn-north-1.amazonaws.com.cn/iwebcam.jpg
+      Server:
+      - AmazonS3
+    body:
+      encoding: UTF-8
+      string: ''
+    http_version: 
+  recorded_at: Wed, 22 Oct 2014 00:35:00 GMT
+recorded_with: VCR 2.9.3

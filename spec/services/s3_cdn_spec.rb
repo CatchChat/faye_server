@@ -4,7 +4,7 @@ require 'vcr_helper'
 require 'services_helper'
 describe Cdn do
   before do
-    Timecop.freeze(Time.local(2014))
+    Timecop.freeze(Time.local(2014,10,22,8,35))
   end
 
   after do
@@ -51,19 +51,18 @@ describe Cdn do
 
     it "provide download url for s3" do
       s3_download_url = subject.get_download_url key: 'webcam.jpg'
-      expect(s3_download_url).to eq "https://rails-test.s3.cn-north-1.amazonaws.com.cn/webcam.jpg?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAOGBVMZAU5EZPGPIQ%2F20131231%2Fcn-north-1%2Fs3%2Faws4_request&X-Amz-Date=20131231T160000Z&X-Amz-Expires=3600&X-Amz-Signature=1fc412adffacb5c52b243f4bf5eeec1c33276d5045db9faa32f9fa9395803b8f&X-Amz-SignedHeaders=Host"
+      expect(s3_download_url).to eq "https://rails-test.s3.cn-north-1.amazonaws.com.cn/webcam.jpg?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAOGBVMZAU5EZPGPIQ%2F20141022%2Fcn-north-1%2Fs3%2Faws4_request&X-Amz-Date=20141022T003500Z&X-Amz-Expires=3600&X-Amz-Signature=eb4488b4f26155ce02a7d72cbe5231656af922a38a6ebb44254c564882d68d4d&X-Amz-SignedHeaders=Host"
     end
 
     it "upload file for s3" do
-      Timecop.return
 
       t = Tempfile.new ['test-key', '.jpeg']
-      #VCR.use_cassette('s3_upload_file') do
+      VCR.use_cassette('s3_upload_file') do
         code = subject.upload_file file_location: t.path,
                                              key: 'test-key.jpg'
 
         expect(code).to eq 204
-      #end
+      end
 
     end
   end
