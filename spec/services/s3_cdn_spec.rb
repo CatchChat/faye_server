@@ -35,19 +35,14 @@ describe Cdn do
       }.to raise_error
     end
 
-    # these fields are useless because it is only for global aws
-    #it "provide upload form url and fields for s3" do
-    #  s3_upload_url, fields = subject.get_upload_form_url_fields key: 'webcam.jpeg'
+    it "provide upload form url and fields for s3" do
+      url, policy, encoded_policy, signature = subject.get_upload_form_url_fields key: 'webcam.jpeg'
 
-    #  expect(s3_upload_url).to eq "https://rails-test.s3.cn-north-1.amazonaws.com.cn/"
-    #  expect(fields).to eq({
-    #    "AWSAccessKeyId" => "AKIAOGBVMZAU5EZPGPIQ",
-    #    "key"=>"webcam.jpeg",
-    #    "policy"=>"eyJleHBpcmF0aW9uIjoiMjAxMy0xMi0zMVQxNzowMDowMFoiLCJjb25kaXRpb25zIjpbeyJidWNrZXQiOiJyYWlscy10ZXN0In0seyJrZXkiOiJ3ZWJjYW0uanBlZyJ9XX0=",
-    #    "signature"=>"Ben/QozHyneedo7aEjhpO+yoaQA="
-    #  })
+      expect(url).to eq "https://rails-test.s3.cn-north-1.amazonaws.com.cn/"
+      expect(policy["conditions"].length).to eq 5
+      expect(signature).to eq '33c77d4bad9d3509a0d08ac66203027c585d3c2941fdbd7679817cd55cf524db'
 
-    #end
+    end
 
     it "provide download url for s3" do
       s3_download_url = subject.get_download_url key: 'webcam.jpg'
