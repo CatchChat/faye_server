@@ -4,3 +4,18 @@ android_style:
   vibrate: 1
   clearable: 1
   n_id: 0
+jpush:
+  id:
+  key:
+  company_id:
+  company_key:
+xinge:
+  android:
+    id:
+    key:
+  ios:
+    id:
+    key:
+  ios_company:
+    id:
+    key:
