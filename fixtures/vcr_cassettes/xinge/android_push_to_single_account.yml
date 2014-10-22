@@ -5,7 +5,7 @@ http_interactions:
     uri: http://openapi.xg.qq.com/v2/push/single_account
     body:
       encoding: UTF-8
-      string: access_id=2100039866&account=53951bc5c2bba5ca47361472&device_type=3&expire_time=0&message=%7B%22content%22%3A%22this+is+a+test.%22%2C%22title%22%3A%22%E7%A7%92%E8%A7%86%22%7D&message_type=1&multi_pkg=0&send_time=1970-01-01+08%3A00%3A00&sign=9d01b2eb4dbe5e0d0523f6074ff7bf75&timestamp=1413888873&valid_time=600
+      string: access_id=2100039866&account=53951bc5c2bba5ca47361472&device_type=3&expire_time=0&message=%7B%22content%22%3A%22this+is+a+test.%22%2C%22title%22%3A%22%E7%A7%92%E8%A7%86%22%7D&message_type=1&multi_pkg=0&send_time=1970-01-01+08%3A00%3A00&sign=cfe1c5da1b76880d563ec69e472a1682&timestamp=1413948773&valid_time=600
     headers:
       User-Agent:
       - Faraday v0.9.0
@@ -23,7 +23,7 @@ http_interactions:
       Server:
       - nginx
       Date:
-      - Tue, 21 Oct 2014 10:54:33 GMT
+      - Wed, 22 Oct 2014 03:32:53 GMT
       Content-Type:
       - text/html; charset=utf-8
       Transfer-Encoding:
@@ -36,5 +36,5 @@ http_interactions:
       encoding: UTF-8
       string: "\r\n{\"ret_code\":0}"
     http_version: 
-  recorded_at: Tue, 21 Oct 2014 10:54:33 GMT
+  recorded_at: Wed, 22 Oct 2014 03:32:53 GMT
 recorded_with: VCR 2.9.3
