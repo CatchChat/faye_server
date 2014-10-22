@@ -8,7 +8,7 @@ describe Xinge::Utils::ApiSender do
 
   let(:dummy_class) { DummyClass.new }
 
-  it '应该有 send_api_request method' do
+  it 'There should be a send_api_request method' do
     expect(dummy_class.respond_to?(:send_api_request)).to eq(true)
   end
 

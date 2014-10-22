@@ -39,12 +39,11 @@ module Xinge
     # tag运算关系：OR
     TAG_OPERATION_OR  = 'OR'
 
-    attr_accessor :access_id, :secret_key, :timeout
+    attr_accessor :access_id, :secret_key
 
-    def initialize(access_id, secret_key, timeout = 3)
+    def initialize(access_id, secret_key)
       @access_id  = access_id
       @secret_key = secret_key
-      @timeout    = timeout
     end
 
     def common_params
@@ -60,7 +59,7 @@ module Xinge
     # @param {string}   device_token          针对某一设备推送
     # @param {Message}  message               推送的消息
     # @param {int}      environment           向iOS设备推送时必填，1表示推送生产环境；2表示推送开发环境。Android可不填。
-    def push_to_single_device(device_token, message, environment: IOS_ENV_PRO, &block)
+    def push_to_single_device(device_token, message, environment = IOS_ENV_PRO)
       fail 'device_token is invalid' if device_token.blank?
       verify_message_and_environment(message, environment)
 
@@ -79,7 +78,7 @@ module Xinge
         params[:environment]  = environment
       end
 
-      send_api_request(API_PUSH_TO_SINGLE_DEVICE, params, 'POST', @secret_key, @timeout, &block)
+      send_api_request(API_PUSH_TO_SINGLE_DEVICE, params, 'POST', @secret_key)
     end
 
     ##
@@ -88,7 +87,7 @@ module Xinge
     # @param {string}   account               账户或别名
     # @param {Message}  message               推送的消息
     # @param {int}      environment           向iOS设备推送时必填，1表示推送生产环境；2表示推送开发环境。Android可不填。
-    def push_to_single_account(account, message, device_type: DEVICE_TYPE_ALL, environment: IOS_ENV_PRO, &block)
+    def push_to_single_account(account, message, device_type: DEVICE_TYPE_ALL, environment: IOS_ENV_PRO)
       fail 'account is invalid' if account.blank?
       verify_device_type(device_type)
       verify_message_and_environment(message, environment)
@@ -109,7 +108,7 @@ module Xinge
         params[:environment]  = environment
       end
 
-      send_api_request(API_PUSH_TO_SINGLE_ACCOUNT, params, 'POST', @secret_key, @timeout, &block)
+      send_api_request(API_PUSH_TO_SINGLE_ACCOUNT, params, 'POST', @secret_key)
     end
 
     ##
@@ -117,7 +116,7 @@ module Xinge
     # @param {int}      device_type           消息推送的适配平台
     # @param {Message}  message               推送的消息
     # @param {int}      environment           向iOS设备推送时必填，1表示推送生产环境；2表示推送开发环境。Android可不填。
-    def push_to_all_devices(message, device_type: DEVICE_TYPE_ALL, environment: IOS_ENV_PRO, &block)
+    def push_to_all_devices(message, device_type: DEVICE_TYPE_ALL, environment: IOS_ENV_PRO)
       verify_device_type(device_type)
       verify_message_and_environment(message, environment)
 
@@ -142,7 +141,7 @@ module Xinge
         params[:environment]  = environment
       end
 
-      send_api_request(API_PUSH_TO_ALL_DEVICES, params, 'POST', @secret_key, @timeout, &block)
+      send_api_request(API_PUSH_TO_ALL_DEVICES, params, 'POST', @secret_key)
     end
 
     ##
@@ -152,7 +151,7 @@ module Xinge
     # @param {string}   tag_operation         多个tag的运算关系，取值为AND或OR
     # @param {Message}  message               推送的消息
     # @param {int}      environment           向iOS设备推送时必填，1表示推送生产环境；2表示推送开发环境。Android可不填。
-    def push_by_tags(message, tags, device_type: DEVICE_TYPE_ALL, tag_operation: nil, environment: IOS_ENV_PRO, &block)
+    def push_by_tags(message, tags, device_type: DEVICE_TYPE_ALL, tag_operation: nil, environment: IOS_ENV_PRO)
       tags = Array(tags).select(&:present?)
 
       verify_device_type(device_type)
@@ -182,54 +181,54 @@ module Xinge
         params[:environment]  = environment
       end
 
-      send_api_request(API_PUSH_BY_TAGS, params, 'POST', @secret_key, @timeout, &block)
+      send_api_request(API_PUSH_BY_TAGS, params, 'POST', @secret_key)
     end
 
     ##
     # 批量查询推送状态
     # @param {array}    push_ids               推送id数组
-    def query_push_status(push_ids, &block)
+    def query_push_status(push_ids)
       push_ids = Array(push_ids).select(&:present?)
       fail 'push_ids is invalid' if push_ids.blank?
 
       params = { push_ids: push_ids.map { |id| { push_id: id.to_s } }.to_json }.merge(common_params)
-      send_api_request(API_QUERY_PUSH_STATUS, params, 'POST', @secret_key, @timeout, &block)
+      send_api_request(API_QUERY_PUSH_STATUS, params, 'POST', @secret_key)
     end
 
     ##
     # 查询设备数
-    def query_device_num(&block)
-      send_api_request(API_QUERY_DEVICE_NUM, common_params, 'POST', @secret_key, @timeout, &block)
+    def query_device_num
+      send_api_request(API_QUERY_DEVICE_NUM, common_params, 'POST', @secret_key)
     end
 
     ##
     # 查询应用标签
     # @param {int}      start                 开始位置
     # @param {int}      limit                 查询数量
-    def query_tags(start: 0, limit: 100, &block)
+    def query_tags(start: 0, limit: 100)
       start = start.to_i
       limit = limit.to_i
       start = 0   if start < 0
       limit = 100 if limit < 1
 
       params = { start: start, limit: limit }.merge(common_params)
-      send_api_request(API_QUERY_TAGS, params, 'POST', @secret_key, @timeout, &block)
+      send_api_request(API_QUERY_TAGS, params, 'POST', @secret_key)
     end
 
     ##
     # 取消尚未触发的定时推送任务
     # @param {int}      push_id                消息推送id
-    def cancel_timing_task(push_id, &block)
+    def cancel_timing_task(push_id)
       fail 'push_id is invalid' if push_id.blank?
 
       params = { push_id: push_id }.merge(common_params)
-      send_api_request(API_CANCEL_TIMING_TASK, params, 'POST', @secret_key, @timeout, &block)
+      send_api_request(API_CANCEL_TIMING_TASK, params, 'POST', @secret_key)
     end
 
     ##
     # 批量为token设置标签
     # @param {array}    tags_tokens_hash         tag和token的hash，每次最多设置20个token。如：{ 'tag1' => ['token1', 'token11'], 'tag2' => ['token2', 'token22'] }。
-    def set_tags(tags_tokens_hash, &block)
+    def set_tags(tags_tokens_hash)
       verify_tags_tokens_hash(tags_tokens_hash)
 
       tag_token_list = []
@@ -240,13 +239,13 @@ module Xinge
       end
 
       params = { tag_token_list: tag_token_list.to_json }.merge(common_params)
-      send_api_request(API_SET_TAGS, params, 'POST', @secret_key, @timeout, &block)
+      send_api_request(API_SET_TAGS, params, 'POST', @secret_key)
     end
 
     ##
     # 批量为token删除标签
     # @param {array}    tags_tokens_hash         tag和token的hash，每次最多设置20个token。如：{ 'tag1' => ['token1', 'token11'], 'tag2' => ['token2', 'token22'] }。
-    def delete_tags(tags_tokens_hash, &block)
+    def delete_tags(tags_tokens_hash)
       verify_tags_tokens_hash(tags_tokens_hash)
 
 
@@ -258,27 +257,27 @@ module Xinge
       end
 
       params = { tag_token_list: tag_token_list.to_json }.merge(common_params)
-      send_api_request(API_DELETE_TAGS, params, 'POST', @secret_key, @timeout, &block)
+      send_api_request(API_DELETE_TAGS, params, 'POST', @secret_key)
     end
 
     ##
     # 根据设备token查询标签
     # @param {string}   device_token 设备token
-    def query_tags_by_device_token(device_token, &block)
+    def query_tags_by_device_token(device_token)
       fail 'device_token is invalid' if device_token.blank?
 
       params = { device_token: device_token }.merge(common_params)
-      send_api_request(API_QUERY_TAGS_BY_DEVICE_TOKEN, params, 'POST', @secret_key, @timeout, &block)
+      send_api_request(API_QUERY_TAGS_BY_DEVICE_TOKEN, params, 'POST', @secret_key)
     end
 
     ##
     # 根据标签查询设备数
     # @param {string}   tag      标签
-    def query_device_num_by_tag(tag, &block)
+    def query_device_num_by_tag(tag)
       fail 'tag is invalid' if tag.blank?
 
       params = { tag: tag }.merge(common_params)
-      send_api_request(API_QUERY_DEVICE_NUM_BY_TAG, params, 'POST', @secret_key, @timeout, &block)
+      send_api_request(API_QUERY_DEVICE_NUM_BY_TAG, params, 'POST', @secret_key)
     end
 
     private
