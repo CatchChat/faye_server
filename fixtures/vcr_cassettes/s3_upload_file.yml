@@ -1,0 +1,49 @@
+---
+http_interactions:
+- request:
+    method: post
+    uri: https://rails-test.s3.cn-north-1.amazonaws.com.cn/
+    body:
+      encoding: UTF-8
+      string: "-------------RubyMultipartPost\r\nContent-Disposition: form-data; name=\"key\"\r\n\r\ntest-key.jpg\r\n-------------RubyMultipartPost\r\nContent-Disposition:
+        form-data; name=\"X-Amz-Algorithm\"\r\n\r\nAWS4-HMAC-SHA256\r\n-------------RubyMultipartPost\r\nContent-Disposition:
+        form-data; name=\"X-Amz-Signature\"\r\n\r\nab479d5650f29778ad6e938d66126ebaa641709cdc571f4a609c61d027b627b4\r\n-------------RubyMultipartPost\r\nContent-Disposition:
+        form-data; name=\"X-Amz-Date\"\r\n\r\n20141022T083500Z\r\n-------------RubyMultipartPost\r\nContent-Disposition:
+        form-data; name=\"X-Amz-Credential\"\r\n\r\nAKIAOGBVMZAU5EZPGPIQ/20141022/cn-north-1/s3/aws4_request\r\n-------------RubyMultipartPost\r\nContent-Disposition:
+        form-data; name=\"Policy\"\r\n\r\neyJleHBpcmF0aW9uIjoiMjAxNC0xMC0yMlQwOTozNTowMC4wMDBaIiwiY29uZGl0aW9ucyI6W3siYnVja2V0IjoicmFpbHMtdGVzdCJ9LHsia2V5IjoidGVzdC1rZXkuanBnIn0seyJ4LWFtei1jcmVkZW50aWFsIjoiQUtJQU9HQlZNWkFVNUVaUEdQSVEvMjAxNDEwMjIvY24tbm9ydGgtMS9zMy9hd3M0X3JlcXVlc3QifSx7IngtYW16LWFsZ29yaXRobSI6IkFXUzQtSE1BQy1TSEEyNTYifSx7IngtYW16LWRhdGUiOiIyMDE0MTAyMlQwODM1MDBaIn1dfQ==\r\n-------------RubyMultipartPost\r\nContent-Disposition:
+        form-data; name=\"file\"; filename=\"test-key20141022-26349-1c3jgx4.jpeg\"\r\nContent-Length:
+        0\r\nContent-Type: image/jpeg\r\nContent-Transfer-Encoding: binary\r\n\r\n\r\n-------------RubyMultipartPost--\r\n\r\n"
+    headers:
+      User-Agent:
+      - Faraday v0.9.0
+      Content-Type:
+      - multipart/form-data; boundary=-----------RubyMultipartPost
+      Content-Length:
+      - '1280'
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+      Accept:
+      - "*/*"
+  response:
+    status:
+      code: 204
+      message: No Content
+    headers:
+      X-Amz-Id-2:
+      - NdG7pkvSb7pCQ6BcPFjsOWdhHbDOJogJEq7uyT9yXBNLn4QS8ZPwwtzfpRWVBDcs
+      X-Amz-Request-Id:
+      - 556BE79358FE9A03
+      Date:
+      - Wed, 22 Oct 2014 01:45:12 GMT
+      Etag:
+      - '"d41d8cd98f00b204e9800998ecf8427e"'
+      Location:
+      - https://rails-test.s3.cn-north-1.amazonaws.com.cn/test-key.jpg
+      Server:
+      - AmazonS3
+    body:
+      encoding: UTF-8
+      string: ''
+    http_version: 
+  recorded_at: Wed, 22 Oct 2014 00:35:00 GMT
+recorded_with: VCR 2.9.3

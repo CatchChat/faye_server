@@ -4,7 +4,7 @@ require 'vcr_helper'
 require 'services_helper'
 describe Cdn do
   before do
-    Timecop.freeze(Time.local(2014))
+    Timecop.freeze(Time.local(2014,10,22,8,35))
   end
 
   after do
@@ -35,38 +35,31 @@ describe Cdn do
       }.to raise_error
     end
 
-    # these fields are useless because it is only for global aws
-    #it "provide upload form url and fields for s3" do
-    #  s3_upload_url, fields = subject.get_upload_form_url_fields key: 'webcam.jpeg'
+    it "provide upload form url and fields for s3" do
+      url, policy, encoded_policy, signature = subject.get_upload_form_url_fields key: 'webcam.jpeg'
 
-    #  expect(s3_upload_url).to eq "https://rails-test.s3.cn-north-1.amazonaws.com.cn/"
-    #  expect(fields).to eq({
-    #    "AWSAccessKeyId" => "AKIAOGBVMZAU5EZPGPIQ",
-    #    "key"=>"webcam.jpeg",
-    #    "policy"=>"eyJleHBpcmF0aW9uIjoiMjAxMy0xMi0zMVQxNzowMDowMFoiLCJjb25kaXRpb25zIjpbeyJidWNrZXQiOiJyYWlscy10ZXN0In0seyJrZXkiOiJ3ZWJjYW0uanBlZyJ9XX0=",
-    #    "signature"=>"Ben/QozHyneedo7aEjhpO+yoaQA="
-    #  })
+      expect(url).to eq "https://rails-test.s3.cn-north-1.amazonaws.com.cn/"
+      expect(policy["conditions"].length).to eq 5
+      expect(signature).to eq '33c77d4bad9d3509a0d08ac66203027c585d3c2941fdbd7679817cd55cf524db'
 
-    #end
+    end
 
     it "provide download url for s3" do
       s3_download_url = subject.get_download_url key: 'webcam.jpg'
-      expect(s3_download_url).to eq "https://rails-test.s3.cn-north-1.amazonaws.com.cn/webcam.jpg?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAOGBVMZAU5EZPGPIQ%2F20131231%2Fcn-north-1%2Fs3%2Faws4_request&X-Amz-Date=20131231T160000Z&X-Amz-Expires=3600&X-Amz-Signature=1fc412adffacb5c52b243f4bf5eeec1c33276d5045db9faa32f9fa9395803b8f&X-Amz-SignedHeaders=Host"
+      expect(s3_download_url).to eq "https://rails-test.s3.cn-north-1.amazonaws.com.cn/webcam.jpg?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAOGBVMZAU5EZPGPIQ%2F20141022%2Fcn-north-1%2Fs3%2Faws4_request&X-Amz-Date=20141022T003500Z&X-Amz-Expires=3600&X-Amz-Signature=eb4488b4f26155ce02a7d72cbe5231656af922a38a6ebb44254c564882d68d4d&X-Amz-SignedHeaders=Host"
     end
 
-    #it "upload file for s3" do
-    #  Timecop.return
+    it "upload file for s3" do
 
-    #  t = Tempfile.new ['test-key', '.jpeg']
-    #  #VCR.use_cassette('s3_upload_file') do
-    #    code = subject.upload_file file_location: t.path,
-    #                                         key: 'test-key.jpg'
+      t = Tempfile.new ['test-key', '.jpeg']
+      VCR.use_cassette('s3_upload_file') do
+        code = subject.upload_file file_location: t.path,
+                                             key: 'test-key.jpg'
 
-    #    binding.pry
-    #    expect(code).to eq 200
-    #  #end
+        expect(code).to eq 204
+      end
 
-    #end
+    end
   end
 
 end
