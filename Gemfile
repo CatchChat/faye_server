@@ -25,6 +25,8 @@ gem 'sdoc', '~> 0.4.0',          group: :doc
 
 # Spring speeds up development by keeping your application running in the background. Read more: https://github.com/rails/spring
 gem 'spring',        group: :development
+# This gem implements the rspec command for Spring.
+gem "spring-commands-rspec", group: :development
 
 gem 'qiniu'
 gem 'faraday'
@@ -63,4 +65,5 @@ group :test do
   gem 'factory_girl_rails'
   gem 'database_cleaner'
   gem 'timecop'
+  gem 'terminal-notifier-guard'
 end
