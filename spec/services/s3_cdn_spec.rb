@@ -4,7 +4,7 @@ require 'vcr_helper'
 require 'services_helper'
 describe Cdn do
   before do
-    Timecop.freeze(Time.local(2014,10,22,8,35))
+    Timecop.freeze(Time.local(2014,10,23,15,10))
   end
 
   after do
@@ -39,14 +39,14 @@ describe Cdn do
       url, policy, encoded_policy, signature = subject.get_upload_form_url_fields key: 'webcam.jpeg'
 
       expect(url).to eq "https://rails-test.s3.cn-north-1.amazonaws.com.cn/"
-      expect(policy["conditions"].length).to eq 5
-      expect(signature).to eq '33c77d4bad9d3509a0d08ac66203027c585d3c2941fdbd7679817cd55cf524db'
+      expect(policy["conditions"].length).to eq 6
+      expect(signature).to eq '79abcc7d829358a5ee701728ae5160f79a3e015e87d7e2f518b16c98121031a6'
 
     end
 
     it "provide download url for s3" do
       s3_download_url = subject.get_download_url key: 'webcam.jpg'
-      expect(s3_download_url).to eq "https://rails-test.s3.cn-north-1.amazonaws.com.cn/webcam.jpg?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAOGBVMZAU5EZPGPIQ%2F20141022%2Fcn-north-1%2Fs3%2Faws4_request&X-Amz-Date=20141022T003500Z&X-Amz-Expires=3600&X-Amz-Signature=eb4488b4f26155ce02a7d72cbe5231656af922a38a6ebb44254c564882d68d4d&X-Amz-SignedHeaders=Host"
+      expect(s3_download_url).to eq 'https://rails-test.s3.cn-north-1.amazonaws.com.cn/webcam.jpg?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAOGBVMZAU5EZPGPIQ%2F20141023%2Fcn-north-1%2Fs3%2Faws4_request&X-Amz-Date=20141023T071000Z&X-Amz-Expires=3600&X-Amz-Signature=ba2a9f1ae5691cff75932348fafa75fdaccb057c4f07cd298d19511ce62b072f&X-Amz-SignedHeaders=Host'
     end
 
     it "upload file for s3" do
@@ -57,6 +57,20 @@ describe Cdn do
                                              key: 'test-key.jpg'
 
         expect(code).to eq 204
+      end
+
+    end
+
+    it "upload file for s3 with successful redirect url" do
+      t = Tempfile.new ['test-key', '.jpeg']
+      VCR.use_cassette('s3_upload_file_with_redirect') do
+        code = subject.upload_file file_location: t.path,
+                                             key: 'test-key.jpg',
+                                             success_action_redirect: 'http://catchchat-callback.herokuapp.com/hi'
+
+        expect(code).to eq 303
+
+        #verify redirect to new url
       end
 
     end

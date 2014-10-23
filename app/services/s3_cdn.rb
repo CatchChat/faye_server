@@ -12,6 +12,8 @@ class S3Cdn
   attribute :expires_in, Integer, default: 3600
   attribute :file_location, String
   attribute :region, String, default: 'cn-north-1'
+  attribute :success_action_redirect, String
+  attribute :acl, String
   def initialize(keys)
     super
   end
@@ -35,28 +37,32 @@ class S3Cdn
     self.attributes = self.attributes.merge args
     fail unless UPLOADVALIDATOR.call(self).valid?
 
-    @date = Time.now.strftime("%Y%m%dT%H%M%SZ")
+    date = Time.now.strftime("%Y%m%dT%H%M%SZ")
     #format for expire_date: 2013-08-06T12:00:00.000Z
-    @expire_date = (Time.now + expires_in).strftime("%Y-%m-%dT%H:%M:%S.000Z")
+    expire_date = (Time.now + expires_in).strftime("%Y-%m-%dT%H:%M:%S.000Z")
 
     if region.match 'cn'
       url = "https://#{bucket}.s3.#{region}.amazonaws.com.cn/"
     else
       url = "https://#{bucket}.s3.#{region}.amazonaws.com/"
     end
+    conditions_list = Array.new.tap do |array|
+      array << {"bucket" => "rails-test"}
+      array << {"key" => key}
+      array << {'acl' => 'private'}
+      array << {'success_action_redirect' => success_action_redirect} if success_action_redirect
+      array << {"x-amz-credential"=> "#{aws_access_key_id}/#{date[0,8]}/cn-north-1/s3/aws4_request"}
+      array << {"x-amz-algorithm"=> "AWS4-HMAC-SHA256"}
+      array << {"x-amz-date"=> date }
+    end
 
-    policy = { "expiration" => @expire_date,
-      "conditions" => [
-        {"bucket" => "rails-test"},
-        {"key" => key},
-        {"x-amz-credential"=> "AKIAOGBVMZAU5EZPGPIQ/#{@date[0,8]}/cn-north-1/s3/aws4_request"},
-        {"x-amz-algorithm"=> "AWS4-HMAC-SHA256"},
-        {"x-amz-date"=> @date }
-      ]
+    policy = {
+      "expiration" => expire_date,
+      "conditions" => conditions_list
     }
 
     encoded_policy = Base64.encode64(policy.to_json).tr("\n","")
-    signature = bin_to_hex(hmac(derive_key, encoded_policy))
+    signature = bin_to_hex(hmac(derive_key(date), encoded_policy))
 
     [url, policy, encoded_policy, signature]
   end
@@ -64,15 +70,18 @@ class S3Cdn
   def upload_file(args)
     url, policy, encoded_policy, signature = get_upload_form_url_fields(args)
     mime_type =  MIME::Types.type_for(file_location).first
-    payload = {
-      :key                => fetch_policy(policy,"key"),
-      :"X-Amz-Algorithm"  => fetch_policy(policy, 'x-amz-algorithm'),
-      :"X-Amz-Signature"  => signature,
-      :"X-Amz-Date"       => fetch_policy(policy,"x-amz-date"),
-      :"X-Amz-Credential" => fetch_policy(policy, "x-amz-credential"),
-      :"Policy"           => encoded_policy,
-      :file               => Faraday::UploadIO.new(file_location, mime_type.content_type)
-    }
+    payload = Hash.new.tap do |hash|
+      hash[:key]                     = fetch_policy(policy,"key")
+      hash[:acl]                     = fetch_policy(policy, 'acl')
+      hash[:success_action_redirect] = success_action_redirect if success_action_redirect
+      hash[:"X-Amz-Algorithm"]       = fetch_policy(policy, 'x-amz-algorithm')
+      hash[:"X-Amz-Signature"]       = signature
+      hash[:"X-Amz-Date"]            = fetch_policy(policy,"x-amz-date")
+      hash[:"X-Amz-Credential"]      = fetch_policy(policy, "x-amz-credential")
+      hash[:"Policy"]                = encoded_policy
+      hash[:file]                    = Faraday::UploadIO.new(file_location, mime_type.content_type)
+    end
+
     conn = Faraday.new(url: url) do |faraday|
       faraday.request :multipart
       faraday.request :url_encoded
@@ -112,12 +121,13 @@ class S3Cdn
     OpenSSL::HMAC.hexdigest(sha256_digest, key, value)
   end
 
-  def derive_key(datetime=nil)
-    service_name = 's3'
-    k_secret = aws_secret_access_key
-    k_date = hmac("AWS4" + k_secret, @date[0,8])
-    k_region = hmac(k_date, region)
-    k_service = hmac(k_region, service_name)
+  def derive_key(date)
+    fail unless date.is_a? String
+    service_name  = 's3'
+    k_secret      = aws_secret_access_key
+    k_date        = hmac("AWS4" + k_secret, date[0,8])
+    k_region      = hmac(k_date, region)
+    k_service     = hmac(k_region, service_name)
     k_credentials = hmac(k_service, 'aws4_request')
   end
 

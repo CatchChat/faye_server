@@ -10,7 +10,10 @@ module MongoModels
     field :created_at
     field :owner
 
-    belongs_to :user, :foreign_key => "owner", :class_name => "MongoModels::User", :inverse_of => 'friend_list'
+    belongs_to :user,
+      :foreign_key => "owner",
+      :class_name  => "MongoModels::User",
+      :inverse_of  => 'friend_list'
   end
 
   class User

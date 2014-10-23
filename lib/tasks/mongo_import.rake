@@ -3,10 +3,11 @@ require_relative './mongo_models'
 include MongoModels
 desc "import data from mongodb"
 task :import_mongo do
-  p user = MongoModels::User.first
-  p message = MongoModels::Message.first
-  p friend_list = MongoModels::FriendList.first
-  p verify_phone = MongoModels::VerifyPhone.first
+  user         = MongoModels::User.first
+  message      = MongoModels::Message.first
+  friend_list  = MongoModels::FriendList.first
+  verify_phone = MongoModels::VerifyPhone.first
+  binding.pry
   
 
 end

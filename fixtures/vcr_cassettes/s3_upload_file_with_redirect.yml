@@ -7,12 +7,13 @@ http_interactions:
       encoding: UTF-8
       string: "-------------RubyMultipartPost\r\nContent-Disposition: form-data; name=\"key\"\r\n\r\ntest-key.jpg\r\n-------------RubyMultipartPost\r\nContent-Disposition:
         form-data; name=\"acl\"\r\n\r\nprivate\r\n-------------RubyMultipartPost\r\nContent-Disposition:
+        form-data; name=\"success_action_redirect\"\r\n\r\nhttp://catchchat-callback.herokuapp.com/hi\r\n-------------RubyMultipartPost\r\nContent-Disposition:
         form-data; name=\"X-Amz-Algorithm\"\r\n\r\nAWS4-HMAC-SHA256\r\n-------------RubyMultipartPost\r\nContent-Disposition:
-        form-data; name=\"X-Amz-Signature\"\r\n\r\n00824797c3936789ad408a64543d30102aca3f9c1d223858e25b9dfa768be5be\r\n-------------RubyMultipartPost\r\nContent-Disposition:
+        form-data; name=\"X-Amz-Signature\"\r\n\r\n20b464c748b52ce8e9cd0e684b28caf66cb3984da922400a5d41618852b44e0d\r\n-------------RubyMultipartPost\r\nContent-Disposition:
         form-data; name=\"X-Amz-Date\"\r\n\r\n20141023T151000Z\r\n-------------RubyMultipartPost\r\nContent-Disposition:
         form-data; name=\"X-Amz-Credential\"\r\n\r\nAKIAOGBVMZAU5EZPGPIQ/20141023/cn-north-1/s3/aws4_request\r\n-------------RubyMultipartPost\r\nContent-Disposition:
-        form-data; name=\"Policy\"\r\n\r\neyJleHBpcmF0aW9uIjoiMjAxNC0xMC0yM1QxNjoxMDowMC4wMDBaIiwiY29uZGl0aW9ucyI6W3siYnVja2V0IjoicmFpbHMtdGVzdCJ9LHsia2V5IjoidGVzdC1rZXkuanBnIn0seyJhY2wiOiJwcml2YXRlIn0seyJ4LWFtei1jcmVkZW50aWFsIjoiQUtJQU9HQlZNWkFVNUVaUEdQSVEvMjAxNDEwMjMvY24tbm9ydGgtMS9zMy9hd3M0X3JlcXVlc3QifSx7IngtYW16LWFsZ29yaXRobSI6IkFXUzQtSE1BQy1TSEEyNTYifSx7IngtYW16LWRhdGUiOiIyMDE0MTAyM1QxNTEwMDBaIn1dfQ==\r\n-------------RubyMultipartPost\r\nContent-Disposition:
-        form-data; name=\"file\"; filename=\"test-key20141023-26933-tg98bd.jpeg\"\r\nContent-Length:
+        form-data; name=\"Policy\"\r\n\r\neyJleHBpcmF0aW9uIjoiMjAxNC0xMC0yM1QxNjoxMDowMC4wMDBaIiwiY29uZGl0aW9ucyI6W3siYnVja2V0IjoicmFpbHMtdGVzdCJ9LHsia2V5IjoidGVzdC1rZXkuanBnIn0seyJhY2wiOiJwcml2YXRlIn0seyJzdWNjZXNzX2FjdGlvbl9yZWRpcmVjdCI6Imh0dHA6Ly9jYXRjaGNoYXQtY2FsbGJhY2suaGVyb2t1YXBwLmNvbS9oaSJ9LHsieC1hbXotY3JlZGVudGlhbCI6IkFLSUFPR0JWTVpBVTVFWlBHUElRLzIwMTQxMDIzL2NuLW5vcnRoLTEvczMvYXdzNF9yZXF1ZXN0In0seyJ4LWFtei1hbGdvcml0aG0iOiJBV1M0LUhNQUMtU0hBMjU2In0seyJ4LWFtei1kYXRlIjoiMjAxNDEwMjNUMTUxMDAwWiJ9XX0=\r\n-------------RubyMultipartPost\r\nContent-Disposition:
+        form-data; name=\"file\"; filename=\"test-key20141023-26933-181r1cs.jpeg\"\r\nContent-Length:
         0\r\nContent-Type: image/jpeg\r\nContent-Transfer-Encoding: binary\r\n\r\n\r\n-------------RubyMultipartPost--\r\n\r\n"
     headers:
       User-Agent:
@@ -20,26 +21,28 @@ http_interactions:
       Content-Type:
       - multipart/form-data; boundary=-----------RubyMultipartPost
       Content-Length:
-      - '1390'
+      - '1629'
       Accept-Encoding:
       - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
       Accept:
       - "*/*"
   response:
     status:
-      code: 204
-      message: No Content
+      code: 303
+      message: See Other
     headers:
       X-Amz-Id-2:
-      - F7Q0+R/PfQh7WDEpvKDql9G5BChKOXKOgGcfmpRN32su1qe4N44pGHPZWHdgRqMh
+      - J4jtZyNndQRslNizrhbJKhqu8h+jXBsFt6a0/OKmvO0lri+3k4pz1DmzEpBOjcLG
       X-Amz-Request-Id:
-      - D16AFFDD9A292069
+      - 0C1B4317BFF1D078
       Date:
-      - Thu, 23 Oct 2014 07:35:53 GMT
+      - Thu, 23 Oct 2014 07:35:55 GMT
       Etag:
       - '"d41d8cd98f00b204e9800998ecf8427e"'
       Location:
-      - https://rails-test.s3.cn-north-1.amazonaws.com.cn/test-key.jpg
+      - http://catchchat-callback.herokuapp.com/hi?bucket=rails-test&key=test-key.jpg&etag=%22d41d8cd98f00b204e9800998ecf8427e%22
+      Content-Length:
+      - '0'
       Server:
       - AmazonS3
     body:

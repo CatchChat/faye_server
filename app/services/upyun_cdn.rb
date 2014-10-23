@@ -98,9 +98,9 @@ class UpyunCdn
 
   def policy
     hash = {
-      :bucket => bucket,
-      :"save-key" => file_path,
-      :expiration => Time.now.to_i + 600,
+      :bucket       => bucket,
+      :"save-key"   => file_path,
+      :expiration   => Time.now.to_i + 600,
       :"return-url" => nil,
       :"notify-url" => notify_url
     }
