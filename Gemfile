@@ -36,7 +36,6 @@ gem 'rails_config', '~> 0.4.2'
 gem 'vanguard'
 gem 'virtus'
 gem 'aws-sdk-v1'
-gem 'mongoid'
 # Use ActiveModel has_secure_password
 # gem 'bcrypt', '~> 3.1.7'
 
