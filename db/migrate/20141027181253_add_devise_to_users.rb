@@ -31,6 +31,8 @@ class AddDeviseToUsers < ActiveRecord::Migration
       # t.string   :unlock_token # Only if unlock strategy is :email or :both
       # t.datetime :locked_at
 
+      t.string :nickname
+      t.string :mobile
 
       # Uncomment below if timestamps were not included in your original model.
       t.timestamps
@@ -40,5 +42,6 @@ class AddDeviseToUsers < ActiveRecord::Migration
     add_index :users, :reset_password_token, unique: true
     # add_index :users, :confirmation_token,   unique: true
     # add_index :users, :unlock_token,         unique: true
+    add_index :users, :mobile,               unique: true
   end
 end
