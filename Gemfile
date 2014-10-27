@@ -14,6 +14,7 @@ gem 'rails_config', '~> 0.4.2'
 gem 'vanguard', '~> 0.0.4'
 gem 'virtus', '~> 1.0.3'
 gem 'aws-sdk-v1', '~> 1.57.0'
+gem 'acts_as_list', '~> 0.4.0'
 
 group :development do
   gem 'spring', '~> 1.1.3'

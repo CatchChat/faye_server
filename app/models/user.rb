@@ -11,6 +11,9 @@ class User < ActiveRecord::Base
 
   attr_accessor :login
 
+  has_many :friendships
+  has_many :friends, through: :friendships
+
   def email_required?
     false
   end
