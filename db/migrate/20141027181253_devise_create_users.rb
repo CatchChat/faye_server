@@ -1,5 +1,5 @@
-class AddDeviseToUsers < ActiveRecord::Migration
-  def self.change
+class DeviseCreateUsers < ActiveRecord::Migration
+  def change
     create_table(:users) do |t|
       ## Database authenticatable
       t.string :username,           null: false, default: ""
