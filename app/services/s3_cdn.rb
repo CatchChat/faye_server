@@ -3,7 +3,7 @@ require 'vanguard'
 require 'virtus'
 
 class S3Cdn
-  include Virtus
+  include Virtus.model
   attribute :aws_access_key_id, String
   attribute :aws_secret_access_key, String
   attribute :bucket, String

@@ -5,7 +5,7 @@ require 'base64'
 require 'securerandom'
 require 'mime/types'
 class UpyunCdn
-  include Virtus
+  include Virtus.model
   attribute :username, String
   attribute :password, String
   attribute :http_method, String

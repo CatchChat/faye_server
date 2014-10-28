@@ -2,7 +2,7 @@ require 'faraday'
 require 'vanguard'
 require 'virtus'
 class LuosimaoSms
-  include Virtus
+  include Virtus.model
   attribute :username, String
   attribute :apikey, String
   attribute :api_host, String, default: 'http://sms-api.luosimao.com'

@@ -3,7 +3,7 @@ require 'vanguard'
 require 'virtus'
 
 class QiniuCdn
-  include Virtus
+  include Virtus.model
   attribute :access_key, String
   attribute :secret_key, String
   attribute :bucket, String
