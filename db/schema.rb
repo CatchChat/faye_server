@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20141030052517) do
+ActiveRecord::Schema.define(version: 20141030070739) do
 
   create_table "access_tokens", force: true do |t|
     t.integer  "user_id"
@@ -35,8 +35,8 @@ ActiveRecord::Schema.define(version: 20141030052517) do
   end
 
   create_table "attachments_messages", force: true do |t|
-    t.integer  "message_id"
     t.integer  "attachment_id"
+    t.integer  "message_id"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
@@ -79,7 +79,6 @@ ActiveRecord::Schema.define(version: 20141030052517) do
   create_table "friendships_groups", force: true do |t|
     t.integer  "group_id"
     t.integer  "friendship_id"
-    t.integer  "position"
     t.datetime "created_at"
     t.datetime "updated_at"
   end

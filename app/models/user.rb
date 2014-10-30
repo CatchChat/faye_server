@@ -14,7 +14,7 @@ class User < ActiveRecord::Base
   has_many :friendships
   has_many :friends, through: :friendships
   has_many :groups, foreign_key: 'owner_id'
-  has_many :messages
+  has_many :messages, as: :recipient
 
   belongs_to :country
 
