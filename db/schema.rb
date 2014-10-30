@@ -11,7 +11,56 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20141027192734) do
+ActiveRecord::Schema.define(version: 20141030052517) do
+
+  create_table "access_tokens", force: true do |t|
+    t.integer  "user_id"
+    t.string   "token"
+    t.datetime "expired_at"
+    t.boolean  "active"
+    t.string   "creator_ip"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "access_tokens", ["user_id"], name: "index_access_tokens_on_user_id", using: :btree
+
+  create_table "attachments", force: true do |t|
+    t.string   "storage"
+    t.string   "file"
+    t.string   "fallback_storage"
+    t.string   "fallback_file"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "attachments_messages", force: true do |t|
+    t.integer  "message_id"
+    t.integer  "attachment_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "attachments_messages", ["attachment_id"], name: "index_attachments_messages_on_attachment_id", using: :btree
+  add_index "attachments_messages", ["message_id"], name: "index_attachments_messages_on_message_id", using: :btree
+
+  create_table "countries", force: true do |t|
+    t.string   "name"
+    t.string   "phone_code"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "friend_requests", force: true do |t|
+    t.integer  "user_id"
+    t.integer  "friend_id"
+    t.string   "state"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "friend_requests", ["friend_id"], name: "index_friend_requests_on_friend_id", using: :btree
+  add_index "friend_requests", ["user_id"], name: "index_friend_requests_on_user_id", using: :btree
 
   create_table "friendships", force: true do |t|
     t.integer  "user_id"
@@ -27,6 +76,17 @@ ActiveRecord::Schema.define(version: 20141027192734) do
   add_index "friendships", ["position"], name: "index_friendships_on_position", using: :btree
   add_index "friendships", ["user_id"], name: "index_friendships_on_user_id", using: :btree
 
+  create_table "friendships_groups", force: true do |t|
+    t.integer  "group_id"
+    t.integer  "friendship_id"
+    t.integer  "position"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "friendships_groups", ["friendship_id"], name: "index_friendships_groups_on_friendship_id", using: :btree
+  add_index "friendships_groups", ["group_id"], name: "index_friendships_groups_on_group_id", using: :btree
+
   create_table "groups", force: true do |t|
     t.integer  "owner_id"
     t.string   "name"
@@ -37,6 +97,43 @@ ActiveRecord::Schema.define(version: 20141027192734) do
 
   add_index "groups", ["owner_id"], name: "index_groups_on_owner_id", using: :btree
   add_index "groups", ["position"], name: "index_groups_on_position", using: :btree
+
+  create_table "individual_recipients", force: true do |t|
+    t.integer  "message_id"
+    t.integer  "user_id"
+    t.string   "state"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "individual_recipients", ["message_id"], name: "index_individual_recipients_on_message_id", using: :btree
+  add_index "individual_recipients", ["user_id"], name: "index_individual_recipients_on_user_id", using: :btree
+
+  create_table "messages", force: true do |t|
+    t.integer  "user_id"
+    t.integer  "recipient"
+    t.string   "recipient_type"
+    t.string   "media_type"
+    t.text     "text_content"
+    t.integer  "parent_id"
+    t.string   "state"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "messages", ["parent_id"], name: "index_messages_on_parent_id", using: :btree
+  add_index "messages", ["recipient"], name: "index_messages_on_recipient", using: :btree
+  add_index "messages", ["user_id"], name: "index_messages_on_user_id", using: :btree
+
+  create_table "unfriend_requests", force: true do |t|
+    t.integer  "user_id"
+    t.integer  "friend_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "unfriend_requests", ["friend_id"], name: "index_unfriend_requests_on_friend_id", using: :btree
+  add_index "unfriend_requests", ["user_id"], name: "index_unfriend_requests_on_user_id", using: :btree
 
   create_table "users", force: true do |t|
     t.string   "username",               default: "", null: false
