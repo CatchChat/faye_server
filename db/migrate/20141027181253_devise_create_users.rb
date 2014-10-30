@@ -35,6 +35,7 @@ class DeviseCreateUsers < ActiveRecord::Migration
       t.string :mobile
 
       t.references :country
+      t.integer :state, null: false, default: 0 # active state
 
       # Uncomment below if timestamps were not included in your original model.
       t.timestamps

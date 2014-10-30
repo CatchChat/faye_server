@@ -54,7 +54,7 @@ ActiveRecord::Schema.define(version: 20141030070739) do
   create_table "friend_requests", force: true do |t|
     t.integer  "user_id"
     t.integer  "friend_id"
-    t.string   "state"
+    t.integer  "state",      default: 0, null: false
     t.datetime "created_at"
     t.datetime "updated_at"
   end
@@ -100,7 +100,7 @@ ActiveRecord::Schema.define(version: 20141030070739) do
   create_table "individual_recipients", force: true do |t|
     t.integer  "message_id"
     t.integer  "user_id"
-    t.string   "state"
+    t.string   "state",      default: "0", null: false
     t.datetime "created_at"
     t.datetime "updated_at"
   end
@@ -115,7 +115,7 @@ ActiveRecord::Schema.define(version: 20141030070739) do
     t.string   "media_type"
     t.text     "text_content"
     t.integer  "parent_id"
-    t.string   "state"
+    t.integer  "state",          default: 0, null: false
     t.datetime "created_at"
     t.datetime "updated_at"
   end
@@ -149,6 +149,7 @@ ActiveRecord::Schema.define(version: 20141030070739) do
     t.string   "nickname"
     t.string   "mobile"
     t.integer  "country_id"
+    t.integer  "state",                  default: 0,  null: false
     t.datetime "created_at"
     t.datetime "updated_at"
   end

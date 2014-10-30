@@ -14,9 +14,24 @@ class User < ActiveRecord::Base
   has_many :friendships
   has_many :friends, through: :friendships
   has_many :groups, foreign_key: 'owner_id'
-  has_many :messages, as: :recipient
-
   belongs_to :country
+  has_many :individual_recipients
+
+  STATES = { active: 0, blocked: 1 }.freeze
+
+  state_machine :state, initial: :active do
+    STATES.each do |state_name, value|
+      state state_name, value: value
+    end
+
+    event :active do
+      transition blocked: :active
+    end
+
+    event :blocked do
+      transition active: :blocked
+    end
+  end
 
   def email_required?
     false
@@ -41,5 +56,10 @@ class User < ActiveRecord::Base
     else
       where(conditions).first
     end
+  end
+
+  def unread_messages
+    Message.joins(:individual_recipients).
+      where(individual_recipients: { state: IndividualRecipient::STATES[:delivered], user_id: self.id })
   end
 end
