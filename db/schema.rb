@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20141030052517) do
+ActiveRecord::Schema.define(version: 20141030060313) do
 
   create_table "access_tokens", force: true do |t|
     t.integer  "user_id"
@@ -151,6 +151,7 @@ ActiveRecord::Schema.define(version: 20141030052517) do
     t.string   "mobile"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.integer  "country_id"
   end
 
   add_index "users", ["mobile"], name: "index_users_on_mobile", unique: true, using: :btree
