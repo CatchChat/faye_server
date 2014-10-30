@@ -1,7 +1,7 @@
 class CreateMessages < ActiveRecord::Migration
   def change
     create_table :messages do |t|
-      t.references :user, index: true
+      t.references :sender, index: true
       t.integer :recipient
       t.string :recipient_type
       t.string :media_type
