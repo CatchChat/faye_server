@@ -2,7 +2,7 @@ class CreateMessages < ActiveRecord::Migration
   def change
     create_table :messages do |t|
       t.references :sender, index: true
-      t.integer :recipient
+      t.integer :recipient_id
       t.string :recipient_type
       t.string :media_type
       t.text :text_content
@@ -11,7 +11,7 @@ class CreateMessages < ActiveRecord::Migration
 
       t.timestamps
     end
-    add_index :messages, :recipient
+    add_index :messages, :recipient_id
     add_index :messages, :parent_id
   end
 end

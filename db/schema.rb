@@ -111,7 +111,7 @@ ActiveRecord::Schema.define(version: 20141030060313) do
 
   create_table "messages", force: true do |t|
     t.integer  "sender_id"
-    t.integer  "recipient"
+    t.integer  "recipient_id"
     t.string   "recipient_type"
     t.string   "media_type"
     t.text     "text_content"
@@ -122,7 +122,7 @@ ActiveRecord::Schema.define(version: 20141030060313) do
   end
 
   add_index "messages", ["parent_id"], name: "index_messages_on_parent_id", using: :btree
-  add_index "messages", ["recipient"], name: "index_messages_on_recipient", using: :btree
+  add_index "messages", ["recipient_id"], name: "index_messages_on_recipient_id", using: :btree
   add_index "messages", ["sender_id"], name: "index_messages_on_sender_id", using: :btree
 
   create_table "unfriend_requests", force: true do |t|
