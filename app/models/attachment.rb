@@ -1,4 +1,3 @@
 class Attachment < ActiveRecord::Base
-  has_many :attachments_messages
-  has_many :messages, through: :attachments_messages
+  has_and_belongs_to_many :messages
 end

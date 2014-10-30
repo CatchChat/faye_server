@@ -1,7 +1,6 @@
 class Group < ActiveRecord::Base
   belongs_to :owner, class_name: 'User'
-  has_many :friendships_groups
-  has_many :friends, through: :friendships_groups
+  has_and_belongs_to_many :friendships
   has_many :messages, as: :recipient
 
   acts_as_list scope: [:owner_id]
