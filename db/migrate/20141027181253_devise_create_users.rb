@@ -34,6 +34,8 @@ class DeviseCreateUsers < ActiveRecord::Migration
       t.string :nickname
       t.string :mobile
 
+      t.references :country
+
       # Uncomment below if timestamps were not included in your original model.
       t.timestamps
     end
