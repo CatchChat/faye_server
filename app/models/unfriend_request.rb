@@ -1,4 +1,4 @@
-class FriendRequest < ActiveRecord::Base
+class UnfriendRequest < ActiveRecord::Base
   belongs_to :user
   belongs_to :friend
 end
