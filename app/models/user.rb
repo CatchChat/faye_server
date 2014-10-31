@@ -1,4 +1,6 @@
+require 'node_password'
 class User < ActiveRecord::Base
+  extend NodePassward
   # Include default devise modules. Others available are:
   # :confirmable, :lockable, :timeoutable and :omniauthable
   devise :database_authenticatable, :encryptable, :registerable,
@@ -62,4 +64,5 @@ class User < ActiveRecord::Base
     Message.joins(:individual_recipients).
       where(individual_recipients: { state: IndividualRecipient::STATES[:delivered], user_id: self.id })
   end
+
 end
