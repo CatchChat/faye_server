@@ -1,6 +1,6 @@
 require 'node_password'
 class User < ActiveRecord::Base
-  extend NodePassward
+  extend NodePassword
   # Include default devise modules. Others available are:
   # :confirmable, :lockable, :timeoutable and :omniauthable
   devise :database_authenticatable, :encryptable, :registerable,
