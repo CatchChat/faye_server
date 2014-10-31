@@ -18,6 +18,8 @@ class User < ActiveRecord::Base
   has_many :groups, foreign_key: 'owner_id'
   belongs_to :country
   has_many :individual_recipients
+  has_one :access_token
+  before_save :ensure_access_token
 
   STATES = { active: 0, blocked: 1 }.freeze
 
@@ -32,6 +34,18 @@ class User < ActiveRecord::Base
 
     event :blocked do
       transition active: :blocked
+    end
+  end
+
+  def ensure_access_token
+    self.access_token  ||= AccessToken.create token:    generate_token,
+                                              user_id:  self.id
+  end
+
+  def generate_token
+    loop do
+      new_token = Devise.friendly_token
+      break new_token unless AccessToken.where(token: new_token).first
     end
   end
 
