@@ -9,15 +9,15 @@ class FriendRequest < ActiveRecord::Base
       state state_name, value: value
     end
 
-    event :accepted do
+    event :accept do
       transition pending: :accepted
     end
 
-    event :rejected do
+    event :reject do
       transition pending: :rejected
     end
 
-    event :blocked do
+    event :block do
       transition pending: :blocked
     end
   end

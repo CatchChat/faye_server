@@ -9,11 +9,11 @@ class IndividualRecipient < ActiveRecord::Base
       state state_name, value: value
     end
 
-    event :delivered do
+    event :deliver do
       transition sent: :delivered
     end
 
-    event :read do
+    event :mark_as_read do
       transition delivered: :read
     end
   end

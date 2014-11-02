@@ -28,12 +28,12 @@ class User < ActiveRecord::Base
       state state_name, value: value
     end
 
-    event :active do
-      transition blocked: :active
+    event :block do
+      transition active: :blocked
     end
 
-    event :blocked do
-      transition active: :blocked
+    event :unblock do
+      transition blocked: :active
     end
   end
 

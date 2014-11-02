@@ -11,7 +11,7 @@ class Message < ActiveRecord::Base
       state state_name, value: value
     end
 
-    event :read do
+    event :mark_as_read do
       transition unread: :read
     end
   end
