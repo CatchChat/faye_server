@@ -5,7 +5,7 @@ class HomeController < ApplicationController
   before_action :authenticate_user
 
   def authenticate_user
-    render :text => "Unauthorized!", :status => 401 unless authenticated?
+    render :text => {error: "Unauthorized!"}.to_json, :status => 401 unless authenticated?
   end
 
   def index
