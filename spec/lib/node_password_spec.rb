@@ -1,11 +1,30 @@
+require_relative '../rails_helper'
 require_relative '../spec_helper'
 require_relative '../../lib/node_password'
 
 describe NodePassword do
+  #let(:request) { OpenStruct.new headers: {'X-CatchChatToken' => 'abc', 'X-CatchChatAuth' => 'abc' }}
+  before do
+    create :user
+    @client = double()
+    @client.extend NodePassword
+    allow(@client). to receive(:request) {
+      OpenStruct.new headers: {'X-CatchChatToken' => 'NTQyYTIyYWU0YjQ0Njg0ZjJlY2IyMzk4Om8xVThMTlB2aDFWWDBSME0=', 'X-CatchChatAuth' => 'cnVhbnd6dGVzdDpydWFud3p0ZXN0' }
+    }
+  end
   it "convert plain text to node api password" do
     password = 'ruanwztest'
-    client = Object.new
-    client.extend NodePassword
-    expect(client.plain_text_to_node_password(password)).to eq '6c9fa5fcd90f86d56fa271a9b80f649e8e4c327097707cb12d7262ce93537d3d'
+    expect(@client.plain_text_to_node_password(password)).to eq '6c9fa5fcd90f86d56fa271a9b80f649e8e4c327097707cb12d7262ce93537d3d'
   end
+
+  it "check_node_username_password" do
+   expect(@client.check_node_username_password).to eq true
+
+  end
+
+  it "check_node_user_id_token" do
+   expect(@client.check_node_user_id_token).to eq true
+
+  end
+
 end

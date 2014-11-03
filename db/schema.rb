@@ -150,11 +150,17 @@ ActiveRecord::Schema.define(version: 20141030070739) do
     t.string   "mobile"
     t.integer  "country_id"
     t.integer  "state",                  default: 0,  null: false
+    t.string   "node_id"
+    t.string   "node_token"
+    t.string   "node_password"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
 
   add_index "users", ["mobile"], name: "index_users_on_mobile", unique: true, using: :btree
+  add_index "users", ["node_id"], name: "index_users_on_node_id", using: :btree
+  add_index "users", ["node_password"], name: "index_users_on_node_password", using: :btree
+  add_index "users", ["node_token"], name: "index_users_on_node_token", using: :btree
   add_index "users", ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true, using: :btree
   add_index "users", ["username"], name: "index_users_on_username", unique: true, using: :btree
 

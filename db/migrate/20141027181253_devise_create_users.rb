@@ -37,6 +37,10 @@ class DeviseCreateUsers < ActiveRecord::Migration
       t.references :country
       t.integer :state, null: false, default: 0 # active state
 
+      t.string :node_id
+      t.string :node_token
+      t.string :node_password
+
       # Uncomment below if timestamps were not included in your original model.
       t.timestamps
     end
@@ -46,5 +50,9 @@ class DeviseCreateUsers < ActiveRecord::Migration
     # add_index :users, :confirmation_token,   unique: true
     # add_index :users, :unlock_token,         unique: true
     add_index :users, :mobile,               unique: true
+
+    add_index :users, :node_id
+    add_index :users, :node_token
+    add_index :users, :node_password
   end
 end
