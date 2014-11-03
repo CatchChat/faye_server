@@ -20,7 +20,7 @@ module AuthToken
     end
 
     # check access_tokens table
-    if params[:access_token] && access_token = AccessToken.find_by_token(params[:access_token])
+    if params[:access_token] && access_token = AccessToken.find_by(token: params[:access_token])
       @user = access_token.user
       true
     else
@@ -35,7 +35,7 @@ module AuthToken
   def check_username_password
     return unless request.headers['X-CatchChatAuth']
     username, plain_password = Base64.decode64(request.headers['X-CatchChatAuth']).split(':')
-    if (user = User.find_by_username(username)) && user.valid_password?(plain_password)
+    if (user = User.find_by(username: username)) && user.valid_password?(plain_password)
       @user = user
       return true
     end
@@ -44,7 +44,7 @@ module AuthToken
   def check_access_token
     return unless token_encoded = request.headers['X-CatchChatToken']
     token_string = Base64.decode64(token_encoded)
-    if access_token = AccessToken.find_by_token(token_string)
+    if access_token = AccessToken.find_by(token: token_string)
       @user = access_token.user
       return true
     end

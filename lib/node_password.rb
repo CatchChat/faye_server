@@ -7,7 +7,7 @@ module NodePassword
   def check_node_user_id_token
     if request.headers['X-CatchChatToken']
       user_node_id, node_token = Base64.decode64(request.headers['X-CatchChatToken']).split(':')
-      if user = User.find_by_node_id_and_node_token(user_node_id, node_token)
+      if user = User.find_by(node_id: user_node_id, node_token: node_token)
         @user = user
         return true
       end
@@ -18,7 +18,7 @@ module NodePassword
     if request.headers['X-CatchChatAuth']
       username, plain_password = Base64.decode64(request.headers['X-CatchChatAuth']).split(':')
       node_password = plain_text_to_node_password(plain_password)
-      if user = User.find_by_username_and_node_password(username, node_password)
+      if user = User.find_by(username: username, node_password: node_password)
         @user = user
         return true
       end
