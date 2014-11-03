@@ -8,10 +8,11 @@ describe NodePassword do
     create :user
     @client = double()
     @client.extend NodePassword
+    # following token comes from mongodb legacy data combined with id and token
     allow(@client). to receive(:request) {
       OpenStruct.new headers: {
         'X-CatchChatToken' => 'NTQyYTIyYWU0YjQ0Njg0ZjJlY2IyMzk4Om8xVThMTlB2aDFWWDBSME0=',
-        'X-CatchChatAuth'  => 'cnVhbnd6dGVzdDpydWFud3p0ZXN0' }
+        'X-CatchChatAuth'  => Base64.encode64('ruanwztest:ruanwztest') }
     }
   end
 

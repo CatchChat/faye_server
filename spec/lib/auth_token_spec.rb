@@ -8,10 +8,11 @@ describe AuthToken do
     user = create :user
     @client = double()
     @client.extend AuthToken
+    # following token just contains uniq token
     allow(@client). to receive(:request) {
       OpenStruct.new headers: {
         'X-CatchChatToken' => Base64.encode64(user.access_token.token),
-        'X-CatchChatAuth'  => 'cnVhbnd6dGVzdDpydWFud3p0ZXN0' }
+        'X-CatchChatAuth'  => Base64.encode64('ruanwztest:ruanwztest') }
     }
   end
 
