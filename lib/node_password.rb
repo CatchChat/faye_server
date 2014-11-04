@@ -1,6 +1,4 @@
-
 module NodePassword
-
 
   def plain_text_to_node_password(plain_text)
     sha256_digest.update(node_salted(plain_text)).hexdigest
