@@ -68,4 +68,13 @@ Rails.application.routes.draw do
   end
 
   root to: "home#index"
+
+  scope path: 'api/v4' do
+    resources :auth do
+      collection do
+        post 'token_by_login'
+      end
+    end
+  end
+
 end

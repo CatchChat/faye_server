@@ -9,20 +9,16 @@ describe AuthToken do
   before do
     user = create :user
     # following token just contains uniq token
-    allow(AuthToken).to receive(:request) {
-      OpenStruct.new headers: {
-        'X-CatchChatToken' => Base64.encode64(user.access_token.token),
-        'X-CatchChatAuth'  => Base64.encode64('ruanwztest:ruanwztest') }
-    }
   end
 
 
   it "check_access_token" do
-    expect(AuthToken.check_access_token).to eq true
+    request = OpenStruct.new headers: {'AuthorizationToken' =>'test-token' }
+    expect(AuthToken.check_access_token(request)).to be_an_instance_of User
   end
 
   it "check_username_password" do
-    expect(AuthToken.check_username_password).to eq true
+    expect(AuthToken.check_username_password('ruanwztest','ruanwztest')).to be_an_instance_of User
   end
 
 end

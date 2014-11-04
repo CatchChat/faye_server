@@ -6,8 +6,7 @@ module AuthToken
 
   def authenticated?
     # TODO: regenerate encrypted_password using devise
-
-    if warden.authenticate(:password, :token, :node_password, :node_token)
+    if warden.authenticate(:token, :password, :node_password)
       return true
     end
   end
@@ -16,60 +15,17 @@ module AuthToken
     warden.user || @user
   end
 
-  def self.check_username_password
-    username, plain_password = Base64.decode64(request.headers['X-CatchChatAuth']).split(':')
-    if (user = User.find_by(username: username)) && user.valid_password?(plain_password)
-      @user = user
-      return true
+  def self.check_username_password(username, password)
+    if (user = User.find_by(username: username)) && user.valid_password?(password)
+      user
     end
   end
 
-  def self.check_access_token
-    token_encoded = request.headers['X-CatchChatToken']
-    token_string = Base64.decode64(token_encoded)
-    if access_token = AccessToken.find_by(token: token_string)
-      @user = access_token.user
-      return true
-    end
-  end
-
-  Warden::Strategies.add(:password) do
-    def valid?
-      request.headers['X-CatchChatAuth']
-    end
-
-    def authenticate!
-      check_access_token
-    end
-  end
-
-  Warden::Strategies.add(:node_token) do
-    def valid?
-      request.headers['X-CatchChatToken']
-    end
-
-    def authenticate!
-      check_node_user_id_token
-    end
-  end
-
-  Warden::Strategies.add(:node_password) do
-    def valid?
-      request.headers['X-CatchChatAuth']
-    end
-
-    def authenticate!
-      check_node_username_password
-    end
-  end
-
-  Warden::Strategies.add(:node_token) do
-    def valid?
-      request.headers['X-CatchChatToken']
-    end
-
-    def authenticate!
-      check_node_user_id_token
+  def self.check_access_token(request)
+    token = request.headers['AuthorizationToken']
+    if access_token = AccessToken.find_by(token: token)
+      access_token.user
     end
   end
 end
+
