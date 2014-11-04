@@ -1,0 +1,21 @@
+en:
+  api:
+    v4:
+      friend_requests:
+        create:
+          blocked: '%{friend_name} has blocked your friend request'
+          not_found: Not found
+          already_friend: 'You are already friends with %{friend_name}'
+        accept:
+          not_found:  Not found
+          accept_error: Accept failed
+        reject:
+          not_found:  Not found
+          reject_error: Reject failed
+        block:
+          not_found:  Not found
+          block_error: Block failed
+        show:
+          not_found:  Not found
+        destroy:
+          not_found:  Not found

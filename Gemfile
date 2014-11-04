@@ -25,6 +25,7 @@ end
 
 group :development, :test do
   gem "pry", '~> 0.10.1'
+  gem 'pry-byebug', '~> 2.0.0'
   gem 'rubocop','~> 0.26.1', require: false
   gem 'guard-rubocop', '~> 1.1.0'
 end

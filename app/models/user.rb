@@ -19,6 +19,9 @@ class User < ActiveRecord::Base
   belongs_to :country
   has_many :individual_recipients
   has_one :access_token
+  has_many :friend_requests
+  has_many :received_friend_requests, foreign_key: 'friend_id', class_name: 'FriendRequest'
+
   before_save :ensure_access_token
 
   STATES = { active: 0, blocked: 1 }.freeze
@@ -65,6 +68,10 @@ class User < ActiveRecord::Base
     @login || self.username
   end
 
+  def name
+    nickname.presence || username
+  end
+
   def self.find_for_database_authentication(warden_conditions)
     conditions = warden_conditions.dup
     if login = conditions.delete(:login)
@@ -78,5 +85,4 @@ class User < ActiveRecord::Base
     Message.joins(:individual_recipients).
       where(individual_recipients: { state: IndividualRecipient::STATES[:delivered], user_id: self.id })
   end
-
 end
