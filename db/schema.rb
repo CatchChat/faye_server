@@ -160,6 +160,7 @@ ActiveRecord::Schema.define(version: 20141104091436) do
     t.string   "mobile"
     t.integer  "country_id"
     t.integer  "state",                  default: 0,  null: false
+    t.string   "time_zone"
     t.string   "node_id"
     t.string   "node_token"
     t.string   "node_password"
