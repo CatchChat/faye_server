@@ -36,6 +36,7 @@ class DeviseCreateUsers < ActiveRecord::Migration
 
       t.references :country
       t.integer :state, null: false, default: 0 # active state
+      t.string :time_zone
 
       t.string :node_id
       t.string :node_token

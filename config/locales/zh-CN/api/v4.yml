@@ -1,0 +1,21 @@
+zh-CN:
+  api:
+    v4:
+      friend_requests:
+        create:
+          blocked: '%{friend_name}已禁止你的好友请求'
+          not_found: 该好友不存在
+          already_friend: '您与%{friend_name}已经是好友关系'
+        accept:
+          accept_error: 接受好友请求发生错误
+          not_found: 好友请求不存在
+        reject:
+          reject_error: 拒绝好友请求发生错误
+          not_found: 好友请求不存在
+        block:
+          block_error: 禁止好友请求发生错误
+          not_found: 好友请求不存在
+        show:
+          not_found: 好友请求不存在
+        destroy:
+          not_found: 好友请求不存在

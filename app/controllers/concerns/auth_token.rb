@@ -1,7 +1,7 @@
 module AuthToken
   extend NodePassword
   def warden
-    env['warden']
+    request.env['warden']
   end
 
   def authenticated?

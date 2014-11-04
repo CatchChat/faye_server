@@ -55,6 +55,18 @@ Rails.application.routes.draw do
   #     resources :products
   #   end
 
+  namespace :api do
+    namespace :v4 do
+      resources :friend_requests, only: %i(create show destroy) do
+        member do
+          patch :accept
+          patch :reject
+          patch :block
+        end
+      end
+    end
+  end
+
   root to: "home#index"
 
   scope path: 'api/v4' do

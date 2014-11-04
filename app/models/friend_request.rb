@@ -4,6 +4,10 @@ class FriendRequest < ActiveRecord::Base
 
   STATES = { pending: 0, accepted: 1, rejected: 2, blocked: 3 }.freeze
 
+  STATES.each do |state, value|
+    scope state, -> { where(self.table_name => { state: value }) }
+  end
+
   state_machine :state, initial: :pending do
     STATES.each do |state_name, value|
       state state_name, value: value

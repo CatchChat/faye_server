@@ -1,6 +1,5 @@
 zh-CN:
-  api:
-    v4:
-      friend_requests:
-        blocked: 好友请求被拒绝
-        not_found: 好友不存在
+  time:
+    formats:
+      default: ! '%Y年%m月%d日 %H:%M:%S'
+      iso8601: ! '%Y-%m-%dT%H:%M:%SZ'
