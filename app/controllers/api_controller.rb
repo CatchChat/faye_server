@@ -11,7 +11,7 @@ class ApiController < ApplicationController
   private
 
   def authenticate_user
-    render json: { error: "Unauthorized!" }, status: 401 unless authenticated?
+    render json: { error: "Unauthorized!" }, status: :unauthorized unless authenticated?
   end
 
   def set_locale

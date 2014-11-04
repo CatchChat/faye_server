@@ -6,21 +6,21 @@ class Api::V4::FriendRequestsController < ApiController
   #   friend_id
   def create
     friend = User.find_by(id: params[:friend_id])
-    return render json: { error: t('.not_found') }, status: 404 unless friend
+    return render json: { error: t('.not_found') }, status: :not_found unless friend
 
     if current_user.friends.find_by(id: friend.id)
-      return render json: { error: t('.already_friend', friend_name: friend.name) }, status: 403
+      return render json: { error: t('.already_friend', friend_name: friend.name) }, status: :forbidden
     end
 
     if current_user.friend_requests.blocked.find_by(friend_id: friend.id)
-      return render json: { error: t('.blocked', friend_name: friend.name) }, status: 403
+      return render json: { error: t('.blocked', friend_name: friend.name) }, status: :forbidden
     end
 
     friend_request = current_user.friend_requests.new(friend_id: friend.id)
     if friend_request.save
       render json: format_json(friend_request)
     else
-      render json: { error: friend_request.errors.full_messages.join("\n") }, status: 422
+      render json: { error: friend_request.errors.full_messages.join("\n") }, status: :unprocessable_entity
     end
   end
 
@@ -29,7 +29,7 @@ class Api::V4::FriendRequestsController < ApiController
     if @friend_request.accept
       render json: format_json(@friend_request)
     else
-      render json: { error: t('.accept_error') }, status: 422
+      render json: { error: t('.accept_error') }, status: :unprocessable_entity
     end
   end
 
@@ -38,7 +38,7 @@ class Api::V4::FriendRequestsController < ApiController
     if @friend_request.reject
       render json: format_json(@friend_request)
     else
-      render json: { error: t('.reject_error') }, status: 422
+      render json: { error: t('.reject_error') }, status: :unprocessable_entity
     end
   end
 
@@ -47,7 +47,7 @@ class Api::V4::FriendRequestsController < ApiController
     if @friend_request.block
       render json: format_json(@friend_request)
     else
-      render json: { error: t('.block_error') }, status: 422
+      render json: { error: t('.block_error') }, status: :unprocessable_entity
     end
   end
 
@@ -66,7 +66,7 @@ class Api::V4::FriendRequestsController < ApiController
 
   def load_friend_request
     unless @friend_request = current_user.friend_requests.find_by(id: params[:id])
-      return render json: { error: t('.not_found') }, status: 404
+      return render json: { error: t('.not_found') }, status: :not_found
     end
   end
 
