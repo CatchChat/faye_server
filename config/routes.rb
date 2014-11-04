@@ -70,7 +70,7 @@ Rails.application.routes.draw do
   root to: "home#index"
 
   scope path: 'api/v4' do
-    resources :auth, shallow: true do
+    resources :auth do
       collection do
         post 'token_by_login'
       end
