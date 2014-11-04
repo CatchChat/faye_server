@@ -4,7 +4,7 @@ FactoryGirl.define do
     username 'ruanwztest'
     password 'ruanwztest'
     node_id '542a22ae4b44684f2ecb2398'
-    node_password '6c9fa5fcd90f86d56fa271a9b80f649e8e4c327097707cb12d7262ce93537d3d'
+    node_password '62d30f88375b7f4f1461aa0e19b47e6e52c6141409a8c5e6bcb2c45e8186a4a1'
     node_token 'o1U8LNPvh1VX0R0M'
     access_token
 
