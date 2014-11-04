@@ -1,5 +1,6 @@
 module AuthToken
   include NodePassword
+
   def warden
     env['warden']
   end
