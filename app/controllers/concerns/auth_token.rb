@@ -1,4 +1,5 @@
 module AuthToken
+  extend NodePassword
   def warden
     env['warden']
   end
@@ -54,7 +55,6 @@ module AuthToken
   end
 
   Warden::Strategies.add(:node_password) do
-    include NodePassword
     def valid?
       request.headers['X-CatchChatAuth']
     end
@@ -65,7 +65,6 @@ module AuthToken
   end
 
   Warden::Strategies.add(:node_token) do
-    include NodePassword
     def valid?
       request.headers['X-CatchChatToken']
     end
