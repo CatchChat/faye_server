@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20141030070739) do
+ActiveRecord::Schema.define(version: 20141104091436) do
 
   create_table "access_tokens", force: true do |t|
     t.integer  "user_id"
@@ -123,6 +123,16 @@ ActiveRecord::Schema.define(version: 20141030070739) do
   add_index "messages", ["parent_id"], name: "index_messages_on_parent_id", using: :btree
   add_index "messages", ["recipient_id", "recipient_type"], name: "index_messages_on_recipient_id_and_recipient_type", using: :btree
   add_index "messages", ["sender_id"], name: "index_messages_on_sender_id", using: :btree
+
+  create_table "sms_verification_codes", force: true do |t|
+    t.integer  "user_id"
+    t.datetime "expired_at"
+    t.boolean  "active"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "sms_verification_codes", ["user_id"], name: "index_sms_verification_codes_on_user_id", using: :btree
 
   create_table "unfriend_requests", force: true do |t|
     t.integer  "user_id"
