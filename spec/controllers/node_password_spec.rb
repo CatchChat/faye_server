@@ -1,6 +1,5 @@
 require_relative '../rails_helper'
 require_relative '../spec_helper'
-require_relative '../../lib/node_password'
 
 describe NodePassword do
 
