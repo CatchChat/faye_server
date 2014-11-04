@@ -1,3 +1,4 @@
+require 'strategies'
 class ApiController < ApplicationController
   include AuthToken
 
