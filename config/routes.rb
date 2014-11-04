@@ -72,7 +72,8 @@ Rails.application.routes.draw do
   scope path: 'api/v4' do
     resources :auth do
       collection do
-        post 'token_by_login'
+        post 'token_by_login'  => "auth#create"
+        post 'token_by_mobile' => "auth#create"
       end
     end
   end

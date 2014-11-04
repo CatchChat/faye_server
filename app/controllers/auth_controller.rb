@@ -1,6 +1,5 @@
 class AuthController < ApiController
-
-  def token_by_login
+  def create
     render :text => 'token_by_login'
   end
 
