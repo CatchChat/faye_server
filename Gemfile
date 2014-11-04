@@ -16,6 +16,7 @@ gem 'virtus', '~> 1.0.3'
 gem 'aws-sdk-v1', '~> 1.57.0'
 gem 'acts_as_list', '~> 0.4.0'
 gem 'state_machine', '~> 1.2.0'
+gem 'rails-i18n', '~> 4.0.3'
 
 group :development do
   gem 'spring', '~> 1.1.3'
