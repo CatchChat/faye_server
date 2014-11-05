@@ -1,11 +1,11 @@
 require 'auth_token'
 Warden::Strategies.add(:password) do
   def valid?
-    params[:username] && params[:password]
+    params[:login] && params[:password]
   end
 
   def authenticate!
-    if user = AuthToken.check_username_password(params[:username], params[:password])
+    if user = AuthToken.check_username_password(params[:login], params[:password])
       success!(user)
     end
   end
@@ -25,11 +25,11 @@ end
 
 Warden::Strategies.add(:node_password) do
   def valid?
-    params[:username] && params[:password]
+    params[:login] && params[:password]
   end
 
   def authenticate!
-    if user = AuthToken.check_node_username_password(params[:username], params[:password])
+    if user = AuthToken.check_node_username_password(params[:login], params[:password])
       success!(user)
     end
   end
@@ -42,7 +42,7 @@ Warden::Strategies.add(:mobile) do
   end
 
   def authenticate!
-    if user = AuthToken.check_mobile_and_sms_verification_code(params[:username], params[:password])
+    if user = AuthToken.check_mobile_and_sms_verification_code(params[:login], params[:password])
       success!(user)
     end
   end

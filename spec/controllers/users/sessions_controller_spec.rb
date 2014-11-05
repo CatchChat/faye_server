@@ -8,18 +8,21 @@ describe Users::SessionsController do
   end
 
   it 'logins with username and password then returns token json' do
-    post :create, username: 'ruanwztest', password: 'ruanwztest', :format => 'json'
+    post :create,login: 'ruanwztest', password: 'ruanwztest', :format => 'json'
     expect(response.body).to include 'ruanwztest'
     expect(response.body).to include 'test-token'
   end
 
   it 'logins with node token then returns token json' do
-    post :create, username: 'ruanwztest', password: 'node', :format => 'json'
+    post :create, login: 'ruanwztest', password: 'node', :format => 'json'
     expect(response.body).to include 'ruanwztest'
     expect(response.body).to include 'test-token'
   end
 
   it 'logins with mobile and sms verification code then returns token json' do
+    post :create, login: '123456789', password: 'test-token', :format => 'json'
+    expect(response.body).to include 'ruanwztest'
+    expect(response.body).to include 'test-token'
 
   end
 end
