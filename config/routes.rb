@@ -1,5 +1,12 @@
 Rails.application.routes.draw do
-  devise_for :users
+  scope path: 'api/v4' do
+    devise_for :users, path: 'auth',
+                       path_names: {sign_in: 'token_by_login'},
+                       controllers: {sessions: "users/sessions"}
+    scope 'auth' do
+      post 'token_by_mobile' => 'users/sessions#create'
+    end
+  end
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".
 
@@ -69,13 +76,13 @@ Rails.application.routes.draw do
 
   root to: "home#index"
 
-  scope path: 'api/v4' do
-    resources :auth do
-      collection do
-        post 'token_by_login'  => "auth#create"
-        post 'token_by_mobile' => "auth#create"
-      end
-    end
-  end
+  #scope path: 'api/v4' do
+  #  resources :auth do
+  #    collection do
+  #      #post 'token_by_login'  => "auth#create"
+  #      post 'token_by_mobile' => "users/sessions#create"
+  #    end
+  #  end
+  #end
 
 end
