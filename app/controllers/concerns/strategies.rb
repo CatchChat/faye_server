@@ -35,3 +35,15 @@ Warden::Strategies.add(:node_password) do
   end
 end
 
+
+Warden::Strategies.add(:mobile) do
+  def valid?
+    params[:login] && params[:password]
+  end
+
+  def authenticate!
+    if user = AuthToken.check_mobile_and_sms_verification_code(params[:username], params[:password])
+      success!(user)
+    end
+  end
+end

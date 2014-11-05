@@ -126,12 +126,14 @@ ActiveRecord::Schema.define(version: 20141104091436) do
 
   create_table "sms_verification_codes", force: true do |t|
     t.integer  "user_id"
+    t.string   "token"
     t.datetime "expired_at"
     t.boolean  "active"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
 
+  add_index "sms_verification_codes", ["token"], name: "index_sms_verification_codes_on_token", using: :btree
   add_index "sms_verification_codes", ["user_id"], name: "index_sms_verification_codes_on_user_id", using: :btree
 
   create_table "unfriend_requests", force: true do |t|
