@@ -29,7 +29,7 @@ module AuthToken
   end
 
   def self.check_mobile_and_sms_verification_code(mobile, sms_str)
-    if sms_verification_code = SmsVerificationCode.find_by(token: sms_str)
+    if sms_verification_code = SmsVerificationCode.find_by(mobile: mobile, token: sms_str)
       sms_verification_code.user
     end
   end
