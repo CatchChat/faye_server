@@ -10,6 +10,13 @@ Rails.application.routes.draw do
       post 'token_by_mobile' => 'users/sessions#create'
     end
   end
+
+  scope path: 'api/v5/auth' do
+    devise_scope :user do
+      post 'token_by_login' => 'users/sessions#create'
+      post 'token_by_mobile' => 'users/sessions#create'
+    end
+  end
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".
 
