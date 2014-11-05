@@ -11,12 +11,12 @@ class Users::SessionsController < Devise::SessionsController
 
   def new
     mobile = params[:login].to_s
-    random_num = rand(100000)
+    random_num = rand(100000).to_s
     user = User.find_by(mobile: mobile)
     user.sms_verification_code ||= SmsVerificationCode.create token: random_num.to_s,
                                                               mobile: mobile
     user.sms_verification_code.save
-    content = "Your SMS Verification Code is " + random_num.to_s
+    content = "Your SMS Verification Code is " + user.sms_verification_code.token
     @success = send_sms(mobile, content)
   end
   private
