@@ -35,5 +35,9 @@ module CatchchatServer
     config.generators do |g|
       g.assets false
     end
+
+    config.middleware.use Rack::Attack
+
+    config.cache_store = :redis_store, Settings.redis.cache.to_h.symbolize_keys.merge(expires_in: 1.day)
   end
 end

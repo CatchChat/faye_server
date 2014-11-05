@@ -17,6 +17,12 @@ gem 'aws-sdk-v1', '~> 1.57.0'
 gem 'acts_as_list', '~> 0.4.0'
 gem 'state_machine', '~> 1.2.0'
 gem 'rails-i18n', '~> 4.0.3'
+gem 'rack-attack', '~> 4.2.0'
+gem 'redis', '~> 3.1.0'
+gem 'redis-namespace', '~> 1.5.1'
+gem 'hiredis', '~> 0.5.2'
+gem 'redis-objects', '~> 1.0.1'
+gem 'redis-rails', '~> 4.0.0'
 
 group :development do
   gem 'spring', '~> 1.1.3'

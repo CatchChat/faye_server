@@ -6,3 +6,5 @@ en:
         accepted: Accepted
         rejected: Rejected
         pending:  Pending
+  messages:
+    retry_after: API rate limit exceeded for you
