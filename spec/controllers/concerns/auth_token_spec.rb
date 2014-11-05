@@ -8,6 +8,7 @@ describe AuthToken do
 
   before do
     @user = create :user
+    @mobile_user = create :mobile_user
     # following token just contains uniq token
   end
 
@@ -22,7 +23,7 @@ describe AuthToken do
   end
 
   it "check_mobile_and_sms_verification_code" do
-    expect(AuthToken.check_mobile_and_sms_verification_code(@user.mobile, @user.sms_verification_code.token)).to be_an_instance_of User
+    expect(AuthToken.check_mobile_and_sms_verification_code(@mobile_user.mobile, @mobile_user.sms_verification_code.token)).to be_an_instance_of User
   end
 
 end
