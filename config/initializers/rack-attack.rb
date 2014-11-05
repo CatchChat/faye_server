@@ -2,13 +2,13 @@ Rack::Attack.cache.store = Redis.current
 
 user_login_regexp = /\A\/api\/v(\d+)\/auth\/(token_by_login|token_by_mobile)\/?\Z/
 
-Rack::Attack.throttle('user_login', limit: 5000, period: 1.hour) do |req|
+Rack::Attack.throttle('user_login', limit: Settings.rate_limit.user_login, period: 1.hour) do |req|
   if req.path =~ user_login_regexp && req.ip && req.params[:login].present?
     "#{req.ip}-#{req.params[:login].strip}"
   end
 end
 
-Rack::Attack.throttle('api_request', limit: 5000, period: 1.hour) do |req|
+Rack::Attack.throttle('api_request', limit: Settings.rate_limit.api_request, period: 1.hour) do |req|
   if req.path !~ user_login_regexp && req.path.start_with?('/api/v')
     req.env['warden'].user ? req.env['warden'].user.id : req.ip
   end

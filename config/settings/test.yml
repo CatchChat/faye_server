@@ -11,3 +11,6 @@ redis:
     db: 0
     port: 6379
     driver: hiredis
+rate_limit:
+  user_login: 5000
+  api_request: 5000

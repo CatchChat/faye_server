@@ -83,17 +83,6 @@ class Api::V4::FriendRequestsController < ApiController
     end
   end
 
-  def format_json(friend_request)
-    json = friend_request.attributes.except(:created_at, :updated_at)
-    json.merge(
-      created_at: format_time_to_iso8601(friend_request.created_at),
-      updated_at: format_time_to_iso8601(friend_request.updated_at),
-      created_at_string: format_time(friend_request.created_at),
-      updated_at_string: format_time(friend_request.created_at),
-      state_string: t("models.friend_request.state.#{friend_request.human_state_name}")
-    )
-  end
-
   def sort_column
     FriendRequest.column_names.include?(params[:sort]) ? params[:sort] : "id"
   end
