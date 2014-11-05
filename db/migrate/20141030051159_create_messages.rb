@@ -6,7 +6,7 @@ class CreateMessages < ActiveRecord::Migration
       t.string :media_type
       t.text :text_content
       t.integer :parent_id
-      t.integer :state, null: false, default: 0 # unread state
+      t.integer :state
 
       t.timestamps
     end

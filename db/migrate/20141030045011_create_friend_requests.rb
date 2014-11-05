@@ -3,7 +3,7 @@ class CreateFriendRequests < ActiveRecord::Migration
     create_table :friend_requests do |t|
       t.references :user, index: true
       t.references :friend, index: true
-      t.integer :state, null: false, default: 0 # pending state
+      t.integer :state
 
       t.timestamps
     end
