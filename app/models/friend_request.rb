@@ -2,6 +2,9 @@ class FriendRequest < ActiveRecord::Base
   belongs_to :user
   belongs_to :friend, class_name: 'User'
 
+  validates :user_id, :friend_id, presence: true
+  validates :friend_id, uniqueness: { scope: [:user_id, :state], allow_blank: true, if: ->(friend_request) { friend_request.pending? } }
+
   STATES = { pending: 0, accepted: 1, rejected: 2, blocked: 3 }.freeze
 
   STATES.each do |state, value|

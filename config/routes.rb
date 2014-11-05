@@ -76,7 +76,7 @@ Rails.application.routes.draw do
 
   namespace :api do
     namespace :v4 do
-      resources :friend_requests, only: %i(create show destroy) do
+      resources :friend_requests, only: %i(index create show destroy) do
         member do
           patch :accept
           patch :reject
