@@ -22,16 +22,16 @@ class Users::SessionsController < Devise::SessionsController
   private
 
   def send_sms(mobile, content)
-      username         = ENV["luosimao_username"]
-      apikey           = ENV["luosimao_apikey"]
-      init_hash       = {username: username, apikey: apikey}
-      luosimao_client = LuosimaoSms.new init_hash
-      sms             = Sms.new(luosimao_client, init_hash)
-      code, body = sms.send_sms mobile: mobile, message: content
-      return true if code == '200' && body == "{\"error\":0,\"msg\":\"ok\"}"
+    code, body = sms.send_sms mobile: mobile, message: content
+    return true if code == '200' && body == "{\"error\":0,\"msg\":\"ok\"}"
+  end
 
-
-
+  def sms
+    username         = ENV["luosimao_username"]
+    apikey           = ENV["luosimao_apikey"]
+    init_hash       = {username: username, apikey: apikey}
+    luosimao_client = LuosimaoSms.new init_hash
+    Sms.new(luosimao_client, init_hash)
   end
 
   def authenticate_user
