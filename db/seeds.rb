@@ -5,3 +5,6 @@
 #
 #   cities = City.create([{ name: 'Chicago' }, { name: 'Copenhagen' }])
 #   Mayor.create(name: 'Emanuel', city: cities.first)
+User.destroy_all
+user = User.create username: 'ruanwztest', password: 'ruanwztest', node_password: 'node'
+user.access_token = AccessToken.create token: 'test-token'
