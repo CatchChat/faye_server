@@ -10,7 +10,7 @@ class Users::SessionsController < Devise::SessionsController
   end
 
   def new
-    mobile = params[:login]
+    mobile = params[:login].to_s
     random_num = rand(100000)
     user = User.find_by(mobile: mobile)
     user.sms_verification_code ||= SmsVerificationCode.create token: random_num.to_s,
@@ -23,7 +23,7 @@ class Users::SessionsController < Devise::SessionsController
 
   def send_sms(mobile, content)
     code, body = sms.send_sms mobile: mobile, message: content
-    return true if code == '200' && body == "{\"error\":0,\"msg\":\"ok\"}"
+    return true if code == 200 && body == "{\"error\":0,\"msg\":\"ok\"}"
   end
 
   def sms
