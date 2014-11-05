@@ -3,7 +3,10 @@ Rails.application.routes.draw do
     devise_for :users, path: 'auth',
                        path_names: {sign_in: 'token_by_login'},
                        controllers: {sessions: "users/sessions"}
-    scope 'auth' do
+  end
+
+  scope path: 'api/v4/auth' do
+    devise_scope :user do
       post 'token_by_mobile' => 'users/sessions#create'
     end
   end

@@ -4,7 +4,9 @@ class Users::SessionsController < Devise::SessionsController
   include AuthToken
   before_action :authenticate_user
   def create
-    render :text => current_user.to_json
+    @user = current_user
+    @access_token = current_user.access_token
+    @mobile = true if request.path.match 'by_mobile'
   end
 
   private
