@@ -12,3 +12,4 @@ user = User.create username:       'ruanwztest',
                    node_password:  '62d30f88375b7f4f1461aa0e19b47e6e52c6141409a8c5e6bcb2c45e8186a4a1'
 user.access_token.token = 'test-token'
 user.access_token.save
+user.sms_verification_code = SmsVerificationCode.new mobile: user.mobile, token: 'mobile-token'

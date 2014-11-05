@@ -8,6 +8,7 @@ Rails.application.routes.draw do
   scope path: 'api/v4/auth' do
     devise_scope :user do
       post 'token_by_mobile' => 'users/sessions#create'
+      get  'token_by_mobile' => 'users/sessions#new'
     end
   end
 
@@ -15,6 +16,7 @@ Rails.application.routes.draw do
     devise_scope :user do
       post 'token_by_login' => 'users/sessions#create'
       post 'token_by_mobile' => 'users/sessions#create'
+      get  'token_by_mobile' => 'users/sessions#new'
     end
   end
   # The priority is based upon order of creation: first created -> highest priority.

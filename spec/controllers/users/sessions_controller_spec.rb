@@ -24,6 +24,11 @@ describe Users::SessionsController do
     post :create, login: '123456789', password: 'test-token', :format => 'json'
     expect(response.body).to include 'mobile'
     expect(response.body).to include 'test-token'
+  end
 
+  it 'request to send sms code' do
+    allow(controller).to receive(:send_sms).and_return(true)
+    get :new, login: '123456789', :format => 'json'
+    expect(response.body).to include 'sent'
   end
 end
