@@ -4,7 +4,10 @@ class Users::SessionsController < Devise::SessionsController
   before_action :authenticate_user, except: [:new]
   def create
     @user = current_user
-    @access_token = current_user.access_token
+    token = AccessToken.create user_id: @user.id,
+      active: true,
+      token: 'test-token'
+    @access_token = token
     @mobile = true if request.path.match 'by_mobile'
   end
 
