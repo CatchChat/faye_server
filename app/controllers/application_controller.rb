@@ -23,4 +23,29 @@ class ApplicationController < ActionController::Base
   def ssl_configured?
     !!Settings.ssl_configured
   end
+
+  def normalize_page(page = params[:page])
+    page.to_i > 0 ? page.to_i : 1
+  end
+
+  def normalize_per_page(per_page = params[:per_page], max: 100, min: 10)
+    per_page = per_page.to_i
+
+    if per_page > 0 && per_page <= max
+      per_page
+    elsif per_page > max
+      max
+    else
+      min
+    end
+  end
+
+  def sort_column(klass, sort: params[:sort])
+    klass.column_names.include?(sort) ? sort : 'id'
+  end
+
+  def sort_direction(direction = params[:direction])
+    direction = direction.to_s.upcase
+    %w(ASC DESC).include?(direction) ? direction : "DESC"
+  end
 end

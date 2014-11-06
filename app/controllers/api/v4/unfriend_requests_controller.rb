@@ -1,7 +1,7 @@
 class Api::V4::UnfriendRequestsController < ApiController
 
   ### POST /api/v4/unfriend_requests
-  # params
+  # Required params
   #   friend_id
   def create
     friend = current_user.friends.find_by(id: params[:friend_id])
