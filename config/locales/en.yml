@@ -23,3 +23,8 @@ en:
   time:
     formats:
       iso8601: ! '%Y-%m-%dT%H:%M:%SZ'
+  auth:
+    sms_verification_code_message: 'Your SMS Verification Code is %{code}'
+    username_password_error: "User or Password is incorrect"
+    access_token_error: "HTTP Token: Access denied"
+    no_auth: "No Authentication"

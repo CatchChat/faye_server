@@ -3,3 +3,8 @@ zh-CN:
     formats:
       default: ! '%Y年%m月%d日 %H:%M:%S'
       iso8601: ! '%Y-%m-%dT%H:%M:%SZ'
+  auth:
+    sms_verification_code_message: '你的验证码是 %{code}'
+    username_password_error: "用户名密码错误"
+    access_token_error: "HTTP Token: Access denied"
+    no_auth: "No Authentication"
