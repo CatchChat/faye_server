@@ -7,6 +7,8 @@ Warden::Strategies.add(:password) do
   def authenticate!
     if user = AuthToken.check_username_password(params[:login], params[:password])
       success!(user)
+    else
+      errors.add :general, 'username_password_error'
     end
   end
 end
@@ -48,6 +50,8 @@ Warden::Strategies.add(:mobile) do
   def authenticate!
     if user = AuthToken.check_mobile_and_sms_verification_code(params[:login], params[:password])
       success!(user)
+    else
+      errors.add :general, 'username_password_error'
     end
   end
 end

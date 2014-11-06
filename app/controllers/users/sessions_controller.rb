@@ -1,7 +1,5 @@
-require 'strategies'
 class Users::SessionsController < Devise::SessionsController
 # before_filter :configure_sign_in_params, only: [:create]
-  include AuthToken
   before_action :authenticate_user, except: [:new]
   def create
     @user = current_user
