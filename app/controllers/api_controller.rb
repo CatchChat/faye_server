@@ -26,10 +26,6 @@ class ApiController < ApplicationController
     logger.debug "===> Set locale to #{I18n.locale}."
   end
 
-  def authenticate_user
-    render json: { error: "Unauthorized!" }, status: :unauthorized unless authenticated?
-  end
-
   def set_time_zone
     Time.zone = current_user.time_zone
   rescue
