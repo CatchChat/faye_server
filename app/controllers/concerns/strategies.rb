@@ -19,6 +19,8 @@ Warden::Strategies.add(:token) do
   def authenticate!
     if user = AuthToken.check_access_token(request)
       success!(user)
+    else
+      errors.add :general, 'access_token_error'
     end
   end
 end
@@ -31,6 +33,8 @@ Warden::Strategies.add(:node_password) do
   def authenticate!
     if user = AuthToken.check_node_username_password(params[:login], params[:password])
       success!(user)
+    else
+      errors.add :general, 'username_password_error'
     end
   end
 end

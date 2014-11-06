@@ -3,3 +3,6 @@ en:
     sessions:
       new:
         sms_verification_code_message: 'Your SMS Verification Code is %{code}'
+      create:
+        username_password_error: "User or Password is incorrect"
+        access_token_error: "HTTP Token: Access denied"

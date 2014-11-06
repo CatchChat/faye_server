@@ -3,3 +3,6 @@ zh-CN:
     sessions:
       new:
         sms_verification_code_message: '你的验证码是 %{code}'
+      create:
+        username_password_error: "用户名密码错误"
+        access_token_error: "HTTP Token: Access denied"

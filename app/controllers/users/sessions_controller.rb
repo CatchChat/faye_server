@@ -35,7 +35,7 @@ class Users::SessionsController < Devise::SessionsController
   end
 
   def authenticate_user
-    render json: { error: "Unauthorized!" }, status: :unauthorized unless authenticated?
+    render json: { error: t(".#{warden.errors[:general].first}") }, status: :unauthorized unless authenticated?
   end
   # GET /resource/sign_in
   # def new
