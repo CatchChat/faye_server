@@ -34,9 +34,6 @@ class Users::SessionsController < Devise::SessionsController
     Sms.new(luosimao_client, init_hash)
   end
 
-  def authenticate_user
-    render json: { error: t(".#{warden.errors[:general].first}") }, status: :unauthorized unless authenticated?
-  end
   # GET /resource/sign_in
   # def new
   #   super
