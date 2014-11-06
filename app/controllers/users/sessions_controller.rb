@@ -1,5 +1,7 @@
 class Users::SessionsController < Devise::SessionsController
-# before_filter :configure_sign_in_params, only: [:create]
+  include RateLimit
+  self.throttle_name = 'api_request'
+  # before_filter :configure_sign_in_params, only: [:create]
   before_action :authenticate_user, except: [:new]
   def create
     @user = current_user

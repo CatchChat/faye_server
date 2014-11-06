@@ -1,6 +1,4 @@
-require 'strategies'
 class ApiController < ApplicationController
-  include AuthToken
   include RateLimit
 
   # Set throttle name
