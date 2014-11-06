@@ -1,9 +1,6 @@
 class ApiController < ApplicationController
   include RateLimit
 
-  # Set throttle name
-  self.throttle_name = 'api_request'
-
   before_action :set_locale
   before_action :authenticate_user
   before_action :set_time_zone
