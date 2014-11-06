@@ -1,8 +1,8 @@
 class Api::V4::FriendRequestsController < ApiController
   before_action :load_friend_request, only: %i(destroy)
 
-  ### get api/v4/friend_requests
-  # optional params
+  ### GET api/v4/friend_requests
+  # Optional params
   #   per_page
   #   page
   #   sort
