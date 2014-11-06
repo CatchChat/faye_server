@@ -5,9 +5,6 @@ class ApplicationController < ActionController::Base
 
   before_action :configure_permitted_parameters, if: :devise_controller?
 
-  def authenticate_user
-    render json: { error: t(".#{warden.errors[:general].first}") }, status: :unauthorized unless authenticated?
-  end
   protected
 
   def configure_permitted_parameters
@@ -17,6 +14,6 @@ class ApplicationController < ActionController::Base
   end
 
   def authenticate_user
-    render json: { error: "Unauthorized!" }, status: :unauthorized unless authenticated?
+    render json: { error: t(".#{warden.errors[:general].first}") }, status: :unauthorized unless authenticated?
   end
 end
