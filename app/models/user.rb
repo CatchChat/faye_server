@@ -49,10 +49,7 @@ class User < ActiveRecord::Base
   end
 
   def generate_token
-    loop do
-      new_token = Devise.friendly_token
-      break new_token unless AccessToken.where(token: new_token).first
-    end
+    "#{Devise.friendly_token}#{Time.now.to_f}"
   end
 
   def email_required?

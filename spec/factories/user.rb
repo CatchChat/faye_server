@@ -21,6 +21,7 @@ FactoryGirl.define do
       sms_verification_code
     end
   end
+
   factory :access_token do
     token 'test-token'
   end

@@ -6,7 +6,7 @@ class Users::SessionsController < Devise::SessionsController
     @user = current_user
     token = AccessToken.create user_id: @user.id,
       active: true,
-      token: 'test-token'
+      token: @user.generate_token
     @access_token = token
     @mobile = true if request.path.match 'by_mobile'
   end
