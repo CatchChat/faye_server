@@ -1,8 +1,11 @@
 require 'strategies'
 class ApiController < ApplicationController
   include AuthToken
+  include RateLimit
 
-  before_action :set_rate_limit
+  # Set throttle name
+  self.throttle_name = 'api_request'
+
   before_action :set_locale
   before_action :authenticate_user
   before_action :set_time_zone
@@ -10,13 +13,6 @@ class ApiController < ApplicationController
   helper_method :format_time, :format_time_to_iso8601
 
   private
-
-  def set_rate_limit
-    rate_limit = request.env['rack.attack.throttle_data'].try(:[], 'api_request') || Hash.new(0)
-    response.headers['X-RateLimit-Limit']     = rate_limit[:limit].to_s
-    response.headers['X-RateLimit-Remaining'] = (rate_limit[:limit].to_i - rate_limit[:count].to_i).to_s
-    response.headers['X-RateLimit-Reset']     = rate_limit[:period].to_s
-  end
 
   def set_locale
     if request.headers['Accept-Language'].present? &&
