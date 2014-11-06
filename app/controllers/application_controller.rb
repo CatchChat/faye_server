@@ -2,6 +2,7 @@ class ApplicationController < ActionController::Base
   # Prevent CSRF attacks by raising an exception.
   # For APIs, you may want to use :null_session instead.
   protect_from_forgery with: :null_session
+  force_ssl if: :ssl_configured?
 
   before_action :configure_permitted_parameters, if: :devise_controller?
 
@@ -15,5 +16,9 @@ class ApplicationController < ActionController::Base
 
   def authenticate_user
     render json: { error: t(".#{warden.errors[:general].first}") }, status: :unauthorized unless authenticated?
+  end
+
+  def ssl_configured?
+    !!Settings.ssl_configured
   end
 end
