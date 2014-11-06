@@ -1,0 +1,5 @@
+en:
+  users:
+    sessions:
+      new:
+        sms_verification_code_message: 'Your SMS Verification Code is %{code}'

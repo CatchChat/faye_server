@@ -1,0 +1,5 @@
+zh-CN:
+  users:
+    sessions:
+      new:
+        sms_verification_code_message: '你的验证码是 %{code}'

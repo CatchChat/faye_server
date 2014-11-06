@@ -16,7 +16,7 @@ class Users::SessionsController < Devise::SessionsController
     user.sms_verification_code ||= SmsVerificationCode.create token: random_num.to_s,
                                                               mobile: mobile
     user.sms_verification_code.save
-    content = "Your SMS Verification Code is " + user.sms_verification_code.token
+    content = t('.sms_verification_code_message', code: user.sms_verification_code.token)
     @success = send_sms(mobile, content)
   end
   private
