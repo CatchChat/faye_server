@@ -141,13 +141,14 @@ RSpec.describe Api::V4::FriendRequestsController, :type => :controller do
       expect(response.body).to eq({ error: subject.t('.accept_error') }.to_json)
     end
 
-    it 'When success' do
+    it 'should add friend when accepted' do
       friend_request = current_user.friend_requests.create!(friend_id: @friend.id)
       expect(friend_request).to_not be_accepted
       patch :accept, id: friend_request.id, format: :json
       expect(friend_request.reload).to be_accepted
       expect(response).to be_success
       expect(response).to render_template(:show)
+      expect(@user.friends).to include @friend
     end
   end
 
@@ -167,13 +168,14 @@ RSpec.describe Api::V4::FriendRequestsController, :type => :controller do
       expect(response.body).to eq({ error: subject.t('.reject_error') }.to_json)
     end
 
-    it 'When success' do
+    it 'should not add friend when rejected ' do
       friend_request = current_user.friend_requests.create!(friend_id: @friend.id)
       expect(friend_request).to_not be_rejected
       patch :reject, id: friend_request.id, format: :json
       expect(friend_request.reload).to be_rejected
       expect(response).to be_success
       expect(response).to render_template(:show)
+      expect(@user.friends).to_not include @friend
     end
   end
 
@@ -193,13 +195,14 @@ RSpec.describe Api::V4::FriendRequestsController, :type => :controller do
       expect(response.body).to eq({ error: subject.t('.block_error') }.to_json)
     end
 
-    it 'When success' do
+    it 'should not add friend when blocked' do
       friend_request = current_user.friend_requests.create!(friend_id: @friend.id)
       expect(friend_request).to_not be_blocked
       patch :block, id: friend_request.id, format: :json
       expect(friend_request.reload).to be_blocked
       expect(response).to be_success
       expect(response).to render_template(:show)
+      expect(@user.friends).to_not include @friend
     end
   end
 

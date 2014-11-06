@@ -22,6 +22,7 @@ class User < ActiveRecord::Base
   has_one :sms_verification_code, :dependent => :delete
   has_many :friend_requests
   has_many :received_friend_requests, foreign_key: 'friend_id', class_name: 'FriendRequest'
+  has_many :unfriend_requests
 
   before_save :ensure_access_token
 

@@ -83,6 +83,8 @@ Rails.application.routes.draw do
           patch :block
         end
       end
+
+      resources :unfriend_requests, only: %i(create)
     end
   end
 

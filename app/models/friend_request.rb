@@ -16,6 +16,8 @@ class FriendRequest < ActiveRecord::Base
       state state_name, value: value
     end
 
+    after_transition pending: :accepted, do: :add_friend
+
     event :accept do
       transition pending: :accepted
     end
@@ -27,5 +29,9 @@ class FriendRequest < ActiveRecord::Base
     event :block do
       transition pending: :blocked
     end
+  end
+
+  def add_friend
+    user.friends << friend
   end
 end
