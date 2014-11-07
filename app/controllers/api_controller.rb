@@ -4,6 +4,7 @@ class ApiController < ApplicationController
   before_action :set_locale
   before_action :authenticate_user
   before_action :set_time_zone
+  skip_before_action :verify_authenticity_token
 
   helper_method :format_time, :format_time_to_iso8601
 
