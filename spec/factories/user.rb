@@ -19,11 +19,15 @@ FactoryGirl.define do
 
   factory :access_token do
     token 'test-token'
+    active true
+    expired_at Time.now + 1000
   end
 
   factory :sms_verification_code do
     mobile '1234567'
     token 'test-token'
+    active true
+    expired_at Time.now + 1000
   end
 end
 
