@@ -29,7 +29,8 @@ describe Users::SessionsController do
   end
 
   it 'request to send sms code' do
-    allow(controller).to receive(:send_sms).and_return(true)
+    # TODO: expect_any_instance_of is a design smell
+    expect_any_instance_of(SmsVerificationCode).to receive(:send_msg).and_return(true)
     post :send_verify_code, login: @user.mobile, :format => 'json'
     expect(response.body).to include 'sent'
   end

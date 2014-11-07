@@ -30,23 +30,10 @@ class Users::SessionsController < Devise::SessionsController
     sms_code = SmsVerificationCode.create token: random_num.to_s,
                                           user_id: user.id,
                                           mobile: mobile
-    content = t('auth.sms_verification_code_message', code: sms_code.token)
-    @success = send_sms(mobile, content)
-  end
-  private
-
-  def send_sms(mobile, content)
-    code, body = sms.send_sms mobile: mobile, message: content
-    return true if code == 200 && body == "{\"error\":0,\"msg\":\"ok\"}"
+    @success = sms_code.send_msg
   end
 
-  def sms
-    username         = ENV["luosimao_username"]
-    apikey           = ENV["luosimao_apikey"]
-    init_hash       = {username: username, apikey: apikey}
-    luosimao_client = LuosimaoSms.new init_hash
-    Sms.new(luosimao_client, init_hash)
-  end
+
 
   # protected
 
