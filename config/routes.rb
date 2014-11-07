@@ -77,7 +77,6 @@ Rails.application.routes.draw do
   namespace :api do
     namespace :v4 do
       resources :friend_requests, only: %i(index create destroy)
-
       resources :received_friend_requests, only: %i(index destroy) do
         member do
           patch :accept
@@ -85,8 +84,8 @@ Rails.application.routes.draw do
           patch :block
         end
       end
-
       resources :unfriend_requests, only: %i(create)
+      resources :friendships, only: %i(index)
     end
   end
 

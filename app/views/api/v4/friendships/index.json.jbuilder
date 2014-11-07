@@ -1,5 +1,5 @@
-json.friend_requests do
- json.array! @friendships, partial: 'friendship', as: :friendship
+json.friendships do
+  json.array! @friendships, partial: 'friendship', as: :friendship
 end
 
 json.current_page @friendships.current_page

@@ -4,8 +4,8 @@ module FriendshipCallbacks
   included do
     after_create :incr_friends_count_for_user
     after_destroy :decr_friends_count_for_user
-    after_save :touch_friendships_updated_at_for_user
-    after_destroy :touch_friendships_updated_at_for_user
+    # after_save :touch_friendships_updated_at_for_user
+    # after_destroy :touch_friendships_updated_at_for_user
   end
 
   def incr_friends_count_for_user
