@@ -9,16 +9,11 @@ FactoryGirl.define do
 
     transient do
       tokens_count 1
+      sms_code_count 1
     end
     after(:create) do |user, evaluator|
       create_list(:access_token, evaluator.tokens_count, user: user)
-    end
-
-    factory :mobile_user, class: User do
-      username 'ruanwzmobile'
-      password 'ruanwzmobile'
-      mobile '123456789'
-      sms_verification_code
+      create_list(:sms_verification_code, evaluator.sms_code_count, user: user)
     end
   end
 
@@ -27,7 +22,7 @@ FactoryGirl.define do
   end
 
   factory :sms_verification_code do
-    mobile '123456789'
+    mobile '1234567'
     token 'test-token'
   end
 end

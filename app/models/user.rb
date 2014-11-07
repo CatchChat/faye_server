@@ -19,7 +19,7 @@ class User < ActiveRecord::Base
   belongs_to :country
   has_many :individual_recipients
   has_many :access_tokens, :dependent => :delete_all
-  has_one :sms_verification_code, :dependent => :delete
+  has_many :sms_verification_codes, :dependent => :delete_all
   has_many :friend_requests
   has_many :received_friend_requests, foreign_key: 'friend_id', class_name: 'FriendRequest'
   has_many :unfriend_requests

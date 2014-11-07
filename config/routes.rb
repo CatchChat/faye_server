@@ -7,16 +7,16 @@ Rails.application.routes.draw do
 
   scope path: 'api/v4/auth' do
     devise_scope :user do
-      post 'token_by_mobile'   => 'users/sessions#create'
-      post 'send_verify_code'  => 'users/sessions#new'
+      post 'token_by_mobile'   => 'users/sessions#create_by_mobile'
+      post 'send_verify_code'  => 'users/sessions#send_verify_code'
     end
   end
 
   scope path: 'api/v5/auth' do
     devise_scope :user do
       post 'token_by_login'    => 'users/sessions#create'
-      post 'token_by_mobile'   => 'users/sessions#create'
-      post 'send_verify_code'  => 'users/sessions#new'
+      post 'token_by_mobile'   => 'users/sessions#create_by_mobile'
+      post 'send_verify_code'  => 'users/sessions#send_verify_code'
     end
   end
   # The priority is based upon order of creation: first created -> highest priority.

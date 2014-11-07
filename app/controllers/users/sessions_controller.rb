@@ -1,24 +1,36 @@
 class Users::SessionsController < Devise::SessionsController
   include RateLimit
   # before_filter :configure_sign_in_params, only: [:create]
-  before_action :authenticate_user, except: [:new]
+  before_action :authenticate_user, except: [:send_verify_code]
+
+  # Post auth/token_by_login
   def create
+    get_access_token
+  end
+
+  # Post auth/token_by_mobile
+  def create_by_mobile
+    @mobile = true
+    get_access_token
+  end
+
+  def get_access_token
     @user = current_user
     token = AccessToken.create user_id: @user.id,
       active: true,
       token: @user.generate_token
     @access_token = token
-    @mobile = true if request.path.match 'by_mobile'
   end
 
-  def new
+  # Post auth/send_verify_code
+  def send_verify_code
     mobile = params[:login].to_s
     random_num = rand(100000).to_s
     user = User.find_by(mobile: mobile)
-    user.sms_verification_code ||= SmsVerificationCode.create token: random_num.to_s,
-                                                              mobile: mobile
-    user.sms_verification_code.save
-    content = t('auth.sms_verification_code_message', code: user.sms_verification_code.token)
+    sms_code = SmsVerificationCode.create token: random_num.to_s,
+                                          user_id: user.id,
+                                          mobile: mobile
+    content = t('auth.sms_verification_code_message', code: sms_code.token)
     @success = send_sms(mobile, content)
   end
   private
@@ -35,21 +47,6 @@ class Users::SessionsController < Devise::SessionsController
     luosimao_client = LuosimaoSms.new init_hash
     Sms.new(luosimao_client, init_hash)
   end
-
-  # GET /resource/sign_in
-  # def new
-  #   super
-  # end
-
-  # POST /resource/sign_in
-  # def create
-  #   super
-  # end
-
-  # DELETE /resource/sign_out
-  # def destroy
-  #   super
-  # end
 
   # protected
 
