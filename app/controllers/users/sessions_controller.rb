@@ -10,11 +10,8 @@ class Users::SessionsController < Devise::SessionsController
 
   # Post auth/token_by_mobile
   def create_by_mobile
-    @mobile = true
     get_access_token
   end
-
-
 
   # Post auth/send_verify_code
   def send_verify_code
@@ -30,7 +27,6 @@ class Users::SessionsController < Devise::SessionsController
 
     @success = sms_code.send_msg(content)
   end
-
 
   private
   def get_access_token
