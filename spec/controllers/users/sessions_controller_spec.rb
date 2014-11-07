@@ -50,7 +50,10 @@ describe Users::SessionsController do
   it 'request to send sms code' do
     # TODO: expect_any_instance_of is a design smell
     expect_any_instance_of(SmsVerificationCode).to receive(:send_msg).and_return(true)
-    post :send_verify_code, login: @user.mobile, :format => 'json'
+
+    post :send_verify_code, login: @user.mobile, expiring: 1000, :format => 'json'
+    expect(@user.sms_verification_codes.last.active).to be true
+    expect(@user.sms_verification_codes.last.expired_at.to_i/10).to eq (Time.now.to_i + 1000)/10
     expect(response.body).to include 'sent'
   end
 end
