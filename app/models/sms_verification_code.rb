@@ -1,14 +1,11 @@
 class SmsVerificationCode < ActiveRecord::Base
   belongs_to :user
 
-  def send_msg
-    send_sms(mobile, content)
+  def send_msg(content)
+    send_sms(mobile,content)
   end
 
   private
-  def content
-    t('auth.sms_verification_code_message', code: sms_code.token)
-  end
 
   def send_sms(mobile, content)
     code, body = sms.send_sms mobile: mobile, message: content

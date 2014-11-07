@@ -30,7 +30,9 @@ class Users::SessionsController < Devise::SessionsController
     sms_code = SmsVerificationCode.create token: random_num.to_s,
                                           user_id: user.id,
                                           mobile: mobile
-    @success = sms_code.send_msg
+    content = t('auth.sms_verification_code_message', code: sms_code.token)
+
+    @success = sms_code.send_msg(content)
   end
 
 
