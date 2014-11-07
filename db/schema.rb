@@ -19,8 +19,7 @@ ActiveRecord::Schema.define(version: 20141104091436) do
     t.datetime "expired_at"
     t.boolean  "active"
     t.string   "creator_ip"
-    t.integer  "push_provider"
-    t.integer  "device"
+    t.integer  "client",     default: 0, null: false
     t.datetime "created_at"
     t.datetime "updated_at"
   end

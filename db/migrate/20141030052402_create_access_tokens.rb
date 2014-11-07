@@ -6,8 +6,7 @@ class CreateAccessTokens < ActiveRecord::Migration
       t.datetime :expired_at
       t.boolean :active
       t.string :creator_ip
-      t.integer :push_provider
-      t.integer :device
+      t.integer :client, null: false, default: AccessToken.clients['official']
 
       t.timestamps
     end
