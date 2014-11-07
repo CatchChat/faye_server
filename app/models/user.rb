@@ -1,6 +1,7 @@
 require 'node_password'
 class User < ActiveRecord::Base
   extend NodePassword
+  include Redis::Objects
   # Include default devise modules. Others available are:
   # :confirmable, :lockable, :timeoutable and :omniauthable
   devise :database_authenticatable, :encryptable, :registerable,
@@ -13,20 +14,24 @@ class User < ActiveRecord::Base
 
   attr_accessor :login
 
-  has_many :friendships
+  has_many :friendships, dependent: :destroy
   has_many :friends, through: :friendships
-  has_many :groups, foreign_key: 'owner_id'
+  has_many :groups, foreign_key: 'owner_id', dependent: :destroy
   belongs_to :country
-  has_many :individual_recipients
+  has_many :individual_recipients, dependent: :destroy
   has_many :access_tokens, :dependent => :delete_all
   has_many :sms_verification_codes, :dependent => :delete_all
-  has_many :friend_requests
+  has_many :friend_requests, dependent: :destroy
   has_many :received_friend_requests, foreign_key: 'friend_id', class_name: 'FriendRequest'
-  has_many :unfriend_requests
+  has_many :unfriend_requests, dependent: :destroy
 
   before_save :ensure_access_token
 
-  STATES = { active: 0, blocked: 1 }.freeze
+  value :received_friend_requests_updated_at
+  value :friendships_updated_at
+  counter :friends_count
+
+  STATES = { active: 1, blocked: 2 }.freeze
 
   state_machine :state, initial: :active do
     STATES.each do |state_name, value|

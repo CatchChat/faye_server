@@ -2,7 +2,7 @@ class IndividualRecipient < ActiveRecord::Base
   belongs_to :message
   belongs_to :user
 
-  STATES = { sent: 0, delivered: 1, read: 2 }.freeze
+  STATES = { sent: 1, delivered: 2, read: 3 }.freeze
 
   state_machine :state, initial: :sent do
     STATES.each do |state_name, value|

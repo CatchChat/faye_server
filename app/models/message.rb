@@ -4,7 +4,7 @@ class Message < ActiveRecord::Base
   has_and_belongs_to_many :attachments
   has_many :individual_recipients
 
-  STATES = { unread: 0, read: 1 }.freeze
+  STATES = { unread: 1, read: 2 }.freeze
 
   state_machine :state, initial: :unread do
     STATES.each do |state_name, value|

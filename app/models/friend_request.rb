@@ -1,11 +1,15 @@
 class FriendRequest < ActiveRecord::Base
+  include FriendRequestCallbacks
+
   belongs_to :user
   belongs_to :friend, class_name: 'User'
 
   validates :user_id, :friend_id, presence: true
   validates :friend_id, uniqueness: { scope: [:user_id, :state], allow_blank: true, if: ->(friend_request) { friend_request.pending? } }
 
-  STATES = { pending: 0, accepted: 1, rejected: 2, blocked: 3 }.freeze
+  scope :by_state, -> (state) { where(self.table_name => { state: state }) }
+
+  STATES = { pending: 1, accepted: 2, rejected: 3, blocked: 4 }.freeze
 
   STATES.each do |state, value|
     scope state, -> { where(self.table_name => { state: value }) }

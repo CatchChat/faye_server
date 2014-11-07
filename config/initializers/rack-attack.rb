@@ -1,4 +1,4 @@
-Rack::Attack.cache.store = Redis.current
+Rack::Attack.cache.store = Rails.cache
 
 # user_login_regexp = /\A\/api\/v(\d+)\/auth\/(token_by_login|token_by_mobile)\/?\Z/
 # 

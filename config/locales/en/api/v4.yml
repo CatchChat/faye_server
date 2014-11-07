@@ -6,16 +6,22 @@ en:
           blocked: '%{friend_name} has blocked your friend request'
           not_found: Not found
           already_friend: 'You are already friends with %{friend_name}'
+        show:
+          not_found:  The friend request is not found
+        destroy:
+          not_found:  The friend request is not found
+      received_friend_requests:
         accept:
-          not_found:  Not found
+          not_found:  The friend request is not found
           accept_error: Accept failed
         reject:
-          not_found:  Not found
+          not_found:  The friend request is not found
           reject_error: Reject failed
         block:
-          not_found:  Not found
+          not_found:  The friend request is not found
           block_error: Block failed
-        show:
-          not_found:  Not found
         destroy:
-          not_found:  Not found
+          not_found:  The friend request is not found
+      unfriend_requests:
+        create:
+          not_found: The friend is not found

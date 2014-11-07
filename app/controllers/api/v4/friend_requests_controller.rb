@@ -7,9 +7,11 @@ class Api::V4::FriendRequestsController < ApiController
   #   page
   #   sort
   #   direction
+  #   state
   def index
     order_string = "#{FriendRequest.table_name}.#{sort_column(FriendRequest)} #{sort_direction}"
-    @friend_requests = current_user.friend_requests.includes(:user, :friend).order(order_string)
+    @friend_requests = current_user.friend_requests.includes(:friend).order(order_string)
+    @friend_requests = @friend_requests.by_state(params[:state]) if params[:state].present?
     @friend_requests = @friend_requests.page(normalize_page).per(normalize_per_page)
   end
 
@@ -30,6 +32,7 @@ class Api::V4::FriendRequestsController < ApiController
 
     @friend_request = current_user.friend_requests.new(friend_id: friend.id)
     if @friend_request.save
+      # TODO Push message to user
       render :show
     else
       render json: { error: @friend_request.errors.full_messages.join("\n") }, status: :unprocessable_entity
