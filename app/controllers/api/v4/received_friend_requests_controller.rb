@@ -16,7 +16,10 @@ class Api::V4::ReceivedFriendRequestsController < ApiController
   end
 
   ### PATCH api/v4/friend_requests/:id/accept
+  # Optional params
+  #   contact_name
   def accept
+    @friend_request.contact_name = params[:contact_name]
     if @friend_request.accept
       # TODO Push message to user
       render :show

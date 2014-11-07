@@ -9,4 +9,9 @@ class Friendship < ActiveRecord::Base
   default_scope { order("#{self.table_name}.position") }
 
   validates :user_id, :friend_id, presence: true
+  # TODO validate contact_name and remarked_name
+
+  def name
+    remarked_name.presence || contact_name.presence || friend.nickname
+  end
 end

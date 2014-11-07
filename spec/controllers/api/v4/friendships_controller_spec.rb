@@ -15,6 +15,8 @@ RSpec.describe Api::V4::FriendshipsController, :type => :controller do
 
       it 'default page is 1, default per_page is 10' do
         get :index, format: :json
+        expect(response).to be_success
+        expect(response).to render_template(:index)
         body = JSON.parse response.body
         expect(body['current_page']).to eq 1
         expect(body['per_page']).to eq 10
@@ -22,6 +24,8 @@ RSpec.describe Api::V4::FriendshipsController, :type => :controller do
 
       it 'should return the correct current_page and per_page' do
         get :index, format: :json, page: 10, per_page: 5
+        expect(response).to be_success
+        expect(response).to render_template(:index)
         body = JSON.parse response.body
         expect(body['current_page']).to eq 10
         expect(body['per_page']).to eq 5

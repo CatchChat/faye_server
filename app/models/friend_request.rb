@@ -7,6 +7,8 @@ class FriendRequest < ActiveRecord::Base
   validates :user_id, :friend_id, presence: true
   validates :friend_id, uniqueness: { scope: [:user_id, :state], allow_blank: true, if: ->(friend_request) { friend_request.pending? } }
 
+  attr_accessor :contact_name
+
   scope :by_state, -> (state) { where(self.table_name => { state: state }) }
 
   STATES = { pending: 1, accepted: 2, rejected: 3, blocked: 4 }.freeze
@@ -20,7 +22,7 @@ class FriendRequest < ActiveRecord::Base
       state state_name, value: value
     end
 
-    after_transition pending: :accepted, do: :add_friend
+    after_transition pending: :accepted, do: :add_friendship
 
     event :accept do
       transition pending: :accepted
@@ -35,7 +37,7 @@ class FriendRequest < ActiveRecord::Base
     end
   end
 
-  def add_friend
-    user.friends << friend
+  def add_friendship
+    user.friendships.create(friend_id: friend_id, contact_name: contact_name.presence)
   end
 end

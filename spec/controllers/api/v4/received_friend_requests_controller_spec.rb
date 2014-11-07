@@ -9,6 +9,58 @@ RSpec.describe Api::V4::ReceivedFriendRequestsController, :type => :controller d
     sign_in friend
   end
 
+  describe 'GET index' do
+
+    it 'should be success and render index template' do
+      get :index, format: :json
+      expect(response).to be_success
+      expect(response).to render_template(:index)
+    end
+
+    describe 'support page and per_page' do
+
+      it 'default page is 1, default per_page is 10' do
+        get :index, format: :json
+        body = JSON.parse response.body
+        expect(body['current_page']).to eq 1
+        expect(body['per_page']).to eq 10
+      end
+
+      it 'should return the correct current_page and per_page' do
+        get :index, format: :json, page: 10, per_page: 5
+        body = JSON.parse response.body
+        expect(body['current_page']).to eq 10
+        expect(body['per_page']).to eq 5
+      end
+    end
+
+    describe 'support sort and direction' do
+
+      before do
+        1.upto(10) do |index|
+          user = FactoryGirl.create(:user, username: "test#{index}")
+          friend.received_friend_requests.create(user_id: user.id)
+        end
+      end
+
+      it 'default sort is id, default direction is DESC' do
+        get :index, format: :json
+        body = JSON.parse response.body
+        ids = body['friend_requests'].map { |request| request['id'] }
+        expect(ids.length).to eq 10
+        expect(ids).to eq(ids.sort { |x, y| y <=> x })
+      end
+
+      it 'should return the correct order' do
+        get :index, format: :json, sort: :created_at, direction: 'ASC'
+        body = JSON.parse response.body
+        created_ats = body['friend_requests'].map { |request| request['created_at'] }
+        expect(created_ats.length).to eq 10
+        expect(created_ats).to eq(created_ats.sort)
+      end
+    end
+  end
+
   describe 'PATCH accept' do
 
     it 'When friend request is not found' do
@@ -28,8 +80,10 @@ RSpec.describe Api::V4::ReceivedFriendRequestsController, :type => :controller d
     it 'should add friend when accepted' do
       friend_request = current_user.received_friend_requests.create!(user_id: user.id)
       expect(friend_request).to_not be_accepted
-      patch :accept, id: friend_request.id, format: :json
+      patch :accept, id: friend_request.id, contact_name: 'contact_name', format: :json
       expect(friend_request.reload).to be_accepted
+      friendship = Friendship.find_by(user_id: user.id, friend_id: friend.id)
+      expect(friendship.contact_name).to eq 'contact_name'
       expect(response).to be_success
       expect(response).to render_template(:show)
       expect(user.friends).to include friend
