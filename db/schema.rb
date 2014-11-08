@@ -80,6 +80,7 @@ ActiveRecord::Schema.define(version: 20141104091436) do
   create_table "friendships_groups", force: true do |t|
     t.integer  "group_id"
     t.integer  "friendship_id"
+    t.integer  "position"
     t.datetime "created_at"
     t.datetime "updated_at"
   end

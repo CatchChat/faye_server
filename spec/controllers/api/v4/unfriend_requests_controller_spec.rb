@@ -11,18 +11,18 @@ RSpec.describe Api::V4::UnfriendRequestsController, :type => :controller do
 
   describe 'POST create' do
 
-    it 'When friend is not found' do
+    it 'should return :not_found when friend is not found' do
       post :create, friend_id: 0, format: :json
       expect(response).to be_not_found
     end
 
-    it 'When is not friend relationship' do
+    it 'should return :not_found when he is not friend' do
       expect(user.friends).to_not include friend
       post :create, friend_id: friend.id, format: :json
       expect(response).to be_not_found
     end
 
-    it 'When success should remove friend' do
+    it 'should remove friend when success' do
       user.friends << friend
       expect(user.friends).to include friend
       post :create, friend_id: friend.id, format: :json

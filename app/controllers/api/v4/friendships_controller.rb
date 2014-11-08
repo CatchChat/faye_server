@@ -5,7 +5,7 @@ class Api::V4::FriendshipsController < ApiController
   #   page
   #   per_page
   def index
-    @friendships = current_user.friendships
+    @friendships = current_user.friendships.includes(:friend)
     @friendships = @friendships.page(normalize_page).per(normalize_per_page)
     fresh_when(@friendships, public: true)
   end

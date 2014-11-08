@@ -25,3 +25,10 @@ en:
       unfriend_requests:
         create:
           not_found: The friend is not found
+      groups:
+        show:
+          not_found: The group is not found
+        update:
+          not_found: The group is not found
+        destroy:
+          not_found: The group is not found

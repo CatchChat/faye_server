@@ -15,3 +15,14 @@ token.save
 
 user.sms_verification_codes << sms_code = SmsVerificationCode.create(mobile: user.mobile, token: '12345', active: true)
 sms_code.save
+
+friend = User.create username:       'tumayun',
+                     password:       '123456',
+                     mobile:         '87654321',
+                     node_password:  '62d30f88375b7f4f1461aa0e19b47e6e52c6141409a8c5e6bcb2c45e8186a4a1'
+
+friend_request = user.friend_requests.create!(friend_id: friend.id)
+friend_request.accept!
+
+group = user.groups.create!(name: 'group')
+group.friendships << user.friendships.last

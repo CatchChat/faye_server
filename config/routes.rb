@@ -86,6 +86,7 @@ Rails.application.routes.draw do
       end
       resources :unfriend_requests, only: %i(create)
       resources :friendships, only: %i(index)
+      resources :groups, only: %i(index create update destroy show)
     end
   end
 

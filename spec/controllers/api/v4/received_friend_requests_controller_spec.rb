@@ -63,13 +63,13 @@ RSpec.describe Api::V4::ReceivedFriendRequestsController, :type => :controller d
 
   describe 'PATCH accept' do
 
-    it 'When friend request is not found' do
+    it 'should return :not_found when friend request is not found' do
       patch :accept, id: 0, format: :json
       expect(response).to be_not_found
       expect(response.body).to eq({ error: subject.t('.not_found') }.to_json)
     end
 
-    it 'When accept failed' do
+    it 'accept failed' do
       friend_request = current_user.received_friend_requests.create!(user_id: user.id)
       friend_request.reject!
       patch :accept, id: friend_request.id, format: :json
@@ -92,13 +92,13 @@ RSpec.describe Api::V4::ReceivedFriendRequestsController, :type => :controller d
 
   describe 'PATCH reject' do
 
-    it 'When friend request is not found' do
+    it 'should return :not_found when friend request is not found' do
       patch :reject, id: 0, format: :json
       expect(response).to be_not_found
       expect(response.body).to eq({ error: subject.t('.not_found') }.to_json)
     end
 
-    it 'When reject failed' do
+    it 'reject failed' do
       friend_request = current_user.received_friend_requests.create!(user_id: user.id)
       friend_request.accept!
       patch :reject, id: friend_request.id, format: :json
@@ -119,13 +119,13 @@ RSpec.describe Api::V4::ReceivedFriendRequestsController, :type => :controller d
 
   describe 'PATCH block' do
 
-    it 'When friend request is not found' do
+    it 'should return :not_found when friend request is not found' do
       patch :block, id: 0, format: :json
       expect(response).to be_not_found
       expect(response.body).to eq({ error: subject.t('.not_found') }.to_json)
     end
 
-    it 'When block failed' do
+    it 'block failed' do
       friend_request = current_user.received_friend_requests.create!(user_id: user.id)
       friend_request.accept!
       patch :block, id: friend_request.id, format: :json
@@ -139,8 +139,23 @@ RSpec.describe Api::V4::ReceivedFriendRequestsController, :type => :controller d
       patch :block, id: friend_request.id, format: :json
       expect(friend_request.reload).to be_blocked
       expect(response).to be_success
-      expect(response).to render_template(:show)
       expect(user.friends).to_not include friend
+    end
+  end
+
+  describe 'DELETE destroy' do
+
+    it 'should return :not_found when friend request is not found' do
+      delete :destroy, id: 0, format: :json
+      expect(response).to be_not_found
+      expect(response.body).to eq({ error: subject.t('.not_found') }.to_json)
+    end
+
+    it 'should return :success when success' do
+      friend_request = current_user.friend_requests.create!(friend_id: friend.id)
+      delete :destroy, id: friend_request.id, format: :json
+      expect(response).to be_success
+      expect { friend_request.reload }.to raise_error(ActiveRecord::RecordNotFound)
     end
   end
 end

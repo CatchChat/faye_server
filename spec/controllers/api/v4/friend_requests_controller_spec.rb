@@ -63,13 +63,13 @@ RSpec.describe Api::V4::FriendRequestsController, :type => :controller do
 
   describe 'POST create' do
 
-    it 'When friend is not found' do
+    it 'should return :not_found when friend is not found' do
       post :create, friend_id: 0, format: :json
       expect(response).to be_not_found
       expect(JSON.parse(response.body)).to eq({ 'error' => subject.t('.not_found') })
     end
 
-    it 'When already friends' do
+    it 'should return :forbidden when already friends' do
       current_user.friends << friend
       expect(current_user.friends).to be_include(friend)
       post :create, friend_id: friend.id, format: :json
@@ -77,14 +77,14 @@ RSpec.describe Api::V4::FriendRequestsController, :type => :controller do
       expect(JSON.parse(response.body)).to eq({ 'error' => subject.t('.already_friend', friend_name: friend.name) })
     end
 
-    it 'When already request' do
+    it 'should return :unprocessable_entity when already request' do
       friend_request = current_user.friend_requests.create!(friend_id: friend.id)
       expect(friend_request).to be_pending
       post :create, friend_id: friend.id
       expect(response).to be_unprocessable
     end
 
-    it 'When blocked' do
+    it 'should return :forbidden when blocked' do
       current_user.friend_requests.create!(
         friend_id: friend.id,
         state: FriendRequest::STATES[:blocked]
@@ -94,7 +94,7 @@ RSpec.describe Api::V4::FriendRequestsController, :type => :controller do
       expect(JSON.parse(response.body)).to eq({ 'error' => subject.t('.blocked', friend_name: friend.name) })
     end
 
-    it 'When success' do
+    it 'should return :success when success' do
       post :create, friend_id: friend.id, format: :json
       expect(response).to be_success
       friend_request = current_user.friend_requests.last
@@ -105,17 +105,16 @@ RSpec.describe Api::V4::FriendRequestsController, :type => :controller do
 
   describe 'DELETE destroy' do
 
-    it 'When friend request id not found' do
+    it 'should return :not_found when friend is not found' do
       delete :destroy, id: 0, format: :json
       expect(response).to be_not_found
       expect(response.body).to eq({ error: subject.t('.not_found') }.to_json)
     end
 
-    it 'When success' do
+    it 'should return :success when success' do
       friend_request = current_user.friend_requests.create!(friend_id: friend.id)
       delete :destroy, id: friend_request.id, format: :json
       expect(response).to be_success
-      expect(response).to render_template(:show)
       expect { friend_request.reload }.to raise_error(ActiveRecord::RecordNotFound)
     end
   end

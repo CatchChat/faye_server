@@ -25,3 +25,10 @@ zh-CN:
       unfriend_requests:
         create:
           not_found: 该好友不存在
+      groups:
+        show:
+          not_found: 该群组不存在
+        update:
+          not_found: 该群组不存在
+        destroy:
+          not_found: 该群组不存在

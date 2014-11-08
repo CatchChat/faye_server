@@ -3,7 +3,8 @@ class Friendship < ActiveRecord::Base
 
   belongs_to :user
   belongs_to :friend, class_name: 'User'
-  has_and_belongs_to_many :groups
+  has_many :friendships_groups
+  has_many :groups, through: :friendships_groups
 
   acts_as_list scope: [:user_id]
   default_scope { order("#{self.table_name}.position") }
@@ -12,6 +13,6 @@ class Friendship < ActiveRecord::Base
   # TODO validate contact_name and remarked_name
 
   def name
-    remarked_name.presence || contact_name.presence || friend.nickname
+    remarked_name.presence || contact_name.presence || friend.nickname || friend.username
   end
 end

@@ -52,7 +52,7 @@ class Api::V4::ReceivedFriendRequestsController < ApiController
   ### DELETE api/v4/friend_requests/:id
   def destroy
     @friend_request.destroy
-    render :show
+    render json: {}
   end
 
   private
