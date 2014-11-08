@@ -13,6 +13,7 @@ class Api::V4::FriendRequestsController < ApiController
     @friend_requests = current_user.friend_requests.includes(:friend).order(order_string)
     @friend_requests = @friend_requests.by_state(params[:state]) if params[:state].present?
     @friend_requests = @friend_requests.page(normalize_page).per(normalize_per_page)
+    fresh_when(@friend_requests, public: true)
   end
 
   ### POST api/v4/friend_requests

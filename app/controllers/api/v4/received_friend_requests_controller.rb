@@ -13,6 +13,7 @@ class Api::V4::ReceivedFriendRequestsController < ApiController
     @friend_requests = current_user.received_friend_requests.includes(:user).order(order_string)
     @friend_requests = @friend_requests.by_state(params[:state]) if params[:state].present?
     @friend_requests = @friend_requests.page(normalize_page).per(normalize_per_page)
+    fresh_when(@friend_requests, public: true)
   end
 
   ### PATCH api/v4/friend_requests/:id/accept
