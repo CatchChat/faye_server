@@ -37,6 +37,7 @@ class DeviseCreateUsers < ActiveRecord::Migration
       t.references :country
       t.integer :state
       t.string :time_zone
+      t.string :avatar
 
       t.string :node_id
       t.string :node_token

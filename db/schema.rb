@@ -166,6 +166,7 @@ ActiveRecord::Schema.define(version: 20141104091436) do
     t.integer  "country_id"
     t.integer  "state"
     t.string   "time_zone"
+    t.string   "avatar"
     t.string   "node_id"
     t.string   "node_token"
     t.string   "node_password"
