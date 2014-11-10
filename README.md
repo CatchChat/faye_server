@@ -67,7 +67,13 @@ There are 2 fields in access\_tokens table
 For expired\_at, incoming login expiring parameter will be map to expired\_at
 field:
 1. the value is in seconds
-1. expiring: 0: never expired
-1. no expiring parameter: default to 1 week
+1. expiring=0: never expired, and expired\_at =nil
+1. no expiring parameter: expired\_at set to 1 week
 
+### client flag
+There is a flag in acces\_tokens table to identify client info
+## Paginate
+Use gem Kaminari 
+
+Default to 30 records per page, page number starts from 1
 

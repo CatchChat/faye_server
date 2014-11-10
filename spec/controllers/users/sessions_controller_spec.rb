@@ -11,15 +11,17 @@ describe Users::SessionsController do
     post :create,login: 'ruanwztest', password: 'ruanwztest', expiring: 0, :format => 'json'
     expect(@user.access_tokens.last.active).to be true
     expect(@user.access_tokens.last.expired_at).to be nil
+    expect(@user.access_tokens.last.client).to eq "official"
     expect(response.body).to include 'ruanwztest'
     expect(response.body).to include 'access_token'
     expect(response.body).not_to include 'null'
   end
 
   it 'logins with username/password and no expiring then returns 7 days active token json' do
-    post :create,login: 'ruanwztest', password: 'ruanwztest', :format => 'json'
+    post :create,login: 'ruanwztest', password: 'ruanwztest', client: 1, :format => 'json'
     expect(@user.access_tokens.last.active).to be true
     expect(@user.access_tokens.last.expired_at.to_i/100).to eq (Time.now.to_i + 3600*24*7)/100
+    expect(@user.access_tokens.last.client).to eq "company"
     expect(response.body).to include 'ruanwztest'
     expect(response.body).to include 'access_token'
     expect(response.body).not_to include 'null'
