@@ -25,6 +25,7 @@ module AuthToken
   def self.check_access_token(request)
     token = request.headers['AuthorizationToken']
     if (access_token = AccessToken.find_by(token: token)) && access_token.active == true && (!access_token.expired_at or access_token.expired_at > Time.now)
+      AccessToken.current = access_token
       access_token.user
     end
   end

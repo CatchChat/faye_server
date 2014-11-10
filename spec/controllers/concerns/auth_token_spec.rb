@@ -12,9 +12,10 @@ describe AuthToken do
   end
 
 
-  it "check_access_token" do
+  it "check_access_token and save to AccessToken.current" do
     request = OpenStruct.new headers: {'AuthorizationToken' =>'test-token' }
     expect(AuthToken.check_access_token(request)).to be_an_instance_of User
+    expect(AccessToken.current).to eq @user.access_tokens.last
   end
 
   it "check_username_password" do
