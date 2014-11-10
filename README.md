@@ -35,6 +35,16 @@ git fetch
 git rebase
 ```
 
+## API HTTP Request Header
+### data is submitted as a form
+set header:
+
+application/x-www-form-urlencoded
+
+### data is in body as json format
+set header:
+
+Content-Type: application/json
 ## Authenticate
 
 ### Login
