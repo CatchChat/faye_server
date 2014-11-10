@@ -34,3 +34,30 @@ git fetch
 
 git rebase
 ```
+
+## Authenticate
+
+### Login
+API use strategies to authenticate the user, there are several ones, their
+orders are:
+
+1. token
+1. username/password
+1. mobile/sms code
+1. node username/password
+
+TODO: need to generate new password for user when the node username/password
+matched.
+
+### Access token expiration
+There are 2 fields in access\_tokens table
+1. active
+1. expired\_at
+
+For expired\_at, incoming login expiring parameter will be map to expired\_at
+field:
+1. the value is in seconds
+1. expiring: 0: never expired
+1. no expiring parameter: default to 1 week
+
+
