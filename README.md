@@ -80,14 +80,14 @@ There is a flag in acces\_tokens table to identify client info
 
 There are 3 cases when changing password:
 
-1. user already login and remember his old password. he need to input old
-   password, new password and new password confirm to update the password. API
+1. user already login and remember his old password. he need to input
+   current\_password, new\_password, new\_password\_confirm to update the password. API
    server will remove all old access tokens of this user
 1. user already login but forget his old password.  
 1. user can't login and also forget his old password.
 
 In the last 2 cases, user request a reset token, then API will send this token
-to user's mobile, then user input token, new password, new password confirm to
+to user's mobile, then user input token, new\_password, new\_password\_confirm to
 change the password, and API remove all old access tokens of this user
   
 ## Paginate
