@@ -1,6 +1,6 @@
 class Api::V4::FriendshipsController < ApiController
 
-  ### GET /api/v4/friendships
+  ### GET /api/v4/friends
   # Optional params
   #   page
   #   per_page

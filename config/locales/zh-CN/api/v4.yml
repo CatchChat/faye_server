@@ -32,3 +32,12 @@ zh-CN:
           not_found: 该群组不存在
         destroy:
           not_found: 该群组不存在
+      friendships_groups:
+        index:
+          group_not_found: 该群组不存在
+        create:
+          not_friend: 你们还不是好友
+          group_not_found: 该群组不存在
+        destroy:
+          not_in_group: 该好友不在群组中
+          group_not_found: 该群组不存在

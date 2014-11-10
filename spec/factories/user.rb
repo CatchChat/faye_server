@@ -10,10 +10,12 @@ FactoryGirl.define do
     transient do
       tokens_count 1
       sms_code_count 1
+      groups_count 1
     end
     after(:create) do |user, evaluator|
       create_list(:access_token, evaluator.tokens_count, user: user)
       create_list(:sms_verification_code, evaluator.sms_code_count, user: user)
+      create_list(:group, evaluator.groups_count, owner: user)
     end
   end
 
@@ -28,6 +30,12 @@ FactoryGirl.define do
     token 'test-token'
     active true
     expired_at Time.now + 1000
+  end
+
+  factory :group do
+    sequence :name do |n|
+      "group#{n}"
+    end
   end
 end
 

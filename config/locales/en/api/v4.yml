@@ -12,16 +12,16 @@ en:
           not_found:  The friend request is not found
       received_friend_requests:
         accept:
-          not_found:  The friend request is not found
+          not_found: The friend request is not found
           accept_error: Accept failed
         reject:
-          not_found:  The friend request is not found
+          not_found: The friend request is not found
           reject_error: Reject failed
         block:
-          not_found:  The friend request is not found
+          not_found: The friend request is not found
           block_error: Block failed
         destroy:
-          not_found:  The friend request is not found
+          not_found: The friend request is not found
       unfriend_requests:
         create:
           not_found: The friend is not found
@@ -32,3 +32,12 @@ en:
           not_found: The group is not found
         destroy:
           not_found: The group is not found
+      friendships_groups:
+        index:
+          group_not_found: The group is not found
+        create:
+          not_friend: Not friend
+          group_not_found: The group is not found
+        destroy:
+          not_in_group: Not in group
+          group_not_found: The group is not found

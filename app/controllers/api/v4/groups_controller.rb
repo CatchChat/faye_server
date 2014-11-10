@@ -8,7 +8,7 @@ class Api::V4::GroupsController < ApiController
   def index
     @groups = current_user.groups.includes(:friends)
     @groups = @groups.page(params[:page]).per(params[:per_page])
-    fresh_when([@groups, @groups.map(&:friendships_groups), @groups.map(&:friendships), @groups.map(&:friends)], public: true)
+    fresh_when([@groups, @groups.map(&:friendships), @groups.map(&:friends)], public: true)
   end
 
   ### POST /api/v4/groups
