@@ -1,24 +1,52 @@
 Rails.application.routes.draw do
   scope path: 'api/v4' do
     devise_for :users, path: 'auth',
-                       path_names: {sign_in: 'token_by_login'},
-                       controllers: {sessions: "users/sessions"}
-  end
+                       skip: [:sessions, :passwords, :registrations]
+                       #path_names: {sign_in: 'token_by_login'},
+                       #controllers: {sessions:  "users/sessions"}
+    scope path: 'auth' do
+      as :user do
+        post 'token_by_login'   => 'users/sessions#create'
+        post 'token_by_mobile'   => 'users/sessions#create_by_mobile'
+        post 'send_verify_code'  => 'users/sessions#send_verify_code'
+      end
+    end
 
-  scope path: 'api/v4/auth' do
-    devise_scope :user do
-      post 'token_by_mobile'   => 'users/sessions#create_by_mobile'
-      post 'send_verify_code'  => 'users/sessions#send_verify_code'
+    scope path: 'password' do
+      as :user do
+        put 'update'   => 'users/passwords#change_password'
+        post 'create'  => 'users/passwordss#send_verify_code'
+      end
     end
   end
 
-  scope path: 'api/v5/auth' do
-    devise_scope :user do
-      post 'token_by_login'    => 'users/sessions#create'
-      post 'token_by_mobile'   => 'users/sessions#create_by_mobile'
-      post 'send_verify_code'  => 'users/sessions#send_verify_code'
+  scope path: 'api/v5' do
+    devise_for :users, path: 'auth',
+                       skip: [:sessions, :passwords, :registrations]
+                       #path_names: {sign_in: 'token_by_login'},
+                       #controllers: {sessions:  "users/sessions"}
+    scope path: 'auth' do
+      as :user do
+        post 'token_by_login'   => 'users/sessions#create'
+        post 'token_by_mobile'   => 'users/sessions#create_by_mobile'
+        post 'send_verify_code'  => 'users/sessions#send_verify_code'
+      end
     end
   end
+  #scope path: 'api/v4/auth' do
+  #  devise_scope :user do
+  #    post 'token_by_mobile'   => 'users/sessions#create_by_mobile'
+  #    post 'send_verify_code'  => 'users/sessions#send_verify_code'
+  #  end
+  #end
+
+  # scope path: 'api/v5/auth' do
+  #   devise_scope :user do
+  #     post 'token_by_login'    => 'users/sessions#create'
+  #     post 'token_by_mobile'   => 'users/sessions#create_by_mobile'
+  #     post 'send_verify_code'  => 'users/sessions#send_verify_code'
+  #   end
+  # end
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".
 
@@ -93,14 +121,5 @@ Rails.application.routes.draw do
   end
 
   root to: "home#index"
-
-  #scope path: 'api/v4' do
-  #  resources :auth do
-  #    collection do
-  #      #post 'token_by_login'  => "auth#create"
-  #      post 'token_by_mobile' => "users/sessions#create"
-  #    end
-  #  end
-  #end
 
 end
