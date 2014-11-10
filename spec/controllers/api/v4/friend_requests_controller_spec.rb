@@ -19,11 +19,11 @@ RSpec.describe Api::V4::FriendRequestsController, :type => :controller do
 
     describe 'support page and per_page' do
 
-      it 'default page is 1, default per_page is 10' do
+      it "default page is 1, default per_page is #{Kaminari.config.default_per_page}" do
         get :index, format: :json
         body = JSON.parse response.body
         expect(body['current_page']).to eq 1
-        expect(body['per_page']).to eq 10
+        expect(body['per_page']).to eq Kaminari.config.default_per_page
       end
 
       it 'should return the correct current_page and per_page' do
