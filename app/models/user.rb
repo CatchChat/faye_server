@@ -25,7 +25,6 @@ class User < ActiveRecord::Base
   has_many :received_friend_requests, foreign_key: 'friend_id', class_name: 'FriendRequest'
   has_many :unfriend_requests, dependent: :destroy
 
-  before_save :ensure_access_token
 
   value :received_friend_requests_updated_at
   value :friendships_updated_at
@@ -44,12 +43,6 @@ class User < ActiveRecord::Base
 
     event :unblock do
       transition blocked: :active
-    end
-  end
-
-  def ensure_access_token
-    if self.access_tokens.empty?
-      AccessToken.create token: generate_token, user_id:  self.id
     end
   end
 
