@@ -60,12 +60,15 @@ TODO: need to generate new password for user when the node username/password
 matched.
 
 ### Access token expiration
+
 There are 2 fields in access\_tokens table
+
 1. active
 1. expired\_at
 
 For expired\_at, incoming login expiring parameter will be map to expired\_at
 field:
+
 1. the value is in seconds
 1. expiring=0: never expired, and expired\_at =nil
 1. no expiring parameter: expired\_at set to 1 week
@@ -74,12 +77,15 @@ field:
 There is a flag in acces\_tokens table to identify client info
 
 ### Change password flow
+
 There are 3 cases when changing password:
+
 1. user already login and remember his old password. he need to input old
    password, new password and new password confirm to update the password. API
    server will remove all old access tokens of this user
 1. user already login but forget his old password.  
 1. user can't login and also forget his old password.
+
 In the last 2 cases, user request a reset token, then API will send this token
 to user's mobile, then user input token, new password, new password confirm to
 change the password, and API remove all old access tokens of this user
