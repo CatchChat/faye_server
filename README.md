@@ -21,3 +21,6 @@ export AWS_ACCESS_KEY_ID
 export AWS_SECRET_ACCESS_KEY
 export AWS_REGION='cn-north-1'
 ```
+
+## Status code mapping
+http://futureshock-ed.com/2011/03/04/http-status-code-symbols-for-rails/
