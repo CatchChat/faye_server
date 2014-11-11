@@ -102,6 +102,15 @@ In the last 2 cases, the steps are
    mobile, token and new/confirmed password
 1. API server verify the token and reset the password
 1. API server remove all old access\_tokens
+
+### Register new user
+
+To register a new user, there are 2 steps
+1. User input the required info: username, password, mobile
+2. API verify the user info and create the user record, then send sms token to user
+3. User input the sms token
+4. API check the sms token and set the user status to be active
+
   
 ## Paginate
 Use gem Kaminari 
