@@ -2,7 +2,7 @@ require 'rails_helper'
 require 'vcr_helper'
 describe JpushPusher do
 
-  subject { JpushPusher.new(id: Settings.jpush.company_id, key: Settings.jpush.company_key) }
+  subject { JpushPusher.new(Settings.jpush.to_hash) }
 
   it '#push_to_single_account' do
     VCR.use_cassette('jpush_pusher_push_to_single_account') do

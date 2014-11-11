@@ -1,9 +1,8 @@
 require 'xinge'
 class XingePusher
-  PLATFORMS = %w(all ios android)
 
   ## options
-  #   example: { ios: { id: 'xxx', key: 'xxx' }, android: { id: 'xxx', key: 'xxx' } }
+  #   Example: { ios: { id: 'xxx', key: 'xxx' }, android: { id: 'xxx', key: 'xxx' } }
   def initialize(options = {})
     @options = options
   end
@@ -20,7 +19,6 @@ class XingePusher
   #   sound: String
   #   environment: Boolean true: Production, false: Development
   #   account: String
-  #   device_token: String
   def push_to_single_account(options)
     if options[:environment].nil? || options[:environment]
       environment = Xinge::Pusher::IOS_ENV_PRO
@@ -29,15 +27,10 @@ class XingePusher
     end
 
     responses = []
-    if options[:device_token].present?
-      pusher = Xinge::Pusher.new(@options[:ios][:id], @options[:ios][:key])
-      responses << pusher.push_to_single_device(options[:device_token], generate_ios_notification(options), environment)
-    end
-
-    if options[:account].present?
-      pusher = Xinge::Pusher.new(@options[:android][:id], @options[:android][:key])
-      responses << pusher.push_to_single_account(options[:account], generate_android_notification(options), device_type: Xinge::Pusher::DEVICE_TYPE_ANDROID)
-    end
+    pusher = Xinge::Pusher.new(@options[:android][:id], @options[:android][:key])
+    responses << pusher.push_to_single_account(options[:account], generate_android_notification(options), device_type: Xinge::Pusher::DEVICE_TYPE_ANDROID)
+    pusher = Xinge::Pusher.new(@options[:ios][:id], @options[:ios][:key])
+    responses << pusher.push_to_single_account(options[:account], generate_ios_notification(options), device_type: Xinge::Pusher::DEVICE_TYPE_IOS)
 
     responses.all?(&:success?)
   end

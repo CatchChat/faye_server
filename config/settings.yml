@@ -7,15 +7,10 @@ android_style:
 jpush:
   id:
   key:
-  company_id:
-  company_key:
 xinge:
   android:
     id:
     key:
   ios:
-    id:
-    key:
-  ios_company:
     id:
     key:

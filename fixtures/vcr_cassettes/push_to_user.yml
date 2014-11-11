@@ -5,7 +5,7 @@ http_interactions:
     uri: http://openapi.xg.qq.com/v2/push/single_account
     body:
       encoding: UTF-8
-      string: access_id=2100039866&account=53951bc5c2bba5ca47361472&device_type=3&expire_time=0&message=%7B%22content%22%3A%22xxx%22%2C%22title%22%3A%22xxx%22%2C%22custom_content%22%3A%7B%22key1%22%3A%22value1%22%2C%22key2%22%3A%22value2%22%7D%2C%22builder_id%22%3A1%2C%22ring%22%3A1%2C%22vibrate%22%3A1%2C%22clearable%22%3A1%2C%22n_id%22%3A0%7D&message_type=1&multi_pkg=0&send_time=1970-01-01+08%3A00%3A00&sign=7575ccff11696aa786ca0a0d6bba11b7&timestamp=1415699903&valid_time=600
+      string: access_id=2100039866&account=1&device_type=3&expire_time=0&message=%7B%22content%22%3A%22xxx%22%2C%22title%22%3A%22xxx%22%2C%22custom_content%22%3A%7B%22key1%22%3A%22value1%22%2C%22key2%22%3A%22value2%22%7D%2C%22builder_id%22%3A1%2C%22ring%22%3A1%2C%22vibrate%22%3A1%2C%22clearable%22%3A1%2C%22n_id%22%3A0%7D&message_type=1&multi_pkg=0&send_time=1970-01-01+08%3A00%3A00&sign=3d6d05ccd549f81767a8c7b05390c85d&timestamp=1415698219&valid_time=600
     headers:
       User-Agent:
       - Faraday v0.9.0
@@ -23,7 +23,7 @@ http_interactions:
       Server:
       - nginx
       Date:
-      - Tue, 11 Nov 2014 09:58:23 GMT
+      - Tue, 11 Nov 2014 09:30:19 GMT
       Content-Type:
       - text/html; charset=utf-8
       Transfer-Encoding:
@@ -34,15 +34,15 @@ http_interactions:
       - Accept-Encoding
     body:
       encoding: UTF-8
-      string: "\r\n{\"ret_code\":0}"
+      string: "\r\n{\"ret_code\":40,\"err_msg\":\"token not found, check registration\"}"
     http_version: 
-  recorded_at: Tue, 11 Nov 2014 09:58:23 GMT
+  recorded_at: Tue, 11 Nov 2014 09:30:19 GMT
 - request:
     method: post
     uri: http://openapi.xg.qq.com/v2/push/single_account
     body:
       encoding: UTF-8
-      string: access_id=2200035654&account=53951bc5c2bba5ca47361472&device_type=4&environment=1&expire_time=0&message=%7B%22key1%22%3A%22value1%22%2C%22key2%22%3A%22value2%22%2C%22aps%22%3A%7B%22alert%22%3A%22xxx%22%2C%22badge%22%3A10%7D%7D&message_type=0&send_time=1970-01-01+08%3A00%3A00&sign=6cb9e127dc592d367a08f79f517674c5&timestamp=1415699903&valid_time=600
+      string: access_id=2200035654&account=1&device_type=4&environment=1&expire_time=0&message=%7B%22key1%22%3A%22value1%22%2C%22key2%22%3A%22value2%22%2C%22aps%22%3A%7B%22alert%22%3A%22xxx%22%2C%22badge%22%3A10%7D%7D&message_type=0&send_time=1970-01-01+08%3A00%3A00&sign=22450d7c89e120e155368ecbb0d83f4d&timestamp=1415698219&valid_time=600
     headers:
       User-Agent:
       - Faraday v0.9.0
@@ -60,7 +60,7 @@ http_interactions:
       Server:
       - nginx
       Date:
-      - Tue, 11 Nov 2014 09:58:24 GMT
+      - Tue, 11 Nov 2014 09:30:19 GMT
       Content-Type:
       - text/html; charset=utf-8
       Transfer-Encoding:
@@ -71,7 +71,7 @@ http_interactions:
       - Accept-Encoding
     body:
       encoding: UTF-8
-      string: "\r\n{\"ret_code\":0}"
+      string: "\r\n{\"ret_code\":40,\"err_msg\":\"token not found, check registration\"}"
     http_version: 
-  recorded_at: Tue, 11 Nov 2014 09:58:24 GMT
+  recorded_at: Tue, 11 Nov 2014 09:30:19 GMT
 recorded_with: VCR 2.9.3

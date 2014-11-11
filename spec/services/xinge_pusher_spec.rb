@@ -18,8 +18,7 @@ describe XingePusher do
         badge: 10,
         sound: 'bub3.caf',
         environment: false,
-        account: '53951bc5c2bba5ca47361472',
-        device_token: '8c27dabc4c0f7810e078a9c286f2afeec2ad567016985b3e19c4f846a1acd8a8'
+        account: '53951bc5c2bba5ca47361472'
       )
       expect(result).to eq true
     end

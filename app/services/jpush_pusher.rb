@@ -1,6 +1,5 @@
 require 'jpush'
 class JpushPusher
-  PLATFORMS = %w(ios android)
 
   ## options
   # - id
