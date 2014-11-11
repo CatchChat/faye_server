@@ -18,6 +18,7 @@ class Users::SessionsController < Devise::SessionsController
     mobile = params[:login].to_s
     random_num = rand(100000).to_s
     user = User.find_by(mobile: mobile)
+    return render json: {status: "Not Found"}, status: :not_found unless user
     sms_code = SmsVerificationCode.create token:       random_num.to_s,
                                           active:      true,
                                           expired_at:  get_expired_at,

@@ -15,7 +15,7 @@ Rails.application.routes.draw do
     scope path: 'password' do
       as :user do
         put 'update'   => 'users/passwords#change_password'
-        post 'create'  => 'users/passwordss#send_verify_code'
+        post 'create'  => 'users/passwords#send_verify_code'
       end
     end
   end

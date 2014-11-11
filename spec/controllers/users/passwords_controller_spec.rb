@@ -14,4 +14,10 @@ describe Users::PasswordsController do
     expect(subject.current_user.password).to eq 'new_password'
   end
 
+  it 'send sms token' do
+    expect_any_instance_of(SmsVerificationCode).to receive(:send_msg).and_return(true)
+    post :send_verify_code, mobile: user.mobile, format: 'json'
+
+  end
+
 end
