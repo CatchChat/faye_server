@@ -99,7 +99,7 @@ In the last 2 cases, the steps are
 
 1. by Post passwords/send\_verify\_code, Client request to send a token to the mobile, then create an SmsVerificationCode
 1. After receive the sms token, client send to Post passwords/change\_password with
-   mobile, token and old/new/confirmed password
+   mobile, token and new/confirmed password
 1. API server verify the token and reset the password
 1. API server remove all old access\_tokens
   
