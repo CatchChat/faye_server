@@ -80,6 +80,7 @@ RSpec.describe Api::V4::ReceivedFriendRequestsController, :type => :controller d
     it 'should add friend when accepted' do
       friend_request = current_user.received_friend_requests.create!(user_id: user.id)
       expect(friend_request).to_not be_accepted
+      allow(Pusher).to receive(:push_to_user)
       patch :accept, id: friend_request.id, contact_name: 'contact_name', format: :json
       expect(friend_request.reload).to be_accepted
       friendship = Friendship.find_by(user_id: user.id, friend_id: friend.id)
@@ -109,6 +110,7 @@ RSpec.describe Api::V4::ReceivedFriendRequestsController, :type => :controller d
     it 'should not add friend when rejected ' do
       friend_request = current_user.received_friend_requests.create!(user_id: user.id)
       expect(friend_request).to_not be_rejected
+      allow(Pusher).to receive(:push_to_user)
       patch :reject, id: friend_request.id, format: :json
       expect(friend_request.reload).to be_rejected
       expect(response).to be_success
@@ -136,6 +138,7 @@ RSpec.describe Api::V4::ReceivedFriendRequestsController, :type => :controller d
     it 'should not add friend when blocked' do
       friend_request = current_user.received_friend_requests.create!(user_id: user.id)
       expect(friend_request).to_not be_blocked
+      allow(Pusher).to receive(:push_to_user)
       patch :block, id: friend_request.id, format: :json
       expect(friend_request.reload).to be_blocked
       expect(response).to be_success

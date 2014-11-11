@@ -7,6 +7,7 @@ RSpec.describe Api::V4::FriendRequestsController, :type => :controller do
 
   before do
     sign_in user
+    AccessToken.current = user.access_tokens.first
   end
 
   describe 'GET index' do
@@ -95,6 +96,7 @@ RSpec.describe Api::V4::FriendRequestsController, :type => :controller do
     end
 
     it 'should return :success when success' do
+      allow(Pusher).to receive(:push_to_user)
       post :create, friend_id: friend.id, format: :json
       expect(response).to be_success
       friend_request = current_user.friend_requests.last

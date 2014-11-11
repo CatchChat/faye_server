@@ -1,4 +1,5 @@
 en:
+  catch_chat: CatchChat
   models:
     friend_request:
       state:

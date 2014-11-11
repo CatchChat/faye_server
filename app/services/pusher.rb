@@ -21,6 +21,7 @@ class Pusher
                  new(JpushPusher.new(Settings.jpush.to_hash.symbolize_keys))
                end
 
+      options[:title] = I18n.t('catch_chat') if options[:title].blank?
       pusher.push_to_single_account(options.merge(account: user.id))
     end
   end

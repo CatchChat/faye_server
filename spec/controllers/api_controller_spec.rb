@@ -41,7 +41,17 @@ RSpec.describe TestsController, :type => :controller do
   end
 
   context 'ApiController#authenticate_user' do
-    # TODO
+
+    it 'unauthorized' do
+      get :index
+      expect(response).to have_http_status(:unauthorized)
+    end
+
+    it 'authenticated' do
+      sign_in user
+      get :index
+      expect(response).to be_success
+    end
   end
 
   context 'ApiController#set_time_zone' do
@@ -58,6 +68,16 @@ RSpec.describe TestsController, :type => :controller do
       sign_in user
       get :index
       expect(Time.zone.name).to eq 'UTC'
+    end
+  end
+
+  context 'ApiController#set_rate_limit' do
+
+    it 'the response should have rate limit data' do
+      get :index
+      expect(response.headers).to be_has_key('X-RateLimit-Limit')
+      expect(response.headers).to be_has_key('X-RateLimit-Remaining')
+      expect(response.headers).to be_has_key('X-RateLimit-Reset')
     end
   end
 end

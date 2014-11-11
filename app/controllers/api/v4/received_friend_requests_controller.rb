@@ -22,7 +22,7 @@ class Api::V4::ReceivedFriendRequestsController < ApiController
   def accept
     @friend_request.contact_name = params[:contact_name]
     if @friend_request.accept
-      # TODO Push message to user
+      Pusher.push_to_user(@friend_request.user, content: t('.accepted_notification', current_user.name))
       render :show
     else
       render json: { error: t('.accept_error') }, status: :unprocessable_entity
@@ -32,7 +32,7 @@ class Api::V4::ReceivedFriendRequestsController < ApiController
   ### PATCH api/v4/friend_requests/:id/reject
   def reject
     if @friend_request.reject
-      # TODO Push message to user
+      Pusher.push_to_user(@friend_request.user, content: t('.rejected_notification', current_user.name))
       render :show
     else
       render json: { error: t('.reject_error') }, status: :unprocessable_entity
@@ -42,7 +42,7 @@ class Api::V4::ReceivedFriendRequestsController < ApiController
   ### PATCH api/v4/friend_requests/:id/block
   def block
     if @friend_request.block
-      # TODO Push message to user
+      Pusher.push_to_user(@friend_request.user, content: t('.blocked_notification', current_user.name))
       render :show
     else
       render json: { error: t('.block_error') }, status: :unprocessable_entity

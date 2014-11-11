@@ -1,4 +1,5 @@
 zh-CN:
+  catch_chat: 秒视
   models:
     friend_request:
       state:
