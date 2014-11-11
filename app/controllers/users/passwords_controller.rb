@@ -23,11 +23,10 @@ class Users::PasswordsController < Devise::PasswordsController
     return :unauthorized unless current_user.valid_password?(params[:current_password])
     return :conflict unless params[:new_password] == params[:new_password_confirm]
 
-    user = User.find current_user.id
-    user.password = params[:new_password]
     current_user.password = params[:new_password]
-    if user.save
-      :accept
+    return :not_acceptable unless current_user.valid?
+    if current_user.save(validate: false)
+      :accepted
     else
       :not_acceptable
     end
