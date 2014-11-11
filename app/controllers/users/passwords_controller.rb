@@ -39,6 +39,7 @@ class Users::PasswordsController < Devise::PasswordsController
     current_user.password = params[:new_password]
     return :not_acceptable unless current_user.valid?
     if current_user.save(validate: false)
+      remove_old_access_token(current_user)
       :accepted
     else
       :not_acceptable
@@ -59,6 +60,7 @@ class Users::PasswordsController < Devise::PasswordsController
     return :not_acceptable unless user.valid?
 
     if user.save(validate: false)
+      remove_old_access_token(user)
       :accepted
     else
       :not_acceptable
@@ -69,5 +71,9 @@ class Users::PasswordsController < Devise::PasswordsController
   def get_expired_at
     valid_period = 3600
     Time.now + valid_period
+  end
+
+  def remove_old_access_token(user)
+    AccessToken.delete_all user_id: user.id
   end
 end
