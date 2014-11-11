@@ -5,7 +5,7 @@ class Users::PasswordsController < Devise::PasswordsController
 
   # Put password/update
   def change_password
-    if authenticated?
+    if authenticated? && params[:current_password]
       status = change_password_with_current_password
     else
       status = change_password_with_token
@@ -46,7 +46,24 @@ class Users::PasswordsController < Devise::PasswordsController
   end
 
   def change_password_with_token
-    :not_implemented
+    return :not_acceptable unless token = params[:token]
+    return :not_acceptable unless mobile = params[:mobile]
+    sms_token = SmsVerificationCode.find_by mobile: mobile, token: token
+    return :not_found unless sms_token
+    user = User.find_by mobile: sms_token.mobile
+    return :not_found unless user
+    return :gone unless sms_token.active && sms_token.expired_at > Time.now
+    return :conflict unless params[:new_password] == params[:new_password_confirm]
+
+    user.password = params[:new_password]
+    return :not_acceptable unless user.valid?
+
+    if user.save(validate: false)
+      :accepted
+    else
+      :not_acceptable
+    end
+
   end
 
   def get_expired_at

@@ -20,4 +20,11 @@ describe Users::PasswordsController do
 
   end
 
+  it 'change password with sms token' do
+    user = User.create username: 'passworduser', password: 'oldpassword', mobile: '111222333'
+    sms_token = SmsVerificationCode.create mobile: user.mobile, user_id: user.id, token: '123', active: true, expired_at: Time.now + 3600
+    post :change_password, token: sms_token.token, mobile: user.mobile, new_password: 'abcabc123', new_password_confirm: 'abcabc123'
+    expect(user.reload.valid_password?('abcabc123')).to eq true
+  end
+
 end

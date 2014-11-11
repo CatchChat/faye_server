@@ -56,6 +56,14 @@ orders are:
 1. mobile/sms code
 1. node username/password
 
+For mobile/sms code, the steps are
+
+1. Client send Post auth/send\_verify\_code with params[:login]=mobile
+1. API server create a sms verification code record with user\_id and mobile,
+   then send sms token to user
+1. Client send auth/create\_by\_mobile with mobile and received sms token
+1. API server return an access token
+
 TODO: need to generate new password for user when the node username/password
 matched.
 
@@ -86,9 +94,14 @@ There are 3 cases when changing password:
 1. user already login but forget his old password.  
 1. user can't login and also forget his old password.
 
-In the last 2 cases, user request a reset token, then API will send this token
-to user's mobile, then user input token, new\_password, new\_password\_confirm to
-change the password, and API remove all old access tokens of this user
+
+In the last 2 cases, the steps are
+
+1. by Post passwords/send\_verify\_code, Client request to send a token to the mobile, then create an SmsVerificationCode
+1. After receive the sms token, client send to Post passwords/change\_password with
+   token and old/new/confirmed password
+1. API server verify the token and reset the password
+1. API server remove all old access\_tokens
   
 ## Paginate
 Use gem Kaminari 
