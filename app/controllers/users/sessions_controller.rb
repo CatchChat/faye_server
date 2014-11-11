@@ -41,7 +41,7 @@ class Users::SessionsController < Devise::SessionsController
   end
 
   def get_client
-    official_flag = 0
+    official_flag = AccessToken.clients['official']
     params.fetch(:client, official_flag).to_i
   end
 
