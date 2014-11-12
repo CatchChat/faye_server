@@ -25,6 +25,6 @@ describe Users::RegistrationsController do
     @user   = FactoryGirl.create(:user, mobile: '1234567', state: User::STATES[:blocked])
     put :update_token, username: @user.username, token: @user.sms_verification_codes.last.token, mobile: @user.mobile, format: 'json'
     expect(@user.reload.state_name).to be :active
-    # expect(User.find_by(username: 'newusername')).to be_an_instance_of(User)
+    expect(response.body).to include '"state_name":"active"'
   end
 end
