@@ -114,7 +114,7 @@ ActiveRecord::Schema.define(version: 20141104091436) do
     t.integer  "sender_id"
     t.integer  "recipient_id"
     t.string   "recipient_type"
-    t.string   "media_type"
+    t.integer  "media_type"
     t.text     "text_content"
     t.integer  "parent_id"
     t.integer  "state"
