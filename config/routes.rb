@@ -18,6 +18,13 @@ Rails.application.routes.draw do
         post 'create'  => 'users/passwords#send_verify_code'
       end
     end
+
+    scope path: 'registration' do
+      as :user do
+        put 'update'   => 'users/registrations#update'
+        post 'create'  => 'users/registrations#create'
+      end
+    end
   end
 
   scope path: 'api/v5' do
