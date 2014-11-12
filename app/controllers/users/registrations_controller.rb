@@ -1,6 +1,6 @@
 class Users::RegistrationsController < Devise::RegistrationsController
-  include RateLimit
-  before_action :authenticate_user, except: [:create, :update]
+  #include RateLimit
+  skip_before_action :authenticate_user
 
   # Post registration/create
   def create
@@ -17,7 +17,25 @@ class Users::RegistrationsController < Devise::RegistrationsController
   end
 
   # Put registration/update
-  def update
+  def update_token
+    unless (username = params[:username]) && (mobile = params[:mobile]) && (token = params[:token])
+      return render json:{status: 'not enough data'}, status: :not_acceptable
+    end
+    @user = User.find_by! username: username, mobile: mobile
+
+    sms_token = SmsVerificationCode.find_by! user_id: @user.id, mobile: mobile, token: token, active: true
+
+    if Time.now > sms_token.expired_at
+      return render json: {status: 'token time out'}, status: :request_timeout
+    end
+
+    @user.unblock
+    @user.save
+    sms_token.active = false
+    sms_token.save
+
+  rescue ActiveRecord::RecordNotFound => e
+    render json: {status: 'record not found', message: e.message}, status: :not_found
   end
 
   private

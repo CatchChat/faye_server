@@ -21,8 +21,8 @@ Rails.application.routes.draw do
 
     scope path: 'registration' do
       as :user do
-        put 'update'   => 'users/registrations#update'
         post 'create'  => 'users/registrations#create'
+        put 'update'   => 'users/registrations#update_token'
       end
     end
   end

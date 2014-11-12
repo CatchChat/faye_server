@@ -17,7 +17,14 @@ describe Users::RegistrationsController do
     expect(User.find_by(username: 'newusername')).to be_an_instance_of(User)
     expect(User.find_by(username: 'newusername').valid_password?('abcabc123')).to be true
     expect(User.find_by(username: 'newusername').blocked?).to be true
+    expect(response.body).to include '"state_name":"blocked"'
     expect(response.body).to include '"sent_sms":true'
   end
 
+  it 'update the user state when receive sms token' do
+    @user   = FactoryGirl.create(:user, mobile: '1234567', state: User::STATES[:blocked])
+    put :update_token, username: @user.username, token: @user.sms_verification_codes.last.token, mobile: @user.mobile, format: 'json'
+    expect(@user.reload.state_name).to be :active
+    # expect(User.find_by(username: 'newusername')).to be_an_instance_of(User)
+  end
 end
