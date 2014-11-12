@@ -118,6 +118,8 @@ ActiveRecord::Schema.define(version: 20141104091436) do
     t.text     "text_content"
     t.integer  "parent_id"
     t.integer  "state"
+    t.float    "longitude",      limit: 24
+    t.float    "latitude",       limit: 24
     t.datetime "created_at"
     t.datetime "updated_at"
   end

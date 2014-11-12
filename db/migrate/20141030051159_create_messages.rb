@@ -7,6 +7,8 @@ class CreateMessages < ActiveRecord::Migration
       t.text :text_content
       t.integer :parent_id
       t.integer :state
+      t.float :longitude
+      t.float :latitude
 
       t.timestamps
     end
