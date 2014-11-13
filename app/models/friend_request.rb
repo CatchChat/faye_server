@@ -9,10 +9,7 @@ class FriendRequest < ActiveRecord::Base
 
   attr_accessor :contact_name
 
-  scope :by_state, -> (state) { where(self.table_name => { state: state }) }
-
   STATES = { pending: 1, accepted: 2, rejected: 3, blocked: 4 }.freeze
-
   STATES.each do |state, value|
     scope state, -> { where(self.table_name => { state: value }) }
   end

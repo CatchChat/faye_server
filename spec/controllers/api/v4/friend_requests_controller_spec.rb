@@ -12,16 +12,12 @@ RSpec.describe Api::V4::FriendRequestsController, :type => :controller do
 
   describe 'GET index' do
 
-    it 'should be success and render index template' do
-      get :index, format: :json
-      expect(response).to be_success
-      expect(response).to render_template(:index)
-    end
-
     describe 'support page and per_page' do
 
       it "default page is 1, default per_page is #{Kaminari.config.default_per_page}" do
         get :index, format: :json
+        expect(response).to be_success
+        expect(response).to render_template(:index)
         body = JSON.parse response.body
         expect(body['current_page']).to eq 1
         expect(body['per_page']).to eq Kaminari.config.default_per_page
@@ -30,6 +26,8 @@ RSpec.describe Api::V4::FriendRequestsController, :type => :controller do
       it 'should return the correct current_page and per_page' do
         get :index, format: :json, page: 10, per_page: 5
         body = JSON.parse response.body
+        expect(response).to be_success
+        expect(response).to render_template(:index)
         expect(body['current_page']).to eq 10
         expect(body['per_page']).to eq 5
       end
@@ -46,6 +44,8 @@ RSpec.describe Api::V4::FriendRequestsController, :type => :controller do
 
       it 'default sort is id, default direction is DESC' do
         get :index, format: :json
+        expect(response).to be_success
+        expect(response).to render_template(:index)
         body = JSON.parse response.body
         ids = body['friend_requests'].map { |request| request['id'] }
         expect(ids.length).to eq 10
@@ -54,10 +54,32 @@ RSpec.describe Api::V4::FriendRequestsController, :type => :controller do
 
       it 'should return the correct order' do
         get :index, format: :json, sort: :created_at, direction: 'ASC'
+        expect(response).to be_success
+        expect(response).to render_template(:index)
         body = JSON.parse response.body
         created_ats = body['friend_requests'].map { |request| request['created_at'] }
         expect(created_ats.length).to eq 10
         expect(created_ats).to eq(created_ats.sort)
+      end
+    end
+
+    describe 'support state' do
+
+      before do
+        8.times do |index|
+          friend = FactoryGirl.create(:user, username: "test#{index}")
+          user.friend_requests.create(friend_id: friend.id, state: (index % 4) + 1)
+        end
+      end
+
+      it 'should return the correct count' do
+        FriendRequest::STATES.keys.each do |state|
+          get :index, format: :json, state: state
+          expect(response).to be_success
+          expect(response).to render_template(:index)
+          body = JSON.parse response.body
+          expect(body['count']).to eq 2
+        end
       end
     end
   end
