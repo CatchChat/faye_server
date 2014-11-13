@@ -18,13 +18,14 @@ class Message < ActiveRecord::Base
   end
 
   def self.detect_message_type(file_url)
-    case File.extname(file_url)
-    when '.mp4'
-      media_types['video']
-    when '.jpg'
-      media_types['image']
+    extname = File.extname(file_url.to_s).downcase
+
+    if Settings.attachment_formats.video.include?(extname)
+      media_types[:video]
+    elsif Settings.attachment_formats.image.include?(extname)
+      media_types[:image]
     else
-      media_types['text']
+      media_types[:text]
     end
   end
 end

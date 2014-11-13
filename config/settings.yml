@@ -4,6 +4,7 @@ android_style:
   vibrate: 1
   clearable: 1
   n_id: 0
+
 jpush:
   id:
   key:
@@ -14,3 +15,16 @@ xinge:
   ios:
     id:
     key:
+
+attachment_formats:
+  image:
+  - jpeg
+  - jpg
+  - png
+  - webp
+  video:
+  - mp4
+  - webm
+  - avi
+  - rmvb
+  - mkv
