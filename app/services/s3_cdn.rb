@@ -47,11 +47,11 @@ class S3Cdn
       url = "https://#{bucket}.s3.#{region}.amazonaws.com/"
     end
     conditions_list = Array.new.tap do |array|
-      array << {"bucket" => "rails-test"}
+      array << {"bucket" => bucket}
       array << {"key" => key}
       array << {'acl' => 'private'}
       array << {'success_action_redirect' => success_action_redirect} if success_action_redirect
-      array << {"x-amz-credential"=> "#{aws_access_key_id}/#{date[0,8]}/cn-north-1/s3/aws4_request"}
+      array << {"x-amz-credential"=> "#{aws_access_key_id}/#{date[0,8]}/#{region}/s3/aws4_request"}
       array << {"x-amz-algorithm"=> "AWS4-HMAC-SHA256"}
       array << {"x-amz-date"=> date }
     end
