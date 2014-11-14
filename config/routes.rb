@@ -115,7 +115,6 @@ Rails.application.routes.draw do
         concern :friend_requests_with_state do
           get :index, path: ':state', constraints: { state: %w(pending accepted rejected blocked) }, on: :collection
         end
-
         resources :friend_requests, only: %i(index create destroy), path: 'sent', concerns: :friend_requests_with_state
         resources :received_friend_requests, only: %i(index destroy), path: 'received', concerns: :friend_requests_with_state do
           member do
@@ -126,24 +125,27 @@ Rails.application.routes.draw do
         end
       end
 
-      resources :unfriend_requests, only: %i(create)
-      resources :friends, only: %i(index), controller: :friendships
-      resources :messages, only: %i(create) do
-        member do
-          patch :mark_as_read
-        end
-
+      resources :friendships, only: %i(index update show) do
+        patch :move_to_top, on: :member
         collection do
-          get :unread
+          get :recent
+          get :search
         end
       end
 
       resources :groups, only: %i(index create update destroy show) do
-        resources :friends, only: %i(index create destroy), controller: :friendships_groups
+        post 'add_friendship/:friendship_id', to: 'friendships_groups#create'
+        delete 'remove_friendship/:friendship_id', to: 'friendships_groups#destroy'
       end
+
+      resources :messages, only: %i(create show) do
+        get :unread, on: :collection
+        patch :mark_as_read, on: :member
+      end
+
+      resources :unfriend_requests, only: %i(create)
     end
   end
 
   root to: "home#index"
-
 end

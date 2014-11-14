@@ -1,21 +1,9 @@
 class Api::V4::FriendshipsGroupsController < ApiController
-  before_action :load_group
+  before_action :load_group, only: %i(create destroy)
 
-  ### GET /api/v4/groups/:group_id/friends
-  # Optional params
-  #   page
-  #   per_page
-  def index
-    @friendships = @group.friendships.includes(:friends)
-    @friendships = @friendships.page(params[:page]).per(params[:per_page])
-    fresh_when([@group, @group.friendships, @group.friends], public: true)
-  end
-
-  ### POST /api/v4/groups/:group_id/friends
-  # Required params
-  #   friend_id
+  ### POST /api/v4/groups/:group_id/add_friendship/:friendship_id
   def create
-    unless friendship = current_user.friendships.find_by(friend_id: params[:friend_id])
+    unless friendship = current_user.friendships.find_by(id: params[:friendship_id])
       return render json: { error: t('.not_friend') }, status: :not_found
     end
 
@@ -25,10 +13,9 @@ class Api::V4::FriendshipsGroupsController < ApiController
     end
   end
 
-  ### DELETE /api/v4/groups/:group_id/friends/:id
+  ### DELETE /api/v4/groups/:group_id/remove_friendship/:friendship_id
   def destroy
-    unless friendships_group = @group.friendships_groups.joins(:friendship).
-      find_by(Friendship.table_name => { friend_id: params[:id] })
+    unless friendships_group = @group.friendships_groups.find_by(friendship_id: params[:friendship_id])
       return render json: { error: t('.not_in_group') }, status: :not_found
     end
 

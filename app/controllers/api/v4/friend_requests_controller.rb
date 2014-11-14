@@ -1,7 +1,7 @@
 class Api::V4::FriendRequestsController < ApiController
   before_action :load_friend_request, only: %i(destroy)
 
-  ### GET api/v4/friend_requests
+  ### GET api/v4/friend_requests/sent
   # Optional params
   #   per_page
   #   page
@@ -40,7 +40,7 @@ class Api::V4::FriendRequestsController < ApiController
     end
   end
 
-  ### DELETE api/v4/friend_requests/:id
+  ### DELETE api/v4/friend_requests/sent/:id
   def destroy
     @friend_request.destroy
     render json: {}

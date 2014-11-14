@@ -1,7 +1,7 @@
 class Api::V4::ReceivedFriendRequestsController < ApiController
   before_action :load_friend_request, only: %i(destroy accept reject block)
 
-  ### GET api/v4/friend_requests
+  ### GET api/v4/friend_request/received
   # Optional params
   #   per_page
   #   page
@@ -16,7 +16,7 @@ class Api::V4::ReceivedFriendRequestsController < ApiController
     fresh_when(@friend_requests, public: true)
   end
 
-  ### PATCH api/v4/friend_requests/:id/accept
+  ### PATCH api/v4/friend_requests/received/:id/accept
   # Optional params
   #   contact_name
   def accept
@@ -29,7 +29,7 @@ class Api::V4::ReceivedFriendRequestsController < ApiController
     end
   end
 
-  ### PATCH api/v4/friend_requests/:id/reject
+  ### PATCH api/v4/friend_requests/received/:id/reject
   def reject
     if @friend_request.reject
       Pusher.push_to_user(@friend_request.user, content: t('.rejected_notification', current_user.name))
@@ -39,7 +39,7 @@ class Api::V4::ReceivedFriendRequestsController < ApiController
     end
   end
 
-  ### PATCH api/v4/friend_requests/:id/block
+  ### PATCH api/v4/friend_requests/received/:id/block
   def block
     if @friend_request.block
       Pusher.push_to_user(@friend_request.user, content: t('.blocked_notification', current_user.name))
@@ -49,7 +49,7 @@ class Api::V4::ReceivedFriendRequestsController < ApiController
     end
   end
 
-  ### DELETE api/v4/friend_requests/:id
+  ### DELETE api/v4/friend_requests/received/:id
   def destroy
     @friend_request.destroy
     render json: {}
@@ -63,3 +63,4 @@ class Api::V4::ReceivedFriendRequestsController < ApiController
     end
   end
 end
+  ### GET api/v4/friend_requests
