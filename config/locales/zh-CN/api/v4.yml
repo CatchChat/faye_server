@@ -45,3 +45,11 @@ zh-CN:
         destroy:
           not_in_group: 该好友不在群组中
           group_not_found: 该群组不存在
+      friendships:
+        show:
+          not_found: 该好友不存在
+        update:
+          not_found: 该好友不存在
+        move_to_top:
+          not_found: 该好友不存在
+          move_to_top_error: 置顶发生错误

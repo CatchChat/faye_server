@@ -1,4 +1,6 @@
 zh-CN:
+  catch_chat: 秒视
+  rate_limit_exceeded: 请求次数过多，请稍后再试
   time:
     formats:
       default: ! '%Y年%m月%d日 %H:%M:%S'

@@ -1,5 +1,4 @@
 zh-CN:
-  catch_chat: 秒视
   models:
     friend_request:
       state:
@@ -7,5 +6,3 @@ zh-CN:
         accepted: 已接受
         rejected: 已拒绝
         blocked:  已禁止
-  messages:
-    retry_after: 请求次数过多，请稍后再试

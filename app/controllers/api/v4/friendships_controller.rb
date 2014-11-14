@@ -16,15 +16,22 @@ class Api::V4::FriendshipsController < ApiController
   #   page
   #   per_page
   def recent
-    joins_sql = <<-SQL
-INNER JOIN messages sent_messages
-ON sent_messages.sender_id = friendships.user_id
-INNER JOIN messages received_messages
-ON received_messages.recipient_id = friendships.user_id AND received_messages.recipient_type = 'User'
+    where_sql = <<-SQL
+friendships.friend_id IN (
+  SELECT messages.recipient_id friend_id FROM messages
+  WHERE messages.sender_id = :current_user_id AND messages.recipient_type = 'User'
+  AND messages.created_at >= :time
+  UNION
+  SELECT messages.sender_id friend_id FROM messages
+  WHERE messages.recipient_id = :current_user_id AND messages.recipient_type = 'User'
+  AND messages.created_at >= :time
+)
     SQL
 
-    @friendships = current_user.friendships.joins(joins_sql).includes(:friend).where(
-      'sent_messages.created_at >= :time OR received_messages.created_at >= :time',
+
+    @friendships = current_user.friendships.includes(:friend).where(
+      where_sql,
+      current_user_id: current_user.id,
       time: 3.days.ago
     ).page(params[:page]).per(params[:per_page])
     render :index if stale?(@friendships, public: true)
@@ -37,8 +44,7 @@ ON received_messages.recipient_id = friendships.user_id AND received_messages.re
   #   page
   #   per_page
   def search
-    @friendships = current_user.friendships.includes(:friend)
-    @friendships = @friendships.where('contact_name LIKE :keyword OR remarked_name LIKE :keyword', keyword: "%#{params[:q]}%")
+    @friendships = current_user.friendships.includes(:friend).references(:friend).where(search_conditions)
     @friendships = @friendships.page(params[:page]).per(params[:per_page])
     render :index if stale?(@friendships, public: true)
   end
@@ -49,6 +55,9 @@ ON received_messages.recipient_id = friendships.user_id AND received_messages.re
   end
 
   ### PUT /api/v4/friendships/:id
+  # Optional params
+  #   remarked_name
+  #   contact_name
   def update
     unless @friendship.update(friendship_params)
       render json: { error: @friendship.errors.full_messages.join("\n") }, status: :unprocessable_entity
@@ -73,5 +82,16 @@ ON received_messages.recipient_id = friendships.user_id AND received_messages.re
 
   def friendship_params
     params.permit(:remarked_name, :contact_name)
+  end
+
+  def search_conditions
+    conditions = [[]]
+    conditions[0] << "friendships.remarked_name LIKE :keyword"
+    conditions[0] << "friendships.contact_name LIKE :keyword"
+    conditions[0] << "users.nickname LIKE :keyword"
+    conditions[0] << "users.username LIKE :keyword"
+    conditions << { keyword: "%#{params[:q]}%" }
+    conditions[0] = conditions[0].join(' OR ')
+    conditions
   end
 end

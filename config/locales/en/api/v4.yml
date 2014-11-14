@@ -45,3 +45,11 @@ en:
         destroy:
           not_in_group: Not in group
           group_not_found: The group is not found
+      friendships:
+        show:
+          not_found: The friend is not found
+        update:
+          not_found: The friend is not found
+        move_to_top:
+          not_found: The friend is not found
+          move_to_top_error: Error occurred

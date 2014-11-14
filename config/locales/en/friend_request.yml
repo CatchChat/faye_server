@@ -1,5 +1,4 @@
 en:
-  catch_chat: CatchChat
   models:
     friend_request:
       state:
@@ -7,5 +6,3 @@ en:
         accepted: Accepted
         rejected: Rejected
         pending:  Pending
-  messages:
-    retry_after: API rate limit exceeded for you

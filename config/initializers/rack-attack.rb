@@ -27,6 +27,6 @@ Rack::Attack.throttled_response = lambda { |env|
       'X-RateLimit-Remaining' => remaining.to_s,
       'X-RateLimit-Reset'     => rate_limit[:period].to_s
     },
-    [{ error: I18n.t('messages.retry_after') }.to_json]
+    [{ error: I18n.t('rate_limit_exceeded') }.to_json]
   ]
 }

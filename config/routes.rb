@@ -109,7 +109,7 @@ Rails.application.routes.draw do
   #     resources :products
   #   end
 
-  namespace :api do
+  namespace :api, defaults: { format: :json } do
     namespace :v4 do
       scope path: 'friend_requests' do
         concern :friend_requests_with_state do

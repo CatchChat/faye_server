@@ -1,10 +1,13 @@
 class Message < ActiveRecord::Base
   belongs_to :sender, class_name: 'User'
   belongs_to :recipient, polymorphic: true
-  has_and_belongs_to_many :attachments
-  has_many :individual_recipients
+  has_and_belongs_to_many :attachments, dependent: :destroy
+  has_many :individual_recipients, dependent: :destroy
 
   enum media_type: [:image, :video, :text]
+
+  validates :sender_id, :recipient_id, :recipient_type, :media_type, presence: true
+  validates :recipient_type, inclusion: { in: %w(User Group), allow_blank: true }
 
   STATES = { unread: 1, read: 2 }.freeze
   state_machine :state, initial: :unread do
