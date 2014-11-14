@@ -28,9 +28,10 @@ RSpec.describe Api::V4::FriendshipsGroupsController, :type => :controller do
       group = current_user.groups.first
       friendship = current_user.friendships.create!(friend_id: friend.id)
       expect(current_user.friends).to include friend
+      expect(group.friends).to_not include friend
       post :create, group_id: group.id, friendship_id: friendship.id, format: :json
+      expect(group.reload.friends).to include friend
       expect(response).to be_success
-      expect(response).to render_template(:create)
     end
   end
 
@@ -59,6 +60,7 @@ RSpec.describe Api::V4::FriendshipsGroupsController, :type => :controller do
       group.friendships << friendship
       expect(group.friends).to include friend
       delete :destroy, group_id: group.id, friendship_id: friendship.id, format: :json
+      expect(group.reload.friends).to_not include friend
       expect(response).to be_success
     end
   end

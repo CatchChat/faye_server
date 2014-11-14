@@ -12,6 +12,9 @@ class Api::V4::FriendshipsController < ApiController
   end
 
   ### GET /api/v4/friendships/recent
+  # Optional params
+  #   page
+  #   per_page
   def recent
     joins_sql = <<-SQL
 INNER JOIN messages sent_messages

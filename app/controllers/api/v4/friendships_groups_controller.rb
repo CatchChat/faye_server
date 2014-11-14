@@ -8,7 +8,9 @@ class Api::V4::FriendshipsGroupsController < ApiController
     end
 
     friendships_group = @group.friendships_groups.build(friendship_id: friendship.id)
-    unless friendships_group.save
+    if friendships_group.save
+      render json: {}
+    else
       render json: { error: friendships_group.errors.full_messages.join("\n") }, status: :unprocessable_entity
     end
   end

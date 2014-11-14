@@ -18,18 +18,16 @@ RSpec.describe Api::V4::FriendRequestsController, :type => :controller do
         get :index, format: :json
         expect(response).to be_success
         expect(response).to render_template(:index)
-        body = JSON.parse response.body
-        expect(body['current_page']).to eq 1
-        expect(body['per_page']).to eq Kaminari.config.default_per_page
+        expect(json_response['current_page']).to eq 1
+        expect(json_response['per_page']).to eq Kaminari.config.default_per_page
       end
 
       it 'should return the correct current_page and per_page' do
         get :index, format: :json, page: 10, per_page: 5
-        body = JSON.parse response.body
         expect(response).to be_success
         expect(response).to render_template(:index)
-        expect(body['current_page']).to eq 10
-        expect(body['per_page']).to eq 5
+        expect(json_response['current_page']).to eq 10
+        expect(json_response['per_page']).to eq 5
       end
     end
 
@@ -46,8 +44,7 @@ RSpec.describe Api::V4::FriendRequestsController, :type => :controller do
         get :index, format: :json
         expect(response).to be_success
         expect(response).to render_template(:index)
-        body = JSON.parse response.body
-        ids = body['friend_requests'].map { |request| request['id'] }
+        ids = json_response['friend_requests'].map { |request| request['id'] }
         expect(ids.length).to eq 10
         expect(ids).to eq(ids.sort { |x, y| y <=> x })
       end
@@ -56,8 +53,7 @@ RSpec.describe Api::V4::FriendRequestsController, :type => :controller do
         get :index, format: :json, sort: :created_at, direction: 'ASC'
         expect(response).to be_success
         expect(response).to render_template(:index)
-        body = JSON.parse response.body
-        created_ats = body['friend_requests'].map { |request| request['created_at'] }
+        created_ats = json_response['friend_requests'].map { |request| request['created_at'] }
         expect(created_ats.length).to eq 10
         expect(created_ats).to eq(created_ats.sort)
       end
@@ -77,8 +73,7 @@ RSpec.describe Api::V4::FriendRequestsController, :type => :controller do
           get :index, format: :json, state: state
           expect(response).to be_success
           expect(response).to render_template(:index)
-          body = JSON.parse response.body
-          expect(body['count']).to eq 2
+          expect(json_response['count']).to eq 2
         end
       end
     end
@@ -89,7 +84,7 @@ RSpec.describe Api::V4::FriendRequestsController, :type => :controller do
     it 'should return :not_found when friend is not found' do
       post :create, friend_id: 0, format: :json
       expect(response).to be_not_found
-      expect(JSON.parse(response.body)).to eq({ 'error' => subject.t('.not_found') })
+      expect(json_response).to eq({ 'error' => subject.t('.not_found') })
     end
 
     it 'should return :forbidden when already friends' do
@@ -97,7 +92,7 @@ RSpec.describe Api::V4::FriendRequestsController, :type => :controller do
       expect(current_user.friends).to be_include(friend)
       post :create, friend_id: friend.id, format: :json
       expect(response).to be_forbidden
-      expect(JSON.parse(response.body)).to eq({ 'error' => subject.t('.already_friend', friend_name: friend.name) })
+      expect(json_response).to eq({ 'error' => subject.t('.already_friend', friend_name: friend.name) })
     end
 
     it 'should return :unprocessable_entity when already request' do
@@ -114,15 +109,15 @@ RSpec.describe Api::V4::FriendRequestsController, :type => :controller do
       )
       post :create, friend_id: friend.id, format: :json
       expect(response).to be_forbidden
-      expect(JSON.parse(response.body)).to eq({ 'error' => subject.t('.blocked', friend_name: friend.name) })
+      expect(json_response).to eq({ 'error' => subject.t('.blocked', friend_name: friend.name) })
     end
 
     it 'should return :success when success' do
       allow(Pusher).to receive(:push_to_user)
+      count = current_user.friend_requests.count
       post :create, friend_id: friend.id, format: :json
+      expect(current_user.friend_requests.count).to eq(count + 1)
       expect(response).to be_success
-      friend_request = current_user.friend_requests.last
-      expect(friend_request.friend_id).to eq friend.id
       expect(response).to render_template(:show)
     end
   end
@@ -132,7 +127,7 @@ RSpec.describe Api::V4::FriendRequestsController, :type => :controller do
     it 'should return :not_found when friend is not found' do
       delete :destroy, id: 0, format: :json
       expect(response).to be_not_found
-      expect(response.body).to eq({ error: subject.t('.not_found') }.to_json)
+      expect(json_response).to eq({ 'error' => subject.t('.not_found') })
     end
 
     it 'should return :success when success' do
