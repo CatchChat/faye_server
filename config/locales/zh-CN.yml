@@ -8,3 +8,4 @@ zh-CN:
     username_password_error: "用户名密码错误"
     access_token_error: "HTTP Token: Access denied"
     no_auth: "No Authentication"
+    token_access_denied: "HTTP Token: Access denied"

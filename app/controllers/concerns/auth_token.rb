@@ -1,4 +1,11 @@
 module AuthToken
+
+  module Exceptions
+    class TokenExpired < RuntimeError; end
+    class TokenNotFound < RuntimeError; end
+    class TokenInactive < RuntimeError; end
+  end
+  include Exceptions
   extend NodePassword
   def warden
     request.env['warden']
@@ -24,10 +31,14 @@ module AuthToken
 
   def self.check_access_token(request)
     token = request.headers['AuthorizationToken']
-    if (access_token = AccessToken.find_by(token: token)) && access_token.active == true && (!access_token.expired_at or access_token.expired_at > Time.now)
-      AccessToken.current = access_token
-      access_token.user
+    raise TokenNotFound unless access_token = AccessToken.find_by(token: token)
+    raise TokenInactive unless access_token.active
+    # nil means never expire
+    if access_token.expired_at
+      raise TokenExpired if  access_token.expired_at < Time.now
     end
+    AccessToken.current = access_token
+    access_token.user
   end
 
   def self.check_mobile_and_sms_verification_code(mobile, sms_str)

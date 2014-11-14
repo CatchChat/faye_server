@@ -18,6 +18,8 @@ class ApplicationController < ActionController::Base
 
   def authenticate_user
     render json: { error: t("auth.#{warden.errors[:general].last}") }, status: :unauthorized unless authenticated?
+  rescue TokenExpired, TokenNotFound, TokenInactive
+    render json: { error: t("auth.token_access_denied") }, status: :unauthorized
   end
 
   def ssl_configured?

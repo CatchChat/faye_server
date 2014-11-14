@@ -28,3 +28,5 @@ en:
     username_password_error: "User or Password is incorrect"
     access_token_error: "HTTP Token: Access denied"
     no_auth: "No Authentication"
+    token_access_denied: "HTTP Token: Access denied"
+    

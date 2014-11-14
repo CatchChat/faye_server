@@ -18,6 +18,12 @@ describe AuthToken do
     expect(AccessToken.current).to eq @user.access_tokens.last
   end
 
+  it "check_access_token and raise exception if expired" do
+    request = OpenStruct.new headers: {'AuthorizationToken' =>'test-token' }
+    Timecop.freeze(Time.local(2015))
+    expect {AuthToken.check_access_token(request)}.to raise_error AuthToken::Exceptions::TokenExpired
+    Timecop.return
+  end
   it "check_username_password" do
     expect(AuthToken.check_username_password('ruanwztest','ruanwztest')).to be_an_instance_of User
   end
