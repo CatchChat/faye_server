@@ -3,7 +3,7 @@ ENV["qiniu_secret_key"]="pQ5v3Bpg6AIx5hIXo9fXJgCLjgObH-DjKWOWU8dy"
 ENV["AWS_ACCESS_KEY_ID"]="AKIAOGBVMZAU5EZPGPIQ"
 ENV["AWS_SECRET_ACCESS_KEY"]="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"
 ENV["AWS_REGION"]='cn-north-1'
-ENV["AWS_Bucket"]='rails-test'
+ENV["AWS_Bucket"]='ruanwz-test'
 ENV["upyun_username"]="david"
 ENV["upyun_password"]="coneonbe"
 ENV["upyun_form_api_secret"]="hY2fekHKoBJWcdTC1bL4T6mgN+A="

@@ -4,7 +4,7 @@ require 'vcr_helper'
 require 'services_helper'
 describe Cdn do
   before do
-    Timecop.freeze(Time.local(2014,10,23,15,10))
+    Timecop.freeze(Time.local(2014,11,14,16,25))
   end
 
   after do
@@ -18,7 +18,7 @@ describe Cdn do
 
           @client_init_hash    = {aws_access_key_id: aws_access_key_id,
                               aws_secret_access_key: aws_secret_access_key,
-                                             bucket: 'rails-test'}
+                                             bucket: 'ruanwz-test'}
 
           @cdn_init_hash    = {aws_access_key_id: aws_access_key_id,
                            aws_secret_access_key: aws_secret_access_key}
@@ -38,15 +38,15 @@ describe Cdn do
     it "provide upload form url and fields for s3" do
       url, policy, encoded_policy, signature = subject.get_upload_form_url_fields key: 'webcam.jpeg'
 
-      expect(url).to eq "https://rails-test.s3.cn-north-1.amazonaws.com.cn/"
+      expect(url).to eq "https://ruanwz-test.s3.cn-north-1.amazonaws.com.cn/"
       expect(policy["conditions"].length).to eq 6
-      expect(signature).to eq '79abcc7d829358a5ee701728ae5160f79a3e015e87d7e2f518b16c98121031a6'
+      expect(signature).to eq '04aa9aa8b7cb52ef09c7ca695b692f7e7c8cd005dfac4e336c7d595018052363'
 
     end
 
     it "provide download url for s3" do
       s3_download_url = subject.get_download_url key: 'webcam.jpg'
-      expect(s3_download_url).to eq 'https://rails-test.s3.cn-north-1.amazonaws.com.cn/webcam.jpg?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAOGBVMZAU5EZPGPIQ%2F20141023%2Fcn-north-1%2Fs3%2Faws4_request&X-Amz-Date=20141023T071000Z&X-Amz-Expires=3600&X-Amz-Signature=ba2a9f1ae5691cff75932348fafa75fdaccb057c4f07cd298d19511ce62b072f&X-Amz-SignedHeaders=Host'
+      expect(s3_download_url).to eq 'https://ruanwz-test.s3.cn-north-1.amazonaws.com.cn/webcam.jpg?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAOGBVMZAU5EZPGPIQ%2F20141114%2Fcn-north-1%2Fs3%2Faws4_request&X-Amz-Date=20141114T082500Z&X-Amz-Expires=3600&X-Amz-Signature=fb03cb107d2d6a0b02a72a4fd86b783dd610ec18623a43dcccdf664e932ec953&X-Amz-SignedHeaders=Host'
     end
 
     it "upload file for s3" do
