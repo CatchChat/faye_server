@@ -8,12 +8,13 @@ describe Cdn do
     aws_access_key_id     = ENV["AWS_ACCESS_KEY_ID"]
     aws_secret_access_key = ENV["AWS_SECRET_ACCESS_KEY"]
 
-        @client_init_hash    = {aws_access_key_id: aws_access_key_id,
-                            aws_secret_access_key: aws_secret_access_key,
-                                           bucket: 'ruanwz-test'}
+    @client_init_hash    = {aws_access_key_id: aws_access_key_id,
+                        aws_secret_access_key: aws_secret_access_key,
+                               sqs_queue_name: 's3-ruanwz-test-post',
+                                       bucket: 'ruanwz-test'}
 
-        @cdn_init_hash    = {aws_access_key_id: aws_access_key_id,
-                         aws_secret_access_key: aws_secret_access_key}
+    @cdn_init_hash    = {aws_access_key_id: aws_access_key_id,
+                     aws_secret_access_key: aws_secret_access_key}
 
     @s3_client = S3Cdn.new @client_init_hash
     @cdn          = Cdn.new(@s3_client, @cdn_init_hash)
@@ -80,7 +81,7 @@ describe Cdn do
 
   context 'global s3' do
     before do
-      Timecop.freeze(Time.local(2014,11,17,11,35))
+      Timecop.freeze(Time.local(2014,11,17,15,45))
     end
 
     subject {@cdn}
@@ -91,10 +92,14 @@ describe Cdn do
       t.write 'abc'
       t.close
       VCR.use_cassette('s3_global_upload_file') do
-       code = subject.upload_file file_location: t.path,
-                                            key: 'test-key.jpg'
-
+       code = subject.upload_file file_location: t.path, key: 'test-key.jpg'
        expect(code).to eq 204
+
+      end
+
+      VCR.use_cassette('s3_global_upload_file_notification') do
+        complete_notification = subject.sqs_receive
+        expect(complete_notification).to include("test-key.jpg")
       end
     end
 

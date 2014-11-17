@@ -14,6 +14,7 @@ class S3Cdn
   attribute :region, String, default: ENV['AWS_REGION'] || 'cn-north-1'
   attribute :success_action_redirect, String
   attribute :acl, String
+  attribute :sqs_queue_name, String
   def initialize(keys)
     super
   end
@@ -93,6 +94,31 @@ class S3Cdn
       req.headers['Content-Type'] =  'multipart/form-data'
     end
     resp.status
+  end
+
+  def sqs_poll
+    sqs = AWS::SQS.new
+    queue = sqs.queues.named(sqs_queue_name)
+
+    queue.poll(wait_time_seconds: 10) do |poll_message|
+      message = JSON.parse(poll_message.body)
+      _keys = message.fetch("Records").map do |record|
+        _post_obj_key = record.fetch("s3").fetch("object").fetch("key")
+      end
+      puts _keys
+
+    end
+
+  end
+
+  def sqs_receive
+    sqs = AWS::SQS.new
+    queue = sqs.queues.named(sqs_queue_name)
+    received_message = queue.receive_message(wait_time_seconds: 20)
+    message = JSON.parse(received_message.body)
+    message.fetch("Records").map do |record|
+      _post_obj_key = record.fetch("s3").fetch("object").fetch("key")
+    end
   end
 
   DOWNLOADVALIDATOR = Vanguard::Validator.build do
