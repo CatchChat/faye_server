@@ -6,7 +6,7 @@ class Message < ActiveRecord::Base
   has_and_belongs_to_many :attachments, dependent: :destroy
   has_many :individual_recipients, dependent: :destroy
 
-  enum media_type: [:image, :video, :text]
+  enum media_type: [:photo, :video, :text]
 
   validates :sender_id, :recipient_id, :recipient_type, :media_type, presence: true
   validates :recipient_type, inclusion: { in: %w(User Group), allow_blank: true }
@@ -30,7 +30,7 @@ class Message < ActiveRecord::Base
     if Settings.attachment_formats.video.include?(extname)
       media_types[:video]
     elsif Settings.attachment_formats.image.include?(extname)
-      media_types[:image]
+      media_types[:photo]
     else
       media_types[:text]
     end

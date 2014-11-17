@@ -5,7 +5,7 @@ class CreateMessages < ActiveRecord::Migration
       t.references :recipient, polymorphic: true, index: true
       t.integer :media_type
       t.text :text_content
-      t.integer :parent_id
+      t.integer :parent_id, null: false, default: 0
       t.integer :state
       t.float :longitude
       t.float :latitude

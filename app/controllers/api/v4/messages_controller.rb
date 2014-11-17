@@ -28,6 +28,11 @@ class Api::V4::MessagesController < ApiController
     message.recipient = recipient
 
     if message.save
+      Pusher.push_to_user(recipient, content: t(
+        '.sent_message_to_you',
+        friend_name: current_user.name,
+        media_type: Message.human_attribute_name(message.media_type)
+      ))
       render json: {}
     else
       render json: { error: message.errors.full_messages.join("\n") }, status: :unprocessable_entity

@@ -56,6 +56,7 @@ en:
       messages:
         create:
           not_found_recipient: The friend is not found
+          sent_message_to_you: '%{friend_name} sent you %{media_type}'
         mark_as_read:
           not_found: The message is not found
           mark_as_read_error: An error occurred, please try again later

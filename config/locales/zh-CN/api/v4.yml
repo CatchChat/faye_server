@@ -56,6 +56,7 @@ zh-CN:
       messages:
         create:
           not_found_recipient: 该好友不存在
+          sent_message_to_you: '%{friend_name} 给你发来了%{media_type}'
         mark_as_read:
           not_found: 该消息不存在
           mark_as_read_error: 出错，请稍后再试

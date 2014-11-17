@@ -140,7 +140,10 @@ Rails.application.routes.draw do
 
       resources :messages, only: %i(create show) do
         get :unread, on: :collection
-        patch :mark_as_read, on: :member
+        member do
+          patch :mark_as_read
+          patch :deliver
+        end
       end
 
       resources :unfriend_requests, only: %i(create)

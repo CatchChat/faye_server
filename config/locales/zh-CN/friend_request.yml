@@ -1,5 +1,7 @@
 zh-CN:
   activerecord:
+    models:
+      friend_request: 好友请求
     attributes:
       friend_request:
         pending:  等待中
