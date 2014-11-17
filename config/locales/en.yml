@@ -31,3 +31,6 @@ en:
     access_token_error: "HTTP Token: Access denied"
     no_auth: "No Authentication"
     token_access_denied: "HTTP Token: Access denied"
+  errors:
+    messages:
+      invalid_transition: cannot transition

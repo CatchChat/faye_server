@@ -63,4 +63,3 @@ class Api::V4::ReceivedFriendRequestsController < ApiController
     end
   end
 end
-  ### GET api/v4/friend_requests

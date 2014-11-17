@@ -1,8 +1,9 @@
 en:
-  models:
-    friend_request:
-      state:
+  activerecord:
+    attributes:
+      friend_request:
         blocked:  Blocked
         accepted: Accepted
         rejected: Rejected
         pending:  Pending
+        state: State

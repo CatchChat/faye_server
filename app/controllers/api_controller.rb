@@ -28,6 +28,6 @@ class ApiController < ApplicationController
   end
 
   def format_time_to_iso8601(time)
-    format_time(time, t('time.formats.iso8601'))
+    I18n.l(time, format: :iso8601)
   end
 end

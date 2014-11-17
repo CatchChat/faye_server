@@ -52,4 +52,15 @@ en:
           not_found: The friend is not found
         move_to_top:
           not_found: The friend is not found
-          move_to_top_error: Error occurred
+          move_to_top_error: An error occurred, please try again later
+      messages:
+        create:
+          not_found_recipient: The friend is not found
+        mark_as_read:
+          not_found: The message is not found
+          mark_as_read_error: An error occurred, please try again later
+        deliver:
+          not_found: The message is not found
+          deliver_error: An error occurred, please try again later
+        show:
+          not_found: The message is not found

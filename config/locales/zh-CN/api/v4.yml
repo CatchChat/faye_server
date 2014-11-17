@@ -52,4 +52,15 @@ zh-CN:
           not_found: 该好友不存在
         move_to_top:
           not_found: 该好友不存在
-          move_to_top_error: 置顶发生错误
+          move_to_top_error: 置顶发生错误，请稍后再试
+      messages:
+        create:
+          not_found_recipient: 该好友不存在
+        mark_as_read:
+          not_found: 该消息不存在
+          mark_as_read_error: 出错，请稍后再试
+        deliver:
+          not_found: 该消息不存在
+          deliver_error: 出错，请稍后再试
+        show:
+          not_found: 该消息不存在

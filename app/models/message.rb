@@ -1,4 +1,6 @@
 class Message < ActiveRecord::Base
+  include MessageCallbacks
+
   belongs_to :sender, class_name: 'User'
   belongs_to :recipient, polymorphic: true
   has_and_belongs_to_many :attachments, dependent: :destroy
@@ -8,6 +10,8 @@ class Message < ActiveRecord::Base
 
   validates :sender_id, :recipient_id, :recipient_type, :media_type, presence: true
   validates :recipient_type, inclusion: { in: %w(User Group), allow_blank: true }
+
+  attr_accessor :attachment_file, :attachment_storage
 
   STATES = { unread: 1, read: 2 }.freeze
   state_machine :state, initial: :unread do
