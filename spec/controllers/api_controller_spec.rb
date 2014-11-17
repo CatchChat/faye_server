@@ -34,7 +34,7 @@ RSpec.describe TestsController, :type => :controller do
     end
 
     it 'Accept-Language is correct' do
-      request.headers['Accept-Language'] = 'en'
+      request.headers['Accept-Language'] = 'en-US,en;q=0.8,zh-CN;q=0.6,zh;q=0.4'
       get :index
       expect(I18n.locale).to eq :en
     end

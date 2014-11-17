@@ -24,6 +24,7 @@ gem 'hiredis', '~> 0.5.2'
 gem 'redis-objects', '~> 1.0.1'
 gem 'redis-rails', '~> 4.0.0'
 gem 'kaminari', '~> 0.16.1'
+gem 'http_accept_language', '~> 2.0.2'
 
 group :development do
   gem 'spring', '~> 1.1.3'

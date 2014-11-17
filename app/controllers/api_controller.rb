@@ -11,10 +11,7 @@ class ApiController < ApplicationController
   private
 
   def set_locale
-    if request.headers['Accept-Language'].present? &&
-      I18n.available_locales.include?(request.headers['Accept-Language'].to_sym)
-      I18n.locale = request.headers['Accept-Language'].to_sym
-    end
+    I18n.locale = http_accept_language.compatible_language_from(I18n.available_locales)
     logger.debug "===> Set locale to #{I18n.locale}."
   end
 
