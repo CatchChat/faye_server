@@ -11,7 +11,7 @@ class S3Cdn
   attribute :key, String
   attribute :expires_in, Integer, default: 3600
   attribute :file_location, String
-  attribute :region, String, default: 'cn-north-1'
+  attribute :region, String, default: ENV['AWS_REGION'] || 'cn-north-1'
   attribute :success_action_redirect, String
   attribute :acl, String
   def initialize(keys)
@@ -44,7 +44,7 @@ class S3Cdn
     if region.match 'cn'
       url = "https://#{bucket}.s3.#{region}.amazonaws.com.cn/"
     else
-      url = "https://#{bucket}.s3.#{region}.amazonaws.com/"
+      url = "https://#{bucket}.s3.amazonaws.com/"
     end
     conditions_list = Array.new.tap do |array|
       array << {"bucket" => bucket}

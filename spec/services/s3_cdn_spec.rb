@@ -3,28 +3,30 @@ require 'timecop'
 require 'vcr_helper'
 require 'services_helper'
 describe Cdn do
-  before do
-    Timecop.freeze(Time.local(2014,11,14,16,25))
-  end
 
-  after do
-    Timecop.return
+  before do
+    aws_access_key_id     = ENV["AWS_ACCESS_KEY_ID"]
+    aws_secret_access_key = ENV["AWS_SECRET_ACCESS_KEY"]
+
+        @client_init_hash    = {aws_access_key_id: aws_access_key_id,
+                            aws_secret_access_key: aws_secret_access_key,
+                                           bucket: 'ruanwz-test'}
+
+        @cdn_init_hash    = {aws_access_key_id: aws_access_key_id,
+                         aws_secret_access_key: aws_secret_access_key}
+
+    @s3_client = S3Cdn.new @client_init_hash
+    @cdn          = Cdn.new(@s3_client, @cdn_init_hash)
   end
 
   context 's3' do
     before do
-      aws_access_key_id     = ENV["AWS_ACCESS_KEY_ID"]
-      aws_secret_access_key = ENV["AWS_SECRET_ACCESS_KEY"]
+      skip "Only test in CN-region" if  ENV['AWS_REGION'] != 'cn-north-1'
+      Timecop.freeze(Time.local(2014,11,14,16,25))
+    end
 
-          @client_init_hash    = {aws_access_key_id: aws_access_key_id,
-                              aws_secret_access_key: aws_secret_access_key,
-                                             bucket: 'ruanwz-test'}
-
-          @cdn_init_hash    = {aws_access_key_id: aws_access_key_id,
-                           aws_secret_access_key: aws_secret_access_key}
-
-      @s3_client = S3Cdn.new @client_init_hash
-      @cdn          = Cdn.new(@s3_client, @cdn_init_hash)
+    after do
+      Timecop.return
     end
 
     subject {@cdn}
@@ -73,6 +75,29 @@ describe Cdn do
         #verify redirect to new url
       end
 
+    end
+  end
+
+  context 'global s3' do
+    before do
+      Timecop.freeze(Time.local(2014,11,17,11,35))
+    end
+
+    subject {@cdn}
+    it "upload file and queue a message to sqs" do
+      skip "not ready in CN-region" if  ENV['AWS_REGION'] == 'cn-north-1'
+
+      t = Tempfile.new ['test-key', '.jpeg']
+      VCR.use_cassette('s3_global_upload_file') do
+       code = subject.upload_file file_location: t.path,
+                                            key: 'test-key.jpg'
+
+       expect(code).to eq 204
+      end
+    end
+
+    after do
+      Timecop.return
     end
   end
 
