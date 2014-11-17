@@ -12,15 +12,15 @@ http_interactions:
         form-data; name=\"X-Amz-Date\"\r\n\r\n20141117T113500Z\r\n-------------RubyMultipartPost\r\nContent-Disposition:
         form-data; name=\"X-Amz-Credential\"\r\n\r\nAKIAJBKE2ELJWZ2W3R5Q/20141117/us-west-2/s3/aws4_request\r\n-------------RubyMultipartPost\r\nContent-Disposition:
         form-data; name=\"Policy\"\r\n\r\neyJleHBpcmF0aW9uIjoiMjAxNC0xMS0xN1QxMjozNTowMC4wMDBaIiwiY29uZGl0aW9ucyI6W3siYnVja2V0IjoicnVhbnd6LXRlc3QifSx7ImtleSI6InRlc3Qta2V5LmpwZyJ9LHsiYWNsIjoicHJpdmF0ZSJ9LHsieC1hbXotY3JlZGVudGlhbCI6IkFLSUFKQktFMkVMSldaMlczUjVRLzIwMTQxMTE3L3VzLXdlc3QtMi9zMy9hd3M0X3JlcXVlc3QifSx7IngtYW16LWFsZ29yaXRobSI6IkFXUzQtSE1BQy1TSEEyNTYifSx7IngtYW16LWRhdGUiOiIyMDE0MTExN1QxMTM1MDBaIn1dfQ==\r\n-------------RubyMultipartPost\r\nContent-Disposition:
-        form-data; name=\"file\"; filename=\"test-key20141117-29391-lwrrd5.jpeg\"\r\nContent-Length:
-        0\r\nContent-Type: image/jpeg\r\nContent-Transfer-Encoding: binary\r\n\r\n\r\n-------------RubyMultipartPost--\r\n\r\n"
+        form-data; name=\"file\"; filename=\"test-key20141117-29985-mdxraa.jpeg\"\r\nContent-Length:
+        3\r\nContent-Type: image/jpeg\r\nContent-Transfer-Encoding: binary\r\n\r\nabc\r\n-------------RubyMultipartPost--\r\n\r\n"
     headers:
       User-Agent:
       - Faraday v0.9.0
       Content-Type:
       - multipart/form-data; boundary=-----------RubyMultipartPost
       Content-Length:
-      - '1389'
+      - '1392'
       Accept-Encoding:
       - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
       Accept:
@@ -31,13 +31,13 @@ http_interactions:
       message: No Content
     headers:
       X-Amz-Id-2:
-      - zS+9OdX2TsffaadTKCM96T08wBPIoKNBNmZ22Wcw/RrjEgH/lIUTiICXhylR9xEUZlK9BwhrTTM=
+      - hbleUgGhJZU9WBTVxnVLhsWFRo5bvDNEV3FoNRGxazcdqPV3pG0EwLeXSAzVAZCl
       X-Amz-Request-Id:
-      - AF002D33C7AF250F
+      - 825B19DB7A74606C
       Date:
-      - Mon, 17 Nov 2014 04:05:32 GMT
+      - Mon, 17 Nov 2014 05:12:08 GMT
       Etag:
-      - '"d41d8cd98f00b204e9800998ecf8427e"'
+      - '"900150983cd24fb0d6963f7d28e17f72"'
       Location:
       - https://ruanwz-test.s3.amazonaws.com/test-key.jpg
       Server:

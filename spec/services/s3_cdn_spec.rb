@@ -88,6 +88,8 @@ describe Cdn do
       skip "not ready in CN-region" if  ENV['AWS_REGION'] == 'cn-north-1'
 
       t = Tempfile.new ['test-key', '.jpeg']
+      t.write 'abc'
+      t.close
       VCR.use_cassette('s3_global_upload_file') do
        code = subject.upload_file file_location: t.path,
                                             key: 'test-key.jpg'
