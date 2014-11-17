@@ -21,10 +21,11 @@ class User < ActiveRecord::Base
   has_many :individual_recipients, dependent: :destroy
   has_many :access_tokens, :dependent => :delete_all
   has_many :sms_verification_codes, :dependent => :delete_all
-  has_many :friend_requests, dependent: :destroy
+  has_many :sent_friend_requests, dependent: :destroy, class_name: 'FriendRequest'
   has_many :received_friend_requests, foreign_key: 'friend_id', class_name: 'FriendRequest'
   has_many :unfriend_requests, dependent: :destroy
-
+  has_many :sent_messages, dependent: :destroy, class_name: 'Message'
+  has_many :received_messages, class_name: 'Message'
 
   value :received_friend_requests_updated_at
   value :friendships_updated_at
@@ -81,6 +82,7 @@ class User < ActiveRecord::Base
 
   def unread_messages
     Message.joins(:individual_recipients).
-      where(individual_recipients: { state: IndividualRecipient::STATES[:delivered], user_id: self.id })
+      where(individual_recipients: { user_id: 1 }).
+      where.not(individual_recipients: { state: IndividualRecipient::STATES[:read] })
   end
 end

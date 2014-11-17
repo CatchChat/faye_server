@@ -172,7 +172,8 @@ RSpec.describe Api::V4::ReceivedFriendRequestsController, :type => :controller d
     end
 
     it 'should return :success when success' do
-      friend_request = current_user.friend_requests.create!(friend_id: friend.id)
+      friend_request = current_user.sent_friend_requests.create!(friend_id: friend.id)
+      friend_request.reject!
       delete :destroy, id: friend_request.id, format: :json
       expect(response).to be_success
       expect { friend_request.reload }.to raise_error(ActiveRecord::RecordNotFound)

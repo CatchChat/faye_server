@@ -24,7 +24,7 @@ class Api::V4::MessagesController < ApiController
 
   ### PATCH /api/v4/messages/:id/mark_as_read
   def mark_as_read
-    @message = current.unread_messages.find_by(id: params[:id])
+    @message = current_user.unread_messages.find_by(id: params[:id])
     render json: { error: t('.not_found') }, status: :not_found unless @message
 
     if @message.mark_as_read
@@ -32,5 +32,10 @@ class Api::V4::MessagesController < ApiController
     else
       render json: { error: @message.errors.full_messages.join("\n") }, status: :unprocessable_entity
     end
+  end
+
+  ### GET /api/v4/messages/:id
+  def show
+    @message = current.find_by(id: params[:id])
   end
 end
