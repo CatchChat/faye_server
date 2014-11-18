@@ -25,6 +25,10 @@ Rails.application.routes.draw do
         put 'update'   => 'users/registrations#update_token'
       end
     end
+    scope path: 'attachments' do
+      get 'upload_token/:provider' => 'attachments#upload_token'
+      get 'download_token/:provider' => 'attachments#download_token'
+    end
   end
 
   scope path: 'api/v5' do

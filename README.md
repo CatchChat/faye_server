@@ -30,8 +30,11 @@ Server side of CatchChat.
 ```shell
 export qiniu_access_key
 export qiniu_secret_key
+export qiniu_callback_url
+export qiniu_callback_body
 export upyun_username
 export upyun_password
+export upyun_form_api_secret
 export luosimao_username
 export luosimao_apikey
 export AWS_ACCESS_KEY_ID
@@ -145,6 +148,7 @@ Some testing show that the DNS resolving for qiniu is slow, and it seems s3 has
 the best speed.
 
 To upload attachment:
+
 1. client send to api the bucket name, file name(some uuid), storage provider , and get the upload token(or upload url)
 1. client upload the file to storage provider
 1. storage notice API server or API server query the storage the completed
@@ -153,6 +157,7 @@ To upload attachment:
    recipient
 
 To download attachment:
+
 1. client send to the api the bucket name, file name, storage provider, and get
    the download token(or download url)
 1. client use the download token to download file from storage provider

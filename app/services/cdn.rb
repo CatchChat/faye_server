@@ -8,7 +8,7 @@ class Cdn
                  :get_download_token, :get_download_url, :upload_file,
                  :get_upload_form_url_fields, :sqs_receive, :sqs_poll
   attr_accessor :options, :provider
-  def initialize(provider, options)
+  def initialize(provider, options={})
     @options  = options
     @provider = provider
     provider.prepare(self)

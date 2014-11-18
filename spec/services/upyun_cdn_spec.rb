@@ -32,8 +32,7 @@ describe Cdn do
       upyun_upload_token = subject.get_upload_token bucket: 'ruanwz-public',
                                                  file_path: '/abc.jpg',
                                                file_length: 100,
-                                                notify_url: 'http://catchchat-callback.herokuapp.com/hi',
-                                             callback_body: "name=fname&hash=myhash"
+                                                notify_url: 'http://catchchat-callback.herokuapp.com/hi'
       expect(upyun_upload_token).to eq "UpYun david:80a440dd5d89b0ab95ec6d2e50cb1969"
     end
 
