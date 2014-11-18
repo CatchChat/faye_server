@@ -145,7 +145,7 @@ Some testing show that the DNS resolving for qiniu is slow, and it seems s3 has
 the best speed.
 
 To upload attachment:
-1. client send to api the bucket name, file name(some uuid), storage provider , and get the upload token
+1. client send to api the bucket name, file name(some uuid), storage provider , and get the upload token(or upload url)
 1. client upload the file to storage provider
 1. storage notice API server or API server query the storage the completed
    filename.
@@ -154,7 +154,7 @@ To upload attachment:
 
 To download attachment:
 1. client send to the api the bucket name, file name, storage provider, and get
-   the download token
+   the download token(or download url)
 1. client use the download token to download file from storage provider
 
 
