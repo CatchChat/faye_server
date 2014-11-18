@@ -9,6 +9,8 @@ Server side of CatchChat.
 * MySQL 5.6
 
 ## To run the server in local development
+1. Install rvm (http://rvm.io/rvm/install)
+1. rvm install 2.1
 1. install mysql
 1. git clone git@github.com:CatchChat/catchchat\_server.git
 1. cd catchchat\_server
