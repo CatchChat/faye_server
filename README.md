@@ -8,6 +8,21 @@ Server side of CatchChat.
 * Rails 4.1
 * MySQL 5.6
 
+## To run the server in local development
+1. install mysql
+1. git clone git@github.com:CatchChat/catchchat\_server.git
+1. cd catchchat\_server
+1. cp config/database.yml.example config/database.yml
+1. setup Mysql database username and password and fill in config/database.yml
+1. bundle install
+1. rake db:create
+1. rake db:migrate
+1. copy some services setup from tumayun
+1. rspec (notes: Run rspec to make sure all tests are passed)
+1. rails s
+1. access the API at http://localhost:3000
+
+
 ## environments needed for services
 
 ```shell
@@ -116,4 +131,15 @@ To register a new user, there are 2 steps
 Use gem Kaminari 
 
 Default to 30 records per page, page number starts from 1
+
+## Attachment
+There are 3 providers for the attachment:
+
+1. qiniu
+1. upyun
+1. s3
+
+Some testing show that the DNS resolving for qiniu is slow, and it seems s3 has
+the best speed.
+
 
