@@ -18,19 +18,26 @@ class XingePusher
   #   badge: Integer
   #   sound: String
   #   environment: Boolean true: Production, false: Development
-  #   account: String
-  def push_to_single_account(options)
+  #   accounts: String or Array
+  def push_to_accounts(options)
     if options[:environment].nil? || options[:environment]
       environment = Xinge::Pusher::IOS_ENV_PRO
     else
       environment = Xinge::Pusher::IOS_ENV_DEV
     end
 
+    accounts = options[:accounts]
+    if accounts.is_a?(Array) && accounts.size > 1
+      method = :push_to_account_list
+    else
+      method = :push_to_single_account
+    end
+
     responses = []
     pusher = Xinge::Pusher.new(@options[:android][:id], @options[:android][:key])
-    responses << pusher.push_to_single_account(options[:account], generate_android_notification(options), device_type: Xinge::Pusher::DEVICE_TYPE_ANDROID)
+    responses << pusher.send(method, accounts, generate_android_notification(options), device_type: Xinge::Pusher::DEVICE_TYPE_ANDROID)
     pusher = Xinge::Pusher.new(@options[:ios][:id], @options[:ios][:key])
-    responses << pusher.push_to_single_account(options[:account], generate_ios_notification(options), device_type: Xinge::Pusher::DEVICE_TYPE_IOS)
+    responses << pusher.send(method, accounts, generate_ios_notification(options), device_type: Xinge::Pusher::DEVICE_TYPE_IOS)
 
     responses.all?(&:success?)
   end

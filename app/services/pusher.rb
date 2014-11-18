@@ -1,7 +1,7 @@
 require 'forwardable'
 class Pusher
   extend Forwardable
-  def_delegators :@provider, :push_to_single_account
+  def_delegators :@provider, :push_to_accounts
   attr_accessor :options, :provider
 
   def initialize(provider, options = {})
@@ -11,7 +11,7 @@ class Pusher
   end
 
   class << self
-    def push_to_user(user_id, options = {})
+    def push_to_users(user_ids, options = {})
       fail 'No current access token' unless token = AccessToken.current
 
       pusher = if token.company?    # Use Xinge
@@ -22,7 +22,7 @@ class Pusher
                end
 
       options[:title] = I18n.t('catch_chat') if options[:title].blank?
-      pusher.push_to_single_account(options.merge(account: user_id))
+      pusher.push_to_accounts(options.merge(account: user_id))
     end
   end
 end

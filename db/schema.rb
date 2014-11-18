@@ -102,7 +102,7 @@ ActiveRecord::Schema.define(version: 20141104091436) do
   create_table "individual_recipients", force: true do |t|
     t.integer  "message_id"
     t.integer  "user_id"
-    t.string   "state"
+    t.integer  "state"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
@@ -116,7 +116,7 @@ ActiveRecord::Schema.define(version: 20141104091436) do
     t.string   "recipient_type"
     t.integer  "media_type"
     t.text     "text_content"
-    t.integer  "parent_id"
+    t.integer  "parent_id",                 default: 0, null: false
     t.integer  "state"
     t.float    "longitude",      limit: 24
     t.float    "latitude",       limit: 24

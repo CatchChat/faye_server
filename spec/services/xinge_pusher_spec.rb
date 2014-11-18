@@ -9,16 +9,16 @@ describe XingePusher do
     )
   }
 
-  it '#push_to_single_account' do
-    VCR.use_cassette('xinge_pusher_push_to_single_account') do
-      result = subject.push_to_single_account(
+  it '#push_to_accounts' do
+    VCR.use_cassette('xinge_pusher_push_to_accounts') do
+      result = subject.push_to_accounts(
         title: 'xxx',
         content: 'xxx',
         extras: { key1: 'value1', key2: 'value2' },
         badge: 10,
         sound: 'bub3.caf',
         environment: false,
-        account: '53951bc5c2bba5ca47361472'
+        accounts: '53951bc5c2bba5ca47361472'
       )
       expect(result).to eq true
     end

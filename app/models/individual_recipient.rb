@@ -17,10 +17,10 @@ class IndividualRecipient < ActiveRecord::Base
     end
 
     event :mark_as_read do
-      transition delivered: :read
+      transition [:sent, :delivered] => :read
     end
 
-    after_transition delivered: :read, do: :update_message_state
+    after_transition [:sent, :delivered] => :read, do: :update_message_state
   end
 
   def update_message_state

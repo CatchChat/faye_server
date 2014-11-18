@@ -19,8 +19,8 @@ class JpushPusher
   #   badge: Integer
   #   sound: String
   #   environment: Boolean true: Production, false: Development
-  #   account: String
-  def push_to_single_account(options)
+  #   accounts: String or Array
+  def push_to_accounts(options)
     if options[:environment].nil? || options[:environment]
       environment = true
     else
@@ -29,7 +29,7 @@ class JpushPusher
 
     payload = JPush::PushPayload.build(
       platform: JPush::Platform.new(ios: true, android: true),
-      audience: JPush::Audience.build(_alias: [options[:account]]),
+      audience: JPush::Audience.build(_alias: Array(options[:accounts])),
       notification: generate_notification(options),
       message: generate_message(options),
       options: JPush::Options.new(apns_production: environment)

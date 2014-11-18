@@ -4,8 +4,4 @@ en:
       friend_request: friend request
     attributes:
       friend_request:
-        blocked:  blocked
-        accepted: accepted
-        rejected: rejected
-        pending:  pending
         state: state

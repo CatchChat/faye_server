@@ -6,7 +6,9 @@ class Message < ActiveRecord::Base
   has_and_belongs_to_many :attachments, dependent: :destroy
   has_many :individual_recipients, dependent: :destroy
 
-  enum media_type: %i(photo video text)
+  scope :draft, -> { where(table_name => { state: STATES[:draft] }) }
+
+  enum media_type: %i(text photo video)
 
   validates :sender_id, :recipient_id, :recipient_type, :media_type, presence: true
   validates :recipient_type, inclusion: { in: %w(User Group), allow_blank: true }
@@ -44,7 +46,7 @@ class Message < ActiveRecord::Base
 
   def create_individual_recipients
     if self.recipient_type == 'Group'
-      self.recipient.friendships.map do |friendships|
+      self.recipient.friendships.map do |friendship|
         self.individual_recipients.build(user_id: friendship.friend_id)
       end
     else

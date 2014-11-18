@@ -5,6 +5,7 @@ module Xinge
     # 定义api地址
     API_PUSH_TO_SINGLE_DEVICE      = 'http://openapi.xg.qq.com/v2/push/single_device'
     API_PUSH_TO_SINGLE_ACCOUNT     = 'http://openapi.xg.qq.com/v2/push/single_account'
+    API_PUSH_TO_ACCOUNT_LIST       = 'http://openapi.xg.qq.com/v2/push/account_list'
     API_PUSH_TO_ALL_DEVICES        = 'http://openapi.xg.qq.com/v2/push/all_device'
     API_PUSH_BY_TAGS               = 'http://openapi.xg.qq.com/v2/push/tags_device'
     API_QUERY_PUSH_STATUS          = 'http://openapi.xg.qq.com/v2/push/get_msg_status'
@@ -109,6 +110,36 @@ module Xinge
       end
 
       send_api_request(API_PUSH_TO_SINGLE_ACCOUNT, params, 'POST', @secret_key)
+    end
+
+    ##
+    # 推送消息到多个账号
+    # @param {int}      device_type           消息推送的适配平台
+    # @param {array}    accounts              账户或别名数组
+    # @param {Message}  message               推送的消息
+    # @param {int}      environment           向iOS设备推送时必填，1表示推送生产环境；2表示推送开发环境。Android可不填。
+    def push_to_account_list(accounts, message, device_type: DEVICE_TYPE_ALL, environment: IOS_ENV_PRO)
+      fail 'accounts is invalid' if accounts.blank?
+      accounts = Array(accounts)
+      verify_device_type(device_type)
+      verify_message_and_environment(message, environment)
+
+      params = {
+        expire_time: message.expire_time,
+        device_type: device_type,
+        account_list: accounts.to_json,
+        message: message.format
+      }.merge(common_params)
+
+      if message.is_a?(Xinge::AndroidMessage)
+        params[:message_type] = message.type
+        params[:multi_pkg]    = message.multi_pkg
+      else
+        params[:message_type] = 0
+        params[:environment]  = environment
+      end
+
+      send_api_request(API_PUSH_TO_ACCOUNT_LIST, params, 'POST', @secret_key)
     end
 
     ##

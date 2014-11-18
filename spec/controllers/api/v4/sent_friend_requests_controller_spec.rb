@@ -113,7 +113,7 @@ RSpec.describe Api::V4::SentFriendRequestsController, :type => :controller do
     end
 
     it 'should return :success when success' do
-      allow(Pusher).to receive(:push_to_user)
+      allow(Pusher).to receive(:push_to_users)
       count = current_user.sent_friend_requests.count
       post :create, friend_id: friend.id, format: :json
       expect(current_user.sent_friend_requests.count).to eq(count + 1)

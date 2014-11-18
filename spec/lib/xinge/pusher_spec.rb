@@ -65,6 +65,31 @@ describe Xinge::Pusher do
     end
   end
 
+  context '#push_to_account_list' do
+    it 'android' do
+      VCR.use_cassette('xinge/android_push_to_account_list') do
+        response = android_pusher.push_to_account_list(
+          ['53951bc5c2bba5ca47361472', '53fa035744d4068444adbd53'],
+          android_message,
+          device_type: Xinge::Pusher::DEVICE_TYPE_ANDROID
+        )
+        expect(response.success?).to eq true
+      end
+    end
+
+    it 'ios' do
+      VCR.use_cassette('xinge/ios_push_to_account_list') do
+        response = ios_pusher.push_to_account_list(
+          ['53951bc5c2bba5ca47361472', '53fa035744d4068444adbd53'],
+          ios_message,
+          device_type: Xinge::Pusher::DEVICE_TYPE_IOS,
+          environment: Xinge::Pusher::IOS_ENV_DEV
+        )
+        expect(response.success?).to eq true
+      end
+    end
+  end
+
   # context '#push_to_all_devices' do
   #   it 'android' do
   #     VCR.use_cassette('xinge/android_push_to_all_devices') do

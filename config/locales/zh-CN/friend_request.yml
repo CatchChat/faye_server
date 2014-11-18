@@ -4,8 +4,4 @@ zh-CN:
       friend_request: 好友请求
     attributes:
       friend_request:
-        pending:  等待中
-        accepted: 已接受
-        rejected: 已拒绝
-        blocked:  已禁止
         state: 状态

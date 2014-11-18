@@ -23,8 +23,6 @@
 *.swp
 .ruby-version
 .ruby-gemset
-# Sensitive information
-fixtures/vcr_cassettes/jpush_pusher_push_to_single_account.yml
 
 config/settings.local.yml
 config/settings/*.local.yml

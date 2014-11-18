@@ -3,7 +3,7 @@ class CreateIndividualRecipients < ActiveRecord::Migration
     create_table :individual_recipients do |t|
       t.references :message, index: true
       t.references :user, index: true
-      t.string :state
+      t.integer :state
 
       t.timestamps
     end
