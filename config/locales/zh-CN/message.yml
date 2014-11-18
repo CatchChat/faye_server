@@ -1,0 +1,16 @@
+zh-CN:
+  activerecord:
+    models:
+      message: 消息
+    attributes:
+      message:
+        state: 状态
+        recipient_id: 接收者
+        recipient_type: 接收者
+        media_type: 消息类型
+        text_content: 文字内容
+        longitude: 经度
+        latitude: 纬度
+        text: 一段文字
+        photo: 一张照片
+        video: 一段视频

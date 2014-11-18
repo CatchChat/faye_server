@@ -6,22 +6,26 @@ class Message < ActiveRecord::Base
   has_and_belongs_to_many :attachments, dependent: :destroy
   has_many :individual_recipients, dependent: :destroy
 
-  enum media_type: [:photo, :video, :text]
+  enum media_type: %i(photo video text)
 
   validates :sender_id, :recipient_id, :recipient_type, :media_type, presence: true
   validates :recipient_type, inclusion: { in: %w(User Group), allow_blank: true }
 
-  attr_accessor :attachment_file, :attachment_storage
-
-  STATES = { unread: 1, read: 2 }.freeze
-  state_machine :state, initial: :unread do
+  STATES = { draft: 1, unread: 2, read: 3 }.freeze
+  state_machine :state, initial: :draft do
     STATES.each do |state_name, value|
       state state_name, value: value
+    end
+
+    event :mark_as_unread do
+      transition draft: :unread
     end
 
     event :mark_as_read do
       transition unread: :read
     end
+
+    after_transition draft: :unread, do: :create_individual_recipients
   end
 
   def self.detect_message_type(file_url)
@@ -34,5 +38,19 @@ class Message < ActiveRecord::Base
     else
       media_types[:text]
     end
+  end
+
+  private
+
+  def create_individual_recipients
+    if self.recipient_type == 'Group'
+      self.recipient.friendships.map do |friendships|
+        self.individual_recipients.build(user_id: friendship.friend_id)
+      end
+    else
+      [self.individual_recipients.build(user_id: self.recipient_id)]
+    end
+
+    self.save!
   end
 end

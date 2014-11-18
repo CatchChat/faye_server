@@ -13,26 +13,27 @@ class Api::V4::MessagesController < ApiController
   ### POST /api/v4/messages
   # Required params
   #   recipient_id
+  #   recipient_type  Only User or Group
   # Optional params
+  #   draft           1 is yes, other is no, default no
   #   text_content
   #   parent_id
-  #   attachment_file
-  #   attachment_storage
   #   longitude
   #   latitude
   def create
-    recipient = current_user.friends.find_by(id: params[:recipient_id])
+    recipient = find_recipient
     return render json: { error: t('.not_found_recipient') } unless recipient
 
     message = current_user.sent_messages.new(create_params)
     message.recipient = recipient
+    message.state = Message::STATES[:unread] if params[:draft] != '1'
 
     if message.save
-      Pusher.push_to_user(recipient, content: t(
+      Pusher.push_to_user(recipient.id, content: t(
         '.sent_message_to_you',
         friend_name: current_user.name,
         media_type: Message.human_attribute_name(message.media_type)
-      ))
+      )) if message.unread?
       render json: {}
     else
       render json: { error: message.errors.full_messages.join("\n") }, status: :unprocessable_entity
@@ -44,7 +45,7 @@ class Api::V4::MessagesController < ApiController
     message = current_user.unread_messages.find_by(id: params[:id])
     return render json: { error: t('.not_found') }, status: :not_found unless message
 
-    if message.mark_as_read
+    if message.individual_recipients.find_by(user_id: current_user.id).mark_as_read
       render json: {}
     else
       render json: { error: t('.mark_as_read_error') }, status: :unprocessable_entity
@@ -56,7 +57,7 @@ class Api::V4::MessagesController < ApiController
     message = current_user.unread_messages.find_by(id: params[:id])
     return render json: { error: t('.not_found') }, status: :not_found unless message
 
-    if message.individual_recipients.first.deliver
+    if message.individual_recipients.find_by(user_id: current_user.id).deliver
       render json: {}
     else
       render json: { error: t('.deliver_error') }, status: :unprocessable_entity
@@ -71,6 +72,15 @@ class Api::V4::MessagesController < ApiController
   end
 
   private
+
+  def find_recipient
+    case params[:recipient_type]
+    when 'User'
+      current_user.friends.find_by(id: params[:recipient_id])
+    when 'Group'
+      current_user.groups.find_by(id: params[:recipient_id])
+    end
+  end
 
   def create_params
     params.permit(:text_content, :parent_id, :attachment_file, :attachment_storage, :longitude, :latitude)

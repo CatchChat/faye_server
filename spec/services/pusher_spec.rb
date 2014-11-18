@@ -9,7 +9,7 @@ describe Pusher do
       AccessToken.current = nil
       expect {
         Pusher.push_to_user(
-          user,
+          user.id,
           title: 'xxx',
           content: 'xxx',
           extras: { key1: 'value1', key2: 'value2' },

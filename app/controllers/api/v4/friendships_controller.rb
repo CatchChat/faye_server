@@ -28,7 +28,6 @@ friendships.friend_id IN (
 )
     SQL
 
-
     @friendships = current_user.friendships.includes(:friend).where(
       where_sql,
       current_user_id: current_user.id,
