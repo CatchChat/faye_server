@@ -35,6 +35,9 @@ ActiveRecord::Schema.define(version: 20141104091436) do
     t.datetime "updated_at"
   end
 
+  add_index "attachments", ["fallback_file"], name: "index_attachments_on_fallback_file", using: :btree
+  add_index "attachments", ["file"], name: "index_attachments_on_file", using: :btree
+
   create_table "attachments_messages", force: true do |t|
     t.integer  "attachment_id"
     t.integer  "message_id"
@@ -114,7 +117,7 @@ ActiveRecord::Schema.define(version: 20141104091436) do
     t.integer  "sender_id"
     t.integer  "recipient_id"
     t.string   "recipient_type"
-    t.integer  "media_type"
+    t.integer  "media_type",                default: 0, null: false
     t.text     "text_content"
     t.integer  "parent_id",                 default: 0, null: false
     t.integer  "state"
