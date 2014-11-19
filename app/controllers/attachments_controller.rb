@@ -11,12 +11,30 @@ class AttachmentsController < ApiController
   def upload_token
     @cdn = init_cdn
     @token = @cdn.get_upload_token
+  rescue Cdn::MissingParam => e
+    render json: {status: 'error', message: e.message}, status: :not_acceptable
   end
 
-  # GET /api/attachments/download\_token/:provider
+  # POST "/api/attachments/callback/:provider"
+  # parms: provider, bucket, key
+  def callback
+    provider = params[:provider]
+    if provider == 'qiniu'
+      # TODO: verify request come from qiniu
+      _bucket = params[:bucket]
+      key = params[:key]
+      _attachment = Attachment.find_or_create_by! storage: provider,  file: key
+      render json: {status: 'ok', provider: 'qiniu', file: key}
+    end
+  rescue Cdn::MissingParam => e
+    render json: {status: 'error', message: e.message}, status: :not_acceptable
+  end
+
   def download_token
     puts params
   end
+
+  #
 
   private
 
@@ -61,6 +79,7 @@ class AttachmentsController < ApiController
                     }
     upyun_client = UpyunCdn.new init_hash
     @cdn          = Cdn.new(upyun_client)
+
   end
 
   def init_s3_cdn

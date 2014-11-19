@@ -27,7 +27,7 @@ class UpyunCdn
 
   def get_upload_token(args = {})
     self.attributes = self.attributes.merge args
-    fail unless UPLOADVALIDATOR.call(self).valid?
+    raise Cdn::MissingParam, "missing params for upload token" unless UPLOADVALIDATOR.call(self).valid?
 
     http_method    ||= 'PUT'
 
@@ -37,7 +37,7 @@ class UpyunCdn
 
   def get_download_token(args = {})
     self.attributes = self.attributes.merge args
-    fail unless DOWNLOADVALIDATOR.call(self).valid?
+    raise Cdn::MissingParam, "missing params for download token" unless DOWNLOADVALIDATOR.call(self).valid?
     http_method    ||= 'GET'
     content_length    = '0'
     sign http_method,
@@ -48,7 +48,7 @@ class UpyunCdn
 
   def upload_file(args = {})
     self.attributes = self.attributes.merge args
-    fail unless UPLOADVALIDATOR.call(self).valid?
+    raise Cdn::MissingParam, "missing params for upload file" unless UPLOADVALIDATOR.call(self).valid?
     token         = get_upload_token(args)
 
     url = "#{api_host}/#{bucket}#{file_path}"
@@ -70,7 +70,7 @@ class UpyunCdn
 
   def callback_upload_file(args = {})
     self.attributes = self.attributes.merge args
-    fail unless CALLBACKUPLOADVALIDATOR.call(self).valid?
+    rase Cdn::MissingParam unless CALLBACKUPLOADVALIDATOR.call(self).valid?
 
     conn = Faraday.new(url: api_host) do |faraday|
       faraday.request :multipart

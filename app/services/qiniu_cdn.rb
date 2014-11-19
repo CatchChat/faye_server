@@ -25,7 +25,7 @@ class QiniuCdn
 
   def get_upload_token(args = {})
     self.attributes = self.attributes.merge args
-    fail unless UPLOADVALIDATOR.call(self).valid?
+    raise Cdn::MissingParam, "missing params for upload token" unless UPLOADVALIDATOR.call(self).valid?
 
     put_policy.callback_url = callback_url
     Qiniu::Auth.generate_uptoken(put_policy)
@@ -34,7 +34,7 @@ class QiniuCdn
 
   def get_download_url(args)
     self.attributes = self.attributes.merge args
-    fail unless DOWNLOADVALIDATOR.call(self).valid?
+    raise Cdn::MissingParam, "missing params for download url" unless DOWNLOADVALIDATOR.call(self).valid?
     Qiniu::Auth.authorize_download_url(url)
   end
 
@@ -51,7 +51,7 @@ class QiniuCdn
   end
 
   UPLOADVALIDATOR = Vanguard::Validator.build do
-      validates_presence_of :callback_url, :callback_body
+      validates_presence_of :bucket, :key, :callback_url, :callback_body
   end
 
   private

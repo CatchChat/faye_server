@@ -52,7 +52,7 @@ describe Cdn do
         code = subject.upload_file file_location: t.path,
                                           bucket: 'ruanwz-public',
                                              key: 'test-key',
-                                    callback_url: 'http://ruanwz.ngrok.com/hi',
+                                    callback_url: 'http://ruanwz.ngrok.com/api/v4/attachments/callback/qiniu',
                                     callback_body: "key=$(key)&bucket=$(bucket)"
 
         expect(code).to eq 200

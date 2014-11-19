@@ -3,6 +3,10 @@ require 'qiniu_cdn'
 require 'upyun_cdn'
 require 's3_cdn'
 class Cdn
+  module Exceptions
+    class MissingParam < RuntimeError; end
+  end
+  include Exceptions
   extend Forwardable
   def_delegators :@provider, :get_upload_token, :callback_upload_file,
                  :get_download_token, :get_download_url, :upload_file,

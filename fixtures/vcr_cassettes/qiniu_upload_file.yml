@@ -5,9 +5,9 @@ http_interactions:
     uri: http://upload.qiniu.com/
     body:
       encoding: ASCII-8BIT
-      string: "--914882\r\nContent-Disposition: form-data; name=\"file\"; filename=\"abc20141119-25615-cui6fj\"\r\nContent-Type:
-        text/plain\r\n\r\n\r\n--914882\r\nContent-Disposition: form-data; name=\"token\"\r\n\r\nBBHE3ccYQ8VQhEIvZbJARrte1U3ic2Om6CW7mxvN:f69b3uDF9HHlT-CYclfSM7K2TQU=:eyJzY29wZSI6InJ1YW53ei1wdWJsaWM6dGVzdC1rZXkiLCJjYWxsYmFja1VybCI6Imh0dHA6Ly9ydWFud3oubmdyb2suY29tL2hpIiwiY2FsbGJhY2tCb2R5Ijoia2V5PSQoa2V5KVx1MDAyNmJ1Y2tldD0kKGJ1Y2tldCkiLCJkZWFkbGluZSI6MTQxNjM3MDY1N30=\r\n--914882\r\nContent-Disposition:
-        form-data; name=\"key\"\r\n\r\ntest-key\r\n--914882--\r\n"
+      string: "--528603\r\nContent-Disposition: form-data; name=\"file\"; filename=\"abc20141119-27022-l9lj86\"\r\nContent-Type:
+        text/plain\r\n\r\n\r\n--528603\r\nContent-Disposition: form-data; name=\"token\"\r\n\r\nBBHE3ccYQ8VQhEIvZbJARrte1U3ic2Om6CW7mxvN:UK2aVRxTJN0ngNZTXWeFl6iwUDg=:eyJzY29wZSI6InJ1YW53ei1wdWJsaWM6dGVzdC1rZXkiLCJjYWxsYmFja1VybCI6Imh0dHA6Ly9ydWFud3oubmdyb2suY29tL2FwaS92NC9hdHRhY2htZW50cy9jYWxsYmFjay9xaW5pdSIsImNhbGxiYWNrQm9keSI6ImtleT0kKGtleSlcdTAwMjZidWNrZXQ9JChidWNrZXQpIiwiZGVhZGxpbmUiOjE0MTYzNzQyMzd9\r\n--528603\r\nContent-Disposition:
+        form-data; name=\"key\"\r\n\r\ntest-key\r\n--528603--\r\n"
     headers:
       Accept:
       - application/json
@@ -18,9 +18,9 @@ http_interactions:
       User-Agent:
       - QiniuRuby/6.3.2 (x86_64-linux) Ruby/2.1.1
       Content-Length:
-      - '530'
+      - '570'
       Content-Type:
-      - multipart/form-data; boundary=914882
+      - multipart/form-data; boundary=528603
   response:
     status:
       code: 200
@@ -29,11 +29,11 @@ http_interactions:
       Server:
       - nginx/1.4.4
       Date:
-      - Wed, 19 Nov 2014 03:17:38 GMT
+      - Wed, 19 Nov 2014 04:17:23 GMT
       Content-Type:
       - application/json
       Content-Length:
-      - '40'
+      - '52'
       Connection:
       - close
       Access-Control-Allow-Headers:
@@ -51,12 +51,12 @@ http_interactions:
       X-Content-Type-Options:
       - nosniff
       X-Log:
-      - s.ph;s.put.tw;s.put.tr;s.ph;s.fwd.tw;s.fwd.tr;s.ph;s.fwd.tw;s.fwd.tr;PFDS;PFDS;PFDS:1;rs9_3.sel;rs10_3.ups;qtbl.ups:1;mc.s;RS:2;rs.put:4;rs-upload.putFile:6;UP.CB:2082;UP:2090
+      - s.ph;s.put.tw;s.put.tr;s.ph;s.fwd.tw;s.fwd.tr;s.ph;s.fwd.tw;s.fwd.tr;PFDS;PFDS;PFDS:1;rs9_3.sel;rs10_3.ups;qtbl.ups:1;mc.s;RS:2;rs.put:5;rs-upload.putFile:8;UP.CB:7021;UP:7031
       X-Reqid:
-      - oGAAAPqrI3xV8qcT
+      - SUkAAGavU-2W9acT
     body:
       encoding: UTF-8
-      string: '{"name":"sunflowerb.jpg","success":true}'
+      string: '{"file":"test-key","provider":"qiniu","status":"ok"}'
     http_version: 
-  recorded_at: Wed, 19 Nov 2014 03:17:40 GMT
+  recorded_at: Wed, 19 Nov 2014 04:17:24 GMT
 recorded_with: VCR 2.9.3
