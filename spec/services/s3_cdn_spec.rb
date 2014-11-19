@@ -13,11 +13,9 @@ describe Cdn do
                                sqs_queue_name: 's3-ruanwz-test-post',
                                        bucket: 'ruanwz-test'}
 
-    @cdn_init_hash    = {aws_access_key_id: aws_access_key_id,
-                     aws_secret_access_key: aws_secret_access_key}
 
     @s3_client = S3Cdn.new @client_init_hash
-    @cdn          = Cdn.new(@s3_client, @cdn_init_hash)
+    @cdn          = Cdn.new(@s3_client)
   end
 
   context 's3' do
