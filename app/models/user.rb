@@ -74,10 +74,10 @@ class User < ActiveRecord::Base
   def name_by_friend(friend)
     friend_id = friend.is_a?(User) ? friend.id : friend
     if friendship = friendships.find_by(friend_id: friend_id)
-      name = friendship.remarked_name.presence || friendship.contact_name.presence
+      friend_name = friendship.remarked_name.presence || friendship.contact_name.presence
     end
 
-    name || nickname.presence || username
+    friend_name || self.name
   end
 
   def self.find_for_database_authentication(warden_conditions)

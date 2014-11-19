@@ -23,7 +23,7 @@ RSpec.describe Api::V4::UnfriendRequestsController, :type => :controller do
     end
 
     it 'should unfriend when success' do
-      Friendship.create_friendships(user.id, friend.id)
+      Friendship.create_friendships(user, friend)
       expect(user.friends).to include friend
       expect(friend.friends).to include user
       post :create, friend_id: friend.id, format: :json
