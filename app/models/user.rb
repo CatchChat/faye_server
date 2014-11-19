@@ -31,10 +31,6 @@ class User < ActiveRecord::Base
     where.not(individual_recipients: { state: IndividualRecipient::STATES[:read] })
   }, through: :individual_recipients, source: :message
 
-  value :received_friend_requests_updated_at
-  value :friendships_updated_at
-  counter :friends_count
-
   STATES = { active: 1, blocked: 2 }.freeze
 
   state_machine :state, initial: :active do
@@ -82,5 +78,27 @@ class User < ActiveRecord::Base
     else
       where(conditions).first
     end
+  end
+
+  def self.create_friendships(user_id, friend_id)
+    # TODO: Add contact_name after find contacts
+    Friendship.transaction do
+      begin
+        Friendship.create!(user_id: user_id, friend_id: friend_id)
+        Friendship.create!(friend_id: user_id, user_id: friend_id)
+        return true
+      rescue => ex
+        logger.debug "===> #{ex}"
+        raise ActiveRecord::Rollback
+        return false
+      end
+    end
+  end
+
+  def self.unfriend(user_id, friend_id)
+    Friendship.where(
+      '(user_id = :user_id AND friend_id = :friend_id) OR (user_id = :friend_id AND friend_id = :user_id)',
+      user_id: user_id, friend_id: friend_id
+    ).destroy_all
   end
 end

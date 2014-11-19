@@ -94,17 +94,18 @@ RSpec.describe Api::V4::ReceivedFriendRequestsController, :type => :controller d
       expect(json_response).to eq({ 'error' => subject.t('.accept_error') })
     end
 
-    it 'should add friend when accepted' do
+    it 'should create friendships when accepted' do
       friend_request = current_user.received_friend_requests.create!(user_id: user.id)
       expect(friend_request).to_not be_accepted
+      expect(user.friends).to_not include friend
+      expect(friend.friends).to_not include user
       allow(Pusher).to receive(:push_to_users)
-      patch :accept, id: friend_request.id, contact_name: 'contact_name', format: :json
+      patch :accept, id: friend_request.id, format: :json
       expect(friend_request.reload).to be_accepted
-      friendship = Friendship.find_by(user_id: user.id, friend_id: friend.id)
-      expect(friendship.contact_name).to eq 'contact_name'
       expect(response).to be_success
       expect(response).to render_template(:show)
-      expect(user.friends).to include friend
+      expect(user.friends.reload).to include friend
+      expect(friend.friends.reload).to include user
     end
   end
 
@@ -124,7 +125,7 @@ RSpec.describe Api::V4::ReceivedFriendRequestsController, :type => :controller d
       expect(json_response).to eq({ 'error' => subject.t('.reject_error') })
     end
 
-    it 'should not add friend when rejected ' do
+    it 'should not create friendships when rejected ' do
       friend_request = current_user.received_friend_requests.create!(user_id: user.id)
       expect(friend_request).to_not be_rejected
       allow(Pusher).to receive(:push_to_users)
@@ -133,6 +134,7 @@ RSpec.describe Api::V4::ReceivedFriendRequestsController, :type => :controller d
       expect(response).to be_success
       expect(response).to render_template(:show)
       expect(user.friends).to_not include friend
+      expect(friend.friends).to_not include user
     end
   end
 
@@ -152,7 +154,7 @@ RSpec.describe Api::V4::ReceivedFriendRequestsController, :type => :controller d
       expect(json_response).to eq({ 'error' => subject.t('.block_error') })
     end
 
-    it 'should not add friend when blocked' do
+    it 'should not create friendships when blocked' do
       friend_request = current_user.received_friend_requests.create!(user_id: user.id)
       expect(friend_request).to_not be_blocked
       allow(Pusher).to receive(:push_to_users)
@@ -160,6 +162,7 @@ RSpec.describe Api::V4::ReceivedFriendRequestsController, :type => :controller d
       expect(friend_request.reload).to be_blocked
       expect(response).to be_success
       expect(user.friends).to_not include friend
+      expect(friend.friends).to_not include user
     end
   end
 

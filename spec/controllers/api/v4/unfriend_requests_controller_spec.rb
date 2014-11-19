@@ -22,12 +22,14 @@ RSpec.describe Api::V4::UnfriendRequestsController, :type => :controller do
       expect(response).to be_not_found
     end
 
-    it 'should remove friend when success' do
-      user.friends << friend
+    it 'should unfriend when success' do
+      User.create_friendships(user.id, friend.id)
       expect(user.friends).to include friend
+      expect(friend.friends).to include user
       post :create, friend_id: friend.id, format: :json
       expect(response).to be_success
-      expect(user.friends.reload).to_not include friend
+      expect(user.friends).to_not include friend
+      expect(friend.friends).to_not include user
     end
   end
 end

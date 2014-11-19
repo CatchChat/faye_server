@@ -1,13 +1,9 @@
 class FriendRequest < ActiveRecord::Base
-  include FriendRequestCallbacks
-
   belongs_to :user
   belongs_to :friend, class_name: 'User'
 
   validates :user_id, :friend_id, presence: true
   validates :friend_id, uniqueness: { scope: [:user_id, :state], allow_blank: true, if: ->(friend_request) { friend_request.pending? } }
-
-  attr_accessor :contact_name
 
   STATES = { pending: 1, accepted: 2, rejected: 3, blocked: 4 }.freeze
   STATES.each do |state, value|
@@ -19,7 +15,7 @@ class FriendRequest < ActiveRecord::Base
       state state_name, value: value
     end
 
-    after_transition pending: :accepted, do: :add_friendship
+    after_transition pending: :accepted, do: :create_friendships!
 
     event :accept do
       transition pending: :accepted
@@ -34,7 +30,9 @@ class FriendRequest < ActiveRecord::Base
     end
   end
 
-  def add_friendship
-    user.friendships.create(friend_id: friend_id, contact_name: contact_name.presence)
+  def create_friendships!
+    unless User.create_friendships(user_id, friend_id)
+      fail 'Create friendships error'
+    end
   end
 end

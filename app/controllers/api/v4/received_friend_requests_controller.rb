@@ -17,10 +17,7 @@ class Api::V4::ReceivedFriendRequestsController < ApiController
   end
 
   ### PATCH api/v4/friend_requests/received/:id/accept
-  # Optional params
-  #   contact_name
   def accept
-    @friend_request.contact_name = params[:contact_name]
     if @friend_request.accept
       Pusher.push_to_users(@friend_request.user_id, content: t('.accepted_notification', current_user.name))
       render :show

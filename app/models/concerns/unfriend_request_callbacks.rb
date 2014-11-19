@@ -2,10 +2,12 @@ module UnfriendRequestCallbacks
   extend ActiveSupport::Concern
 
   included do
-    after_create :remove_friend
+    after_create :unfriend
   end
 
-  def remove_friend
-    user.friendships.find_by(friend_id: friend_id).try(:destroy)
+  private
+
+  def unfriend
+    User.unfriend(user_id, friend_id)
   end
 end

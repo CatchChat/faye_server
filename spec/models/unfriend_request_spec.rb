@@ -4,12 +4,12 @@ RSpec.describe UnfriendRequest, :type => :model do
   let(:user) { FactoryGirl.create(:user, username: 'user') }
   let(:friend) { FactoryGirl.create(:user, username: 'friend') }
 
-  it 'Should remove friend when create' do
-    user.friends << friend
+  it 'Should unfriend when create' do
+    User.create_friendships(user.id, friend.id)
     expect(user.friends).to include friend
-    expect(user.friends_count).to eq 1
+    expect(friend.friends).to include user
     user.unfriend_requests.create!(friend_id: friend.id)
     expect(user.friends.reload).to_not include friend
-    expect(user.friends_count).to eq 0
+    expect(friend.friends.reload).to_not include user
   end
 end
