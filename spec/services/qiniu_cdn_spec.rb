@@ -4,7 +4,7 @@ require 'vcr_helper'
 require 'services_helper'
 describe Cdn do
   before do
-    Timecop.freeze(Time.local(2014))
+    Timecop.freeze(Time.local(2014,11,19,10,23))
   end
 
   after do
@@ -34,14 +34,14 @@ describe Cdn do
       qiniu_upload_token = subject.get_upload_token bucket: 'ruanwz-public',
                                                        test: 'abc',
                                                        key: 'test-key',
-                                              callback_url: 'http://catchchat-callback.herokuapp.com/hi',
-                                              callback_body: "name=fname&hash=myhash"
-      expect(qiniu_upload_token).to eq "BBHE3ccYQ8VQhEIvZbJARrte1U3ic2Om6CW7mxvN:cSkUKZglWsifwHuII-_gM2cD-EI=:eyJzY29wZSI6InJ1YW53ei1wdWJsaWM6dGVzdC1rZXkiLCJjYWxsYmFja1VybCI6Imh0dHA6Ly9jYXRjaGNoYXQtY2FsbGJhY2suaGVyb2t1YXBwLmNvbS9oaSIsImNhbGxiYWNrQm9keSI6Im5hbWU9Zm5hbWVcdTAwMjZoYXNoPW15aGFzaCIsImRlYWRsaW5lIjoxMzg4NTA5MjAwfQ=="
+                                              callback_url: 'http://ruanwz.ngrok.com/hi',
+                                              callback_body: "key=$(key)&bucket=$(bucket)"
+      expect(qiniu_upload_token).to eq "BBHE3ccYQ8VQhEIvZbJARrte1U3ic2Om6CW7mxvN:5CERXHpCBEhtl9Hf0zCxkGbd3go=:eyJzY29wZSI6InJ1YW53ei1wdWJsaWM6dGVzdC1rZXkiLCJjYWxsYmFja1VybCI6Imh0dHA6Ly9ydWFud3oubmdyb2suY29tL2hpIiwiY2FsbGJhY2tCb2R5Ijoia2V5PSQoa2V5KVx1MDAyNmJ1Y2tldD0kKGJ1Y2tldCkiLCJkZWFkbGluZSI6MTQxNjM2NzM4MH0="
     end
 
     it "provide download url for qiniu" do
       qiniu_download_url = subject.get_download_url url: "http://hello.qiniu.com/a/b/c.jpg"
-      expect(qiniu_download_url).to eq "http://hello.qiniu.com/a/b/c.jpg?e=1388509200&token=BBHE3ccYQ8VQhEIvZbJARrte1U3ic2Om6CW7mxvN:Ff38tdgiw8yFLjzLHrKzwABSogc="
+      expect(qiniu_download_url).to eq "http://hello.qiniu.com/a/b/c.jpg?e=1416367380&token=BBHE3ccYQ8VQhEIvZbJARrte1U3ic2Om6CW7mxvN:InlxoDfgMKCqC-lSYM3WrgcNBJI="
     end
 
     it "upload file for qiniu" do
@@ -52,8 +52,8 @@ describe Cdn do
         code = subject.upload_file file_location: t.path,
                                           bucket: 'ruanwz-public',
                                              key: 'test-key',
-                                    callback_url: 'http://catchchat-callback.herokuapp.com/hi',
-                                    callback_body: "name=fname&hash=myhash"
+                                    callback_url: 'http://ruanwz.ngrok.com/hi',
+                                    callback_body: "key=$(key)&bucket=$(bucket)"
 
         expect(code).to eq 200
       end

@@ -42,7 +42,7 @@ class QiniuCdn
     self.attributes = self.attributes.merge args
 
     code, _result, _response_headers = Qiniu::Storage.upload_with_put_policy(
-      put_policy, file_location, 'test-key')
+      put_policy, file_location, key)
     code
   end
 
