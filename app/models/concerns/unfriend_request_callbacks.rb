@@ -8,6 +8,6 @@ module UnfriendRequestCallbacks
   private
 
   def unfriend
-    User.unfriend(user_id, friend_id)
+    Friendship.unfriend(user_id, friend_id)
   end
 end

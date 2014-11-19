@@ -71,6 +71,15 @@ class User < ActiveRecord::Base
     nickname.presence || username
   end
 
+  def name_by_friend(friend)
+    friend_id = friend.is_a?(User) ? friend.id : friend
+    if friendship = friendships.find_by(friend_id: friend_id)
+      name = friendship.remarked_name.presence || friendship.contact_name.presence
+    end
+
+    name || nickname.presence || username
+  end
+
   def self.find_for_database_authentication(warden_conditions)
     conditions = warden_conditions.dup
     if login = conditions.delete(:login)
@@ -78,27 +87,5 @@ class User < ActiveRecord::Base
     else
       where(conditions).first
     end
-  end
-
-  def self.create_friendships(user_id, friend_id)
-    # TODO: Add contact_name after find contacts
-    Friendship.transaction do
-      begin
-        Friendship.create!(user_id: user_id, friend_id: friend_id)
-        Friendship.create!(friend_id: user_id, user_id: friend_id)
-        return true
-      rescue => ex
-        logger.debug "===> #{ex}"
-        raise ActiveRecord::Rollback
-        return false
-      end
-    end
-  end
-
-  def self.unfriend(user_id, friend_id)
-    Friendship.where(
-      '(user_id = :user_id AND friend_id = :friend_id) OR (user_id = :friend_id AND friend_id = :user_id)',
-      user_id: user_id, friend_id: friend_id
-    ).destroy_all
   end
 end

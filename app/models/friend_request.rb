@@ -31,7 +31,7 @@ class FriendRequest < ActiveRecord::Base
   end
 
   def create_friendships!
-    unless User.create_friendships(user_id, friend_id)
+    unless Friendship.create_friendships(user_id, friend_id)
       fail 'Create friendships error'
     end
   end
