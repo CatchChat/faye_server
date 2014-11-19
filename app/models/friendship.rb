@@ -11,6 +11,28 @@ class Friendship < ActiveRecord::Base
   # TODO validate contact_name and remarked_name
 
   def name
-    remarked_name.presence || contact_name.presence || friend.nickname || friend.username
+    remarked_name.presence || contact_name.presence || friend.nickname.presence || friend.username
+  end
+
+  def self.create_friendships(user_id, friend_id)
+    # TODO: Add contact_name after find contacts
+    Friendship.transaction do
+      begin
+        Friendship.create!(user_id: user_id, friend_id: friend_id)
+        Friendship.create!(friend_id: user_id, user_id: friend_id)
+        return true
+      rescue => ex
+        logger.debug "===> #{ex}"
+        raise ActiveRecord::Rollback
+        return false
+      end
+    end
+  end
+
+  def self.unfriend(user_id, friend_id)
+    Friendship.where(
+      '(user_id = :user_id AND friend_id = :friend_id) OR (user_id = :friend_id AND friend_id = :user_id)',
+      user_id: user_id, friend_id: friend_id
+    ).destroy_all
   end
 end
