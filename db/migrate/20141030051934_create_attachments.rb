@@ -8,5 +8,7 @@ class CreateAttachments < ActiveRecord::Migration
 
       t.timestamps
     end
+    add_index :attachments, :file
+    add_index :attachments, :fallback_file
   end
 end
