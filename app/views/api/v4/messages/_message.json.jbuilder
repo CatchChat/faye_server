@@ -6,6 +6,11 @@ json.updated_at format_time_to_iso8601(message.updated_at)
 json.created_at_string format_time(message.created_at)
 json.updated_at_string format_time(message.created_at)
 
+json.sender do
+  json.extract! message.sender, :id, :avatar
+  json.name message.sender.name_by_friend(current_user)
+end
+
 json.attachments do
   json.array! message.attachments do |attachment|
     attachment.extract! :storage, :file, :fallback_storage, :fallback_file

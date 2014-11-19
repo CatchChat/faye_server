@@ -24,5 +24,7 @@ class Pusher
       options[:title] = I18n.t('catch_chat') if options[:title].blank?
       pusher.push_to_accounts(options.merge(account: user_id))
     end
+
+    alias_method :push_to_user, :push_to_users
   end
 end

@@ -68,7 +68,7 @@ RSpec.describe Api::V4::MessagesController, :type => :controller do
 
         it 'text message' do
           expect(user.friends).to include friend
-          allow(Pusher).to receive(:push_to_users)
+          allow(Pusher).to receive(:push_to_user)
           post :create, format: :json, recipient_id: friend.id, recipient_type: friend.class.name, text_content: 'This is a test!'
           expect(response).to be_success
           message = friend.received_messages.last
@@ -117,7 +117,7 @@ RSpec.describe Api::V4::MessagesController, :type => :controller do
 
         it 'text message' do
           expect(@group.friends).to include friend
-          allow(Pusher).to receive(:push_to_users)
+          allow(Pusher).to receive(:push_to_user)
           post :create, format: :json, recipient_id: @group.id, recipient_type: @group.class.name, text_content: 'This is a test!'
           expect(response).to be_success
           message = friend.received_messages.last

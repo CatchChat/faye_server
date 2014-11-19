@@ -37,11 +37,14 @@ class Api::V4::MessagesController < ApiController
     end
 
     if result
-      Pusher.push_to_users(message.individual_recipients.map(&:user_id), content: t(
-        '.sent_message_to_you',
-        friend_name: current_user.name,
-        media_type: Message.human_attribute_name(message.media_type)
-      )) if message.unread?
+      # TODO: Use sidekiq
+      message.individual_recipients.each do |individual_recipient|
+        Pusher.push_to_user(individual_recipient.user_id, content: t(
+          '.sent_message_to_you',
+          friend_name: current_user.name_by_friend(individual_recipient.user_id),
+          media_type: Message.human_attribute_name(message.media_type)
+        ))
+      end if message.unread?
       render json: {}
     else
       render json: { error: message.errors.full_messages.join("\n") }, status: :unprocessable_entity

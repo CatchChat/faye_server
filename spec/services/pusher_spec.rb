@@ -3,12 +3,12 @@ require 'vcr_helper'
 describe Pusher do
   let(:user) { FactoryGirl.create(:user) }
 
-  describe '#push_to_users' do
+  describe '#push_to_user' do
 
     it 'no current access token' do
       AccessToken.current = nil
       expect {
-        Pusher.push_to_users(
+        Pusher.push_to_user(
           user.id,
           title: 'xxx',
           content: 'xxx',
@@ -28,8 +28,8 @@ describe Pusher do
     #     expired_at: 3.days.since
     #   )
 
-    #   VCR.use_cassette('push_to_users') do
-    #     result = Pusher.push_to_users(
+    #   VCR.use_cassette('push_to_user') do
+    #     result = Pusher.push_to_user(
     #       user,
     #       title: 'xxx',
     #       content: 'xxx',
