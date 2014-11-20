@@ -5,34 +5,20 @@ RSpec.describe FriendRequest, :type => :model do
   let(:user) { FactoryGirl.create(:user, username: 'user') }
   let(:friend) { FactoryGirl.create(:user, username: 'friend') }
 
-  # describe 'Touch received_friend_requests_updated_at for friend' do
+  it '#create_friendships!' do
+    allow(Friendship).to receive(:create_friendships).with(user.id, friend.id) { true }
+    friend_request = FriendRequest.create!(user: user, friend: friend)
+    expect { friend_request.create_friendships! }.to_not raise_error
+    friend_request.destroy
 
-  #   before do
-  #     Timecop.freeze
-  #   end
+    allow(Friendship).to receive(:create_friendships).with(user.id, friend.id) { false }
+    friend_request = FriendRequest.create!(user: user, friend: friend)
+    expect { friend_request.create_friendships! }.to raise_error
+  end
 
-  #   after do
-  #     Timecop.return
-  #   end
-
-  #   it 'when create' do
-  #     expect(friend.received_friend_requests_updated_at).to be_nil
-  #     FriendRequest.create!(user_id: user.id, friend_id: friend.id)
-  #     expect(friend.received_friend_requests_updated_at.to_i).to eq Time.zone.now.to_i
-  #   end
-
-  #   it 'when destroy' do
-  #     friend_request = FriendRequest.create!(user_id: user.id, friend_id: friend.id)
-  #     friend.received_friend_requests_updated_at = nil
-  #     friend_request.destroy
-  #     expect(friend.received_friend_requests_updated_at.to_i).to eq Time.zone.now.to_i
-  #   end
-
-  #   it 'when update' do
-  #     friend_request = FriendRequest.create!(user_id: user.id, friend_id: friend.id)
-  #     friend.received_friend_requests_updated_at = nil
-  #     friend_request.accept
-  #     expect(friend.received_friend_requests_updated_at.to_i).to eq Time.zone.now.to_i
-  #   end
-  # end
+  it 'Should create friendships after accept' do
+    friend_request = FriendRequest.create!(user: user, friend: friend)
+    allow(Friendship).to receive(:create_friendships).with(user.id, friend.id) { true }
+    friend_request.accept!
+  end
 end
