@@ -115,12 +115,15 @@ Rails.application.routes.draw do
   #     resources :products
   #   end
 
-  namespace :api, defaults: { format: :json } do
+  namespace :api do
     namespace :v4 do
+      post 'friend_requests', to: 'sent_friend_requests#create'
+
       scope path: 'friend_requests' do
         concern :friend_requests_with_state do
           get :index, path: ':state', constraints: { state: %w(pending accepted rejected blocked) }, on: :collection
         end
+
         resources :sent_friend_requests, only: %i(index create destroy), path: 'sent', concerns: :friend_requests_with_state
         resources :received_friend_requests, only: %i(index destroy), path: 'received', concerns: :friend_requests_with_state do
           member do
