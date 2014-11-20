@@ -23,10 +23,12 @@ class IndividualRecipient < ActiveRecord::Base
     after_transition [:sent, :delivered] => :read, do: :update_message_state
   end
 
+  private
+
   def update_message_state
     return if skip_update_message_state
 
-    unless self.class.unread.exists?(message_id: message_id, user_id: user_id)
+    unless self.class.unread.exists?(message_id: message_id)
       message.mark_as_read
     end
 
