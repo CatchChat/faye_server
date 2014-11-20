@@ -44,11 +44,11 @@ end
 
 Warden::Strategies.add(:mobile) do
   def valid?
-    params[:login] && params[:password]
+    params[:mobile] && params[:verify_code]
   end
 
   def authenticate!
-    if user = AuthToken.check_mobile_and_sms_verification_code(params[:login], params[:password])
+    if user = AuthToken.check_mobile_and_sms_verification_code(params[:mobile], params[:verify_code])
       success!(user)
     else
       errors.add :general, 'username_password_error'

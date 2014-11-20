@@ -15,15 +15,15 @@ class Users::SessionsController < Devise::SessionsController
 
   # Post auth/send_verify_code
   def send_verify_code
-    mobile = params[:login].to_s
+    @mobile = params[:mobile].to_s
     random_num = rand(100000).to_s
-    user = User.find_by(mobile: mobile)
+    user = User.find_by(mobile: @mobile)
     return render json: {status: "Not Found"}, status: :not_found unless user
     sms_code = SmsVerificationCode.create token:       random_num.to_s,
                                           active:      true,
                                           expired_at:  get_expired_at,
                                           user_id:     user.id,
-                                          mobile:      mobile
+                                          mobile:      @mobile
     content = t('auth.sms_verification_code_message', code: sms_code.token)
 
     @success = sms_code.send_msg(content)

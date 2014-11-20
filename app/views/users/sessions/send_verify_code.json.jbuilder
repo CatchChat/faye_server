@@ -1,5 +1,7 @@
 if @success
-  json.status 'sms sent.' 
+  json.mobile @mobile
+  json.status 'sms sent' 
 else
+  json.mobile @mobile
   json.status 'failed' 
 end
