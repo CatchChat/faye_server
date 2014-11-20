@@ -26,3 +26,7 @@ friend_request.accept!
 
 group = user.groups.create!(name: 'group')
 group.friendships << user.friendships.last
+
+user.sent_messages.create!(recipient: friend, text_content: 'This is a test!')
+user.sent_messages.create!(recipient: group, text_content: 'This is a test!')
+user.sent_messages.each(&:mark_as_unread!)

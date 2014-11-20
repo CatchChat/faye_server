@@ -37,6 +37,9 @@ class JpushPusher
 
     result = JPush::JPushClient.new(@options[:id], @options[:key]).sendPush(payload)
     result.isok
+  rescue => ex
+    Rails.logger.debug "===> #{ex}\n#{ex.backtrace.join("\n")}"
+    false
   end
 
   private
