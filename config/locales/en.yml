@@ -32,6 +32,12 @@ en:
     access_token_error: "HTTP Token: Access denied"
     no_auth: "No Authentication"
     token_access_denied: "HTTP Token: Access denied"
+  notification:
+    sent_message_to_you: '%{friend_name} sent you %{media_type}'
+    wants_to_be_friend: '%{friend_name} wants to be your friend'
+    blocked_friend_request: '%{friend_name} blocked your friend request'
+    accepted_friend_request: '%{friend_name} accepted your friend request'
+    rejected_friend_request: '%{friend_name} rejected your friend request'
   errors:
     messages:
       invalid_transition: cannot transition

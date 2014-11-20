@@ -28,6 +28,17 @@ class Message < ActiveRecord::Base
     after_transition draft: :unread, do: :create_individual_recipients
   end
 
+  def push_notification
+    # TODO: Use sidekiq
+    individual_recipients.each do |individual_recipient|
+      Pusher.push_to_user(individual_recipient.user_id, content: I18n.t(
+        'notification.sent_message_to_you',
+        friend_name: sender.name_by_friend(individual_recipient.user_id),
+        media_type: Message.human_attribute_name(media_type)
+      ))
+    end
+  end
+
   def self.detect_message_type(file_url)
     extname = File.extname(file_url.to_s).downcase
 

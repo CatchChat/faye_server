@@ -6,22 +6,18 @@ zh-CN:
           blocked: '%{friend_name} 已禁止您的好友请求'
           not_found: 该好友不存在
           already_friend: '您与 %{friend_name} 已经是好友关系'
-          wants_to_be_friend: '%{name} 想要成为您的好友'
         show:
           not_found: 好友请求不存在
         destroy:
           not_found: 好友请求不存在
       received_friend_requests:
         accept:
-          accepted_notification: '%{name} 接受了您的好友请求'
           accept_error: 接受好友请求发生错误
           not_found: 好友请求不存在
         reject:
-          rejected_notification: '%{name} 拒绝了您的好友请求'
           reject_error: 拒绝好友请求发生错误
           not_found: 好友请求不存在
         block:
-          blocked_notification: '%{name} 禁止了您的好友请求'
           block_error: 禁止好友请求发生错误
           not_found: 好友请求不存在
         destroy:
@@ -56,7 +52,6 @@ zh-CN:
       messages:
         create:
           not_found_recipient: 该好友不存在
-          sent_message_to_you: '%{friend_name} 给你发来了%{media_type}'
         mark_as_read:
           not_found: 该消息不存在
           mark_as_read_error: 出错，请稍后再试

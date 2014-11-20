@@ -12,6 +12,12 @@ zh-CN:
     access_token_error: "HTTP Token: Access denied"
     no_auth: "No Authentication"
     token_access_denied: "HTTP Token: Access denied"
+  notification:
+    sent_message_to_you: '%{friend_name} 给你发来了%{media_type}'
+    wants_to_be_friend: '%{friend_name} 想要成为您的好友'
+    blocked_friend_request: '%{friend_name} 禁止了您的好友请求'
+    accepted_friend_request: '%{friend_name} 接受了您的好友请求'
+    rejected_friend_request: '%{friend_name} 拒绝了您的好友请求'
   errors:
     messages:
       invalid_transition: 不能切换
