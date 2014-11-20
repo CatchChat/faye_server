@@ -25,6 +25,20 @@ class AttachmentsController < ApiController
 
   # POST "/api/attachments/callback/:provider"
   # parms: provider, bucket, key
+  # example
+  # Started POST "/api/v4/attachments/callback/upyun" for 127.0.0.1 at
+  # 2014-11-20 17:53:57 +0800
+  # Processing by AttachmentsController#callback as HTML
+  #   Parameters: {"code"=>"200", "url"=>"/abcd.jpg", "time"=>"1416477184",
+  #   "ext-param"=>"", "sign"=>"d72be160641a0f91016ca66aab10c4c3",
+  #   "message"=>"ok", "provider"=>"upyun"}
+  #
+  # Started POST "/api/v4/attachments/callback/qiniu" for 127.0.0.1 at
+  # 2014-11-20 17:58:38 +0800
+  # Processing by AttachmentsController#callback as HTML
+  #   Parameters: {"key"=>"test-key", "bucket"=>"ruanwz-public",
+  #   "provider"=>"qiniu"}
+  #
   def callback
     provider = params[:provider]
     if provider == 'qiniu'
@@ -33,6 +47,11 @@ class AttachmentsController < ApiController
       key = params[:key]
       _attachment = Attachment.find_or_create_by! storage: provider,  file: key
       render json: {status: 'ok', provider: 'qiniu', file: key}
+    end
+    if provider == 'upyun'
+      key = params[:url]
+      _attachment = Attachment.find_or_create_by! storage: provider,  file: key
+      render json: {status: 'ok', provider: 'upyun', file: key}
     end
   rescue Cdn::MissingParam => e
     render json: {status: 'error', message: e.message}, status: :not_acceptable

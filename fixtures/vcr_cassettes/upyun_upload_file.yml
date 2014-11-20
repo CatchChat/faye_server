@@ -10,9 +10,9 @@ http_interactions:
       User-Agent:
       - Faraday v0.9.0
       Authorization:
-      - UpYun david:774416f83dd1d13b5d0961a046da1f93
+      - UpYun david:f0b1f11b6362e833c88863ed10843cf0
       Date:
-      - Fri, 17 Oct 2014 16:16:00 GMT
+      - Thu, 20 Nov 2014 09:52:00 GMT
       Content-Length:
       - '0'
       Content-Type:
@@ -27,22 +27,20 @@ http_interactions:
       message: OK
     headers:
       Server:
-      - vivi/0.3
+      - nginx/upyun@403
       Date:
-      - Fri, 17 Oct 2014 16:16:59 GMT
+      - Thu, 20 Nov 2014 09:53:03 GMT
       Content-Type:
       - text/html
       Transfer-Encoding:
       - chunked
       Connection:
       - keep-alive
-      X-Request-Id:
-      - c4603ffa3a08ca052f7788833377a721
       Access-Control-Allow-Origin:
       - "*"
     body:
       encoding: UTF-8
       string: ''
     http_version: 
-  recorded_at: Fri, 17 Oct 2014 16:16:00 GMT
+  recorded_at: Thu, 20 Nov 2014 09:52:00 GMT
 recorded_with: VCR 2.9.3

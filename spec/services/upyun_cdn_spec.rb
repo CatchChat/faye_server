@@ -4,7 +4,7 @@ require 'vcr_helper'
 require 'services_helper'
 describe Cdn do
   before do
-    Timecop.freeze(Time.local(2014,10,18,0,16))
+    Timecop.freeze(Time.local(2014,11,20,17,52))
   end
 
   after do
@@ -32,15 +32,15 @@ describe Cdn do
       upyun_upload_token = subject.get_upload_token bucket: 'ruanwz-public',
                                                  file_path: '/abc.jpg',
                                                file_length: 100,
-                                                notify_url: 'http://catchchat-callback.herokuapp.com/hi'
-      expect(upyun_upload_token).to eq "UpYun david:80a440dd5d89b0ab95ec6d2e50cb1969"
+                                                notify_url: 'http://ruanwz.ngrok.com/api/v4/attachments/callback/upyun'
+      expect(upyun_upload_token).to eq "UpYun david:406b6584c931dd01569ae43a5686281a"
     end
 
     it "provide download token for upyun" do
       upyun_download_token = subject.get_download_token  bucket: 'ruanwz-public',
                                                       file_path: '/abc.jpg'
 
-      expect(upyun_download_token).to eq "UpYun david:c842b673c53748ff268ed00a7a9d443b"
+      expect(upyun_download_token).to eq "UpYun david:939177681dbc2853692f7b4b6500e51b"
     end
 
     it "upload file for upyun" do
@@ -65,7 +65,7 @@ describe Cdn do
         code = subject.callback_upload_file file_location: t.path,
                                           bucket: 'ruanwz-public',
                                        file_path: '/abcd.jpg',
-                                      notify_url: 'http://catchchat-callback.herokuapp.com/hi'
+                                      notify_url: 'http://ruanwz.ngrok.com/api/v4/attachments/callback/upyun'
         expect(code).to eq 200
       end
 

@@ -15,12 +15,6 @@ describe AttachmentsController do
       expect(json_response[:message]).to eq "missing params for upload token"
     end
 
-    it 'check param' do
-      post :upload_token, provider: 'qiniu', key: 'abc', :format => 'json'
-      expect(response.status).to eq 406
-      expect(json_response[:status]).to eq "error"
-      expect(json_response[:message]).to eq "missing params for upload token"
-    end
 
     it 'returns upload tokens' do
       post :upload_token, provider: 'qiniu', bucket: 'mybucket', key: 'mykey', :format => 'json'

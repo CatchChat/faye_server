@@ -5,17 +5,17 @@ http_interactions:
     uri: http://v0.api.upyun.com/ruanwz-public
     body:
       encoding: UTF-8
-      string: "-------------RubyMultipartPost\r\nContent-Disposition: form-data; name=\"policy\"\r\n\r\neyJidWNrZXQiOiJydWFud3otcHVibGljIiwic2F2ZS1rZXkiOiIvYWJjZC5qcGciLCJleHBpcmF0aW9uIjoxNDEzNTYzMTYwLCJyZXR1cm4tdXJsIjpudWxsLCJub3RpZnktdXJsIjoiaHR0cDovL2NhdGNoY2hhdC1jYWxsYmFjay5oZXJva3VhcHAuY29tL2hpIn0=\r\n-------------RubyMultipartPost\r\nContent-Disposition:
-        form-data; name=\"signature\"\r\n\r\n8112a39bf6aba84c8b8d6d43e0adc9f7\r\n-------------RubyMultipartPost\r\nContent-Disposition:
-        form-data; name=\"file\"; filename=\"test.jpeg\"\r\nContent-Length: 0\r\nContent-Type:
-        image/jpeg\r\nContent-Transfer-Encoding: binary\r\n\r\n\r\n-------------RubyMultipartPost--\r\n\r\n"
+      string: "-------------RubyMultipartPost\r\nContent-Disposition: form-data; name=\"policy\"\r\n\r\neyJidWNrZXQiOiJydWFud3otcHVibGljIiwic2F2ZS1rZXkiOiIvYWJjZC5qcGciLCJleHBpcmF0aW9uIjoxNDE2NDc3NzIwLCJyZXR1cm4tdXJsIjpudWxsLCJub3RpZnktdXJsIjoiaHR0cDovL3J1YW53ei5uZ3Jvay5jb20vYXBpL3Y0L2F0dGFjaG1lbnRzL2NhbGxiYWNrL3VweXVuIn0=\r\n-------------RubyMultipartPost\r\nContent-Disposition:
+        form-data; name=\"signature\"\r\n\r\n256f7711015282abb9f970928ebe54a6\r\n-------------RubyMultipartPost\r\nContent-Disposition:
+        form-data; name=\"file\"; filename=\"abcd20141120-8659-xdvqfu.jpg\"\r\nContent-Length:
+        0\r\nContent-Type: image/jpeg\r\nContent-Transfer-Encoding: binary\r\n\r\n\r\n-------------RubyMultipartPost--\r\n\r\n"
     headers:
       User-Agent:
       - Faraday v0.9.0
       Content-Type:
       - multipart/form-data; boundary=-----------RubyMultipartPost
       Content-Length:
-      - '620'
+      - '659'
       Accept-Encoding:
       - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
       Accept:
@@ -25,23 +25,21 @@ http_interactions:
       code: 200
       message: OK
     headers:
-      Server:
-      - vivi/0.3
-      Date:
-      - Fri, 17 Oct 2014 16:17:00 GMT
       Content-Type:
       - text/html; Charset=utf-8
       Transfer-Encoding:
       - chunked
       Connection:
       - keep-alive
-      X-Request-Id:
-      - e2624cbb9e06c40c05679af8a0690291
+      Server:
+      - nginx/upyun@403
+      Date:
+      - Thu, 20 Nov 2014 09:53:02 GMT
       Access-Control-Allow-Origin:
       - "*"
     body:
       encoding: UTF-8
-      string: '{"code":200,"message":"ok","url":"\/abcd.jpg","time":1413562620,"sign":"c9873c4f3d57170079c83dc4530a77f3"}'
+      string: '{"code":200,"message":"ok","url":"\/abcd.jpg","time":1416477184,"sign":"d72be160641a0f91016ca66aab10c4c3"}'
     http_version: 
-  recorded_at: Fri, 17 Oct 2014 16:16:00 GMT
+  recorded_at: Thu, 20 Nov 2014 09:52:00 GMT
 recorded_with: VCR 2.9.3

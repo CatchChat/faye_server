@@ -4,7 +4,7 @@ require 'vcr_helper'
 require 'services_helper'
 describe Cdn do
   before do
-    Timecop.freeze(Time.local(2014,11,19,10,23))
+    Timecop.freeze(Time.local(2014,11,20,17,58))
   end
 
   after do
@@ -36,16 +36,15 @@ describe Cdn do
                                                        key: 'test-key',
                                               callback_url: 'http://ruanwz.ngrok.com/hi',
                                               callback_body: "key=$(key)&bucket=$(bucket)"
-      expect(qiniu_upload_token).to eq "BBHE3ccYQ8VQhEIvZbJARrte1U3ic2Om6CW7mxvN:5CERXHpCBEhtl9Hf0zCxkGbd3go=:eyJzY29wZSI6InJ1YW53ei1wdWJsaWM6dGVzdC1rZXkiLCJjYWxsYmFja1VybCI6Imh0dHA6Ly9ydWFud3oubmdyb2suY29tL2hpIiwiY2FsbGJhY2tCb2R5Ijoia2V5PSQoa2V5KVx1MDAyNmJ1Y2tldD0kKGJ1Y2tldCkiLCJkZWFkbGluZSI6MTQxNjM2NzM4MH0="
+      expect(qiniu_upload_token).to eq "BBHE3ccYQ8VQhEIvZbJARrte1U3ic2Om6CW7mxvN:NTEhpoOBD4EuJ2XyGduEw9kP7uA=:eyJzY29wZSI6InJ1YW53ei1wdWJsaWM6dGVzdC1rZXkiLCJjYWxsYmFja1VybCI6Imh0dHA6Ly9ydWFud3oubmdyb2suY29tL2hpIiwiY2FsbGJhY2tCb2R5Ijoia2V5PSQoa2V5KVx1MDAyNmJ1Y2tldD0kKGJ1Y2tldCkiLCJkZWFkbGluZSI6MTQxNjQ4MTA4MH0="
     end
 
     it "provide download url for qiniu" do
       qiniu_download_url = subject.get_download_url url: "http://hello.qiniu.com/a/b/c.jpg"
-      expect(qiniu_download_url).to eq "http://hello.qiniu.com/a/b/c.jpg?e=1416367380&token=BBHE3ccYQ8VQhEIvZbJARrte1U3ic2Om6CW7mxvN:InlxoDfgMKCqC-lSYM3WrgcNBJI="
+      expect(qiniu_download_url).to eq "http://hello.qiniu.com/a/b/c.jpg?e=1416481080&token=BBHE3ccYQ8VQhEIvZbJARrte1U3ic2Om6CW7mxvN:b7gYlhulEOk-VxiaMrc3EAS5Ago="
     end
 
     it "upload file for qiniu" do
-      Timecop.return
 
       t = Tempfile.new 'abc'
       VCR.use_cassette('qiniu_upload_file') do
