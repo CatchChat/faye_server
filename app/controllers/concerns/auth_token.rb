@@ -23,8 +23,10 @@ module AuthToken
     warden.user || @user
   end
 
-  def self.check_username_password(username, password)
-    if (user = User.find_by(username: username)) && user.valid_password?(password)
+  def self.check_password(login, password)
+    if (user = User.find_by(username: login)) && user.valid_password?(password)
+      user
+    elsif (user = User.find_by(mobile: login)) && user.valid_password?(password)
       user
     end
   end

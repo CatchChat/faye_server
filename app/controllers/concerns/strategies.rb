@@ -5,7 +5,7 @@ Warden::Strategies.add(:password) do
   end
 
   def authenticate!
-    if user = AuthToken.check_username_password(params[:login], params[:password])
+    if user = AuthToken.check_password(params[:login], params[:password])
       success!(user)
     else
       errors.add :general, 'username_password_error'

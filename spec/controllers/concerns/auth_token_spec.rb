@@ -24,8 +24,9 @@ describe AuthToken do
     expect {AuthToken.check_access_token(request)}.to raise_error AuthToken::Exceptions::TokenExpired
     Timecop.return
   end
-  it "check_username_password" do
-    expect(AuthToken.check_username_password('ruanwztest','ruanwztest')).to be_an_instance_of User
+  it "check_password" do
+    expect(AuthToken.check_password('ruanwztest','ruanwztest')).to be_an_instance_of User
+    expect(AuthToken.check_password('1234567','ruanwztest')).to be_an_instance_of User
   end
 
   it "check_mobile_and_sms_verification_code" do
