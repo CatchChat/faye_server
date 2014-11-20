@@ -15,6 +15,7 @@ class S3Cdn
   attribute :success_action_redirect, String
   attribute :acl, String
   attribute :sqs_queue_name, String
+  attribute :message_id, String
   def initialize(keys)
     super
   end
@@ -55,6 +56,7 @@ class S3Cdn
       array << {"x-amz-credential"=> "#{aws_access_key_id}/#{date[0,8]}/#{region}/s3/aws4_request"}
       array << {"x-amz-algorithm"=> "AWS4-HMAC-SHA256"}
       array << {"x-amz-date"=> date }
+      array << {"x-amz-meta-message-id" => message_id} if message_id
     end
 
     policy = {
@@ -80,6 +82,7 @@ class S3Cdn
       hash[:"X-Amz-Date"]            = fetch_policy(policy,"x-amz-date")
       hash[:"X-Amz-Credential"]      = fetch_policy(policy, "x-amz-credential")
       hash[:"Policy"]                = encoded_policy
+      hash[:"x-amz-meta-message-id"] = args[:message_id] if args[:message_id]
       hash[:file]                    = Faraday::UploadIO.new(file_location, mime_type.content_type)
     end
 

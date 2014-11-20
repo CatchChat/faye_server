@@ -55,7 +55,8 @@ describe Cdn do
       t = Tempfile.new ['test-key', '.jpeg']
       VCR.use_cassette('s3_upload_file') do
         code = subject.upload_file file_location: t.path,
-                                             key: 'test-key.jpg'
+                                             key: 'test-key.jpg',
+                                             message_id: '12345'
 
         expect(code).to eq 204
       end
@@ -79,7 +80,7 @@ describe Cdn do
 
   context 'global s3' do
     before do
-      Timecop.freeze(Time.local(2014,11,17,15,45))
+      Timecop.freeze(Time.local(2014,11,20,17,00))
     end
 
     subject {@cdn}
@@ -90,7 +91,9 @@ describe Cdn do
       t.write 'abc'
       t.close
       VCR.use_cassette('s3_global_upload_file') do
-       code = subject.upload_file file_location: t.path, key: 'test-key.jpg'
+       code = subject.upload_file file_location: t.path,
+                                  key: 'test-key.jpg',
+                                  message_id: '1234'
        expect(code).to eq 204
 
       end
