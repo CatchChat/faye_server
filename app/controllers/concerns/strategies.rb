@@ -51,7 +51,7 @@ Warden::Strategies.add(:mobile) do
     if user = AuthToken.check_mobile_and_sms_verification_code(params[:mobile], params[:verify_code])
       success!(user)
     else
-      errors.add :general, 'username_password_error'
+      errors.add :general, 'mobile_token_error'
     end
   end
 end
