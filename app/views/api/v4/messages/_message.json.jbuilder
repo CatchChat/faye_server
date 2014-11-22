@@ -1,9 +1,11 @@
-json.extract! message, :id, :recipient_id, :recipient_type, :media_type, :text_content, :parent_id, :state, :longitude, :latitude
+json.extract! message, :id, :recipient_id, :recipient_type, :text_content, :parent_id, :longitude, :latitude
+json.media_type message.media_type
 json.media_type_string Message.human_attribute_name(message.media_type)
+json.state message.state
 json.state_string message.human_state_name
 json.created_at format_time_to_iso8601(message.created_at)
-json.updated_at format_time_to_iso8601(message.updated_at)
 json.created_at_string format_time(message.created_at)
+json.updated_at format_time_to_iso8601(message.updated_at)
 json.updated_at_string format_time(message.created_at)
 
 json.sender do
@@ -13,6 +15,8 @@ end
 
 json.attachments do
   json.array! message.attachments do |attachment|
-    attachment.extract! :storage, :file, :fallback_storage, :fallback_file
+    attachment.file_url attachment.file
+    attachment.fallback_file_url attachment.fallback_file
+    attachment.extract! :storage, :fallback_storage
   end
 end
