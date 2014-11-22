@@ -19,7 +19,7 @@ class Api::V4::ReceivedFriendRequestsController < ApiController
   ### PATCH api/v4/friend_requests/received/:id/accept
   def accept
     if @friend_request.accept
-      Pusher.push_to_user(@friend_request.user_id, t('notification.accepted_friend_request', friend_name: current_user.name))
+      Pusher.push_to_user(@friend_request.user_id, content: t('notification.accepted_friend_request', friend_name: current_user.name))
       render :show
     else
       render json: { error: t('.accept_error') }, status: :unprocessable_entity

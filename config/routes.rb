@@ -121,7 +121,7 @@ Rails.application.routes.draw do
 
       scope path: 'friend_requests' do
         concern :friend_requests_with_state do
-          get :index, path: ':state', constraints: { state: %w(pending accepted rejected blocked) }, on: :collection
+          get :index, path: ':state', constraints: { state: /pending|accepted|rejected|blocked/ }, on: :collection
         end
 
         resources :sent_friend_requests, only: %i(index create destroy), path: 'sent', concerns: :friend_requests_with_state

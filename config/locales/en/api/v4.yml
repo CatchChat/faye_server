@@ -1,7 +1,7 @@
 en:
   api:
     v4:
-      friend_requests:
+      sent_friend_requests:
         create:
           blocked: '%{friend_name} has blocked your friend request'
           not_found: Not found

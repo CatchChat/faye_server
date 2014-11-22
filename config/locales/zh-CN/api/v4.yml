@@ -1,7 +1,7 @@
 zh-CN:
   api:
     v4:
-      friend_requests:
+      sent_friend_requests:
         create:
           blocked: '%{friend_name} 已禁止您的好友请求'
           not_found: 该好友不存在
