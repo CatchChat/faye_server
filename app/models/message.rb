@@ -51,6 +51,16 @@ class Message < ActiveRecord::Base
     end
   end
 
+  # recipient is group
+  def group_message?
+    recipient_type == Group.name
+  end
+
+  # recipient is user
+  def direct_message?
+    recipient_type == User.name
+  end
+
   private
 
   def create_individual_recipients

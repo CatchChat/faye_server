@@ -64,6 +64,8 @@ class Api::V4::MessagesController < ApiController
 
     individual_recipient = message.individual_recipients.find_by(user_id: current_user.id)
     if individual_recipient.delivered? || individual_recipient.read? || individual_recipient.deliver
+      friendship = current_user.friendships.find_by(friend_id: message.sender_id)
+      friendship.move_to_top if friendship
       render json: {}
     else
       render json: { error: t('.deliver_error') }, status: :unprocessable_entity
