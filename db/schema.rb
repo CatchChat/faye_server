@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20141104091436) do
+ActiveRecord::Schema.define(version: 20141123141348) do
 
   create_table "access_tokens", force: true do |t|
     t.integer  "user_id"
@@ -47,6 +47,17 @@ ActiveRecord::Schema.define(version: 20141104091436) do
 
   add_index "attachments_messages", ["attachment_id"], name: "index_attachments_messages_on_attachment_id", using: :btree
   add_index "attachments_messages", ["message_id"], name: "index_attachments_messages_on_message_id", using: :btree
+
+  create_table "contacts", force: true do |t|
+    t.integer  "user_id"
+    t.string   "name"
+    t.string   "encrypted_number"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "contacts", ["encrypted_number"], name: "index_contacts_on_encrypted_number", using: :btree
+  add_index "contacts", ["user_id"], name: "index_contacts_on_user_id", using: :btree
 
   create_table "countries", force: true do |t|
     t.string   "name"

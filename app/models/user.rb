@@ -30,6 +30,7 @@ class User < ActiveRecord::Base
   has_many :unread_messages, -> {
     where.not(individual_recipients: { state: IndividualRecipient::STATES[:read] })
   }, through: :individual_recipients, source: :message
+  has_many :contacts
 
   STATES = { active: 1, blocked: 2 }.freeze
 
@@ -75,6 +76,7 @@ class User < ActiveRecord::Base
     friend_id = friend.is_a?(User) ? friend.id : friend
     if friendship = friendships.find_by(friend_id: friend_id)
       friend_name = friendship.remarked_name.presence || friendship.contact_name.presence
+    else
     end
 
     friend_name || self.name
