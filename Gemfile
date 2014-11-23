@@ -1,20 +1,20 @@
 source 'https://rubygems.org'
 
-gem 'rails', '4.1.7'
-gem 'mysql2', '~> 0.3.16'
-gem 'jbuilder', '~> 2.0'
+gem 'rails', '4.1.8'
+gem 'mysql2', '~> 0.3.17'
+gem 'jbuilder', '~> 2.2.5'
 gem 'unicorn', '~> 4.8.3'
 gem 'devise', '~> 3.4.1'
 gem 'devise-encryptable', '~> 0.2.0'
 gem 'qiniu', '~> 6.3.2'
 gem 'faraday', '~> 0.9.0'
-gem 'fog', '~> 1.24.0'
+gem 'fog', '~> 1.25.0'
 gem 'jpush', '~> 3.1.1'
 gem 'rails_config', '~> 0.4.2'
 gem 'vanguard', '~> 0.0.5'
 gem 'virtus', '~> 1.0.3'
-gem 'aws-sdk-v1', '~> 1.57.0'
-gem 'acts_as_list', '~> 0.4.0'
+gem 'aws-sdk-v1', '~> 1.59.0'
+gem 'acts_as_list', '~> 0.5.0'
 gem 'state_machine', '~> 1.2.0'
 gem 'rails-i18n', '~> 4.0.3'
 gem 'rack-attack', '~> 4.2.0'
@@ -34,8 +34,8 @@ end
 group :development, :test do
   gem "pry", '~> 0.10.1'
   gem 'pry-byebug', '~> 2.0.0'
-  gem 'rubocop','~> 0.26.1', require: false
-  gem 'guard-rubocop', '~> 1.1.0'
+  gem 'rubocop', '~> 0.27.1', require: false
+  gem 'guard-rubocop', '~> 1.2.0'
 end
 
 group :test do
