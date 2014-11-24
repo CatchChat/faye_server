@@ -3,7 +3,6 @@ lock '3.2.1'
 
 set :application, 'catchchat_server'
 set :repo_url, 'git@github.com:CatchChat/catchchat_server.git'
-set :rails_env, :staging
 
 # Default branch is :master
 # Uncomment the following line to have Capistrano ask which branch to deploy.
@@ -33,11 +32,6 @@ set :keep_releases, 5
 namespace :deploy do
   task :restart do
     invoke 'unicorn:restart'
-  end
-
-  desc "reload thedatabase with seed data"
-  task :seed do
-    run"cd#{current_path}; rake db:seed RAILS_ENV=#{rails_env}"
   end
 
   after 'deploy:publishing', 'restart'
