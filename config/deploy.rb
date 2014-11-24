@@ -19,6 +19,7 @@ set :ssh_options, {
 # Default value for :pty is false
 set :pty, true
 set :unicorn_config_path, "#{current_path}/config/unicorn.rb"
+set :unicorn_rack_env, 'staging'
 set :bundle_bins, fetch(:bundle_bins, []).push("unicorn")
 
 set :linked_files, %w{config/database.yml .rbenv-vars .ruby-version config/secrets.yml config/settings/production.yml config/settings/staging.yml config/unicorn.rb}
