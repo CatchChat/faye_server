@@ -1,8 +1,19 @@
 worker_processes Integer(ENV["WEB_CONCURRENCY"] || 3)
 timeout 15
 preload_app true
-listen '/u/apps/catchchat_server_staging/shared/tmp/sockets/unicorn.sock', :backlog => 2048
+pid RAILS_ROOT + "/tmp/pids/unicorn.pid"
+listen RAILS_ROOT + '/shared/tmp/sockets/unicorn.sock', :backlog => 2048
 before_fork do |server, worker|
+
+  old_pid = RAILS_ROOT + '/shared/tmp/pids/unicorn..pid'
+  if File.exists?(old_pid) && server.pid != old_pid
+    begin
+      Process.kill("QUIT", File.read(old_pid).to_i)
+    rescue Errno::ENOENT, Errno::ESRCH
+      # someone else did our job for us
+    end
+  end
+
   Signal.trap 'TERM' do
     puts 'Unicorn master intercepting TERM and sending myself QUIT instead'
     Process.kill 'QUIT', Process.pid
