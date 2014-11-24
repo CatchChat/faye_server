@@ -72,11 +72,13 @@ class User < ActiveRecord::Base
     nickname.presence || username
   end
 
-  def name_by_friend(friend)
+  def name_by_friend(friend, not_friend = false)
     friend_id = friend.is_a?(User) ? friend.id : friend
-    if friendship = friendships.find_by(friend_id: friend_id)
+
+    if !not_friend && (friendship = friendships.find_by(friend_id: friend_id))
       friend_name = friendship.remarked_name.presence || friendship.contact_name.presence
-    else
+    elsif mobile.present? && (contact = Contact.by_user(friend_id).by_number(mobile).first)
+      friend_name = contact.name.presence
     end
 
     friend_name || self.name

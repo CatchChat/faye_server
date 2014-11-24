@@ -8,6 +8,9 @@ class Contact < ActiveRecord::Base
 
   attr_accessor :number
 
+  scope :by_number, ->(number) { where(self.table_name => { encrypted_number: encrypt_number(number) }) }
+  scope :by_user, -> (user) { where(self.table_name => { user_id: user.is_a?(User) ? user.id : user }) }
+
   # From NodeJS
   # sha256ed(salted(sha256ed(_str)))
   #
