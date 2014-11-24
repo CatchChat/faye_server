@@ -3,7 +3,7 @@ lock '3.2.1'
 
 set :application, 'catchchat_server'
 set :repo_url, 'git@github.com:CatchChat/catchchat_server.git'
-set:rails_env, :staging
+set :rails_env, :staging
 
 # Default branch is :master
 # Uncomment the following line to have Capistrano ask which branch to deploy.
