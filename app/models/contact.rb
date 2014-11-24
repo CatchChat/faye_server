@@ -2,7 +2,7 @@ class Contact < ActiveRecord::Base
   include PhoneNumberParser
   belongs_to :user
 
-  before_validation :encrypt_number, on: :create, if: -> { number.present? }
+  before_validation :encrypt_number, on: :create
   validates :name, :encrypted_number, :user_id, presence: true
   validates :encrypted_number, uniqueness: { scope: :user_id, allow_blank: true }
 
@@ -26,6 +26,6 @@ class Contact < ActiveRecord::Base
   end
 
   def encrypt_number
-    self.class.encrypted_number(number)
+    self.encrypted_number = self.class.encrypt_number(number) if number.present?
   end
 end
