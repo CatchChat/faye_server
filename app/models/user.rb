@@ -30,7 +30,7 @@ class User < ActiveRecord::Base
   has_many :unread_messages, -> {
     where.not(individual_recipients: { state: IndividualRecipient::STATES[:read] })
   }, through: :individual_recipients, source: :message
-  has_many :contacts
+  has_many :contacts, dependent: :destroy
 
   STATES = { active: 1, blocked: 2 }.freeze
 

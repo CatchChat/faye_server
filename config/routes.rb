@@ -156,6 +156,9 @@ Rails.application.routes.draw do
       end
 
       resources :unfriend_requests, only: %i(create)
+      resources :contacts, only: [] do
+        post :upload, on: :collection
+      end
     end
   end
 

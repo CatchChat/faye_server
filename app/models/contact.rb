@@ -20,6 +20,8 @@ class Contact < ActiveRecord::Base
   def self.encrypt_number(number)
     number = number.to_s
     country_code, pure_number = parse(number)
+    return if pure_number.blank?
+
     country_code  = '86' if country_code.blank?
     full_number   = "+#{country_code}#{pure_number}"
     sha256_number = Digest::SHA256.hexdigest(full_number)
