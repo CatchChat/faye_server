@@ -1,7 +1,7 @@
 class Friendship < ActiveRecord::Base
   belongs_to :user
   belongs_to :friend, class_name: 'User'
-  has_many :friendships_groups
+  has_many :friendships_groups, dependent: :destroy
   has_many :groups, through: :friendships_groups
 
   acts_as_list scope: [:user_id]
