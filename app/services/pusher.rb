@@ -12,8 +12,8 @@ class Pusher
 
   class << self
     def push_to_users(user_ids, options = {})
-      fail 'No current access token' unless token = AccessToken.current
-      options[:environment] = false if token.local?
+      token = AccessToken.current
+      options[:environment] = false if token && token.local?
       options[:title] = I18n.t('catch_chat') if options[:title].blank?
 
       [

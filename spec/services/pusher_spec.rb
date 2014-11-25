@@ -17,7 +17,7 @@ describe Pusher do
           sound: 'bub3.caf',
           environment: false
         )
-      }.to raise_error('No current access token')
+      }.to_not raise_error
     end
 
     # it 'success' do
