@@ -31,6 +31,9 @@ Rails.application.routes.draw do
       get 'download_token/:provider' => 'attachments#download_token'
       post "callback/:provider" => 'attachments#callback'
     end
+    scope path: 'messages' do
+      get ':id/upload_token' => 'attachments#upload_token'
+    end
   end
 
   scope path: 'api/v5' do
