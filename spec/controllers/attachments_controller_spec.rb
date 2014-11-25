@@ -1,10 +1,11 @@
 require 'rails_helper'
+require 'services_helper'
 
 describe AttachmentsController do
   render_views
   let(:user) {FactoryGirl.create(:user, mobile: '1234567')}
   before do
-    @request.env["devise.mapping"] = Devise.mappings[:user]
+    sign_in user
   end
 
   context "qiniu" do
@@ -28,12 +29,14 @@ describe AttachmentsController do
 
   context "upyun" do
     it 'check param' do
+      skip "only upload to qiniu"
       post :upload_token, provider: 'upyun', bucket: 'abc', :format => 'json'
       expect(response.status).to eq 406
       expect(json_response[:status]).to eq "error"
       expect(json_response[:message]).to eq "missing params for upload token"
     end
     it 'returns upload tokens' do
+      skip "only upload to qiniu"
       post :upload_token, provider: 'upyun', bucket: 'mybucket', file_path: '/mykey', file_length: 23, :format => 'json'
       expect(response.status).to eq 200
       expect(json_response[:provider]).to eq "upyun"
@@ -45,6 +48,7 @@ describe AttachmentsController do
 
   context "s3" do
     it 'check param' do
+      skip "only upload from server"
       post :upload_fields, provider: 's3', bucket: 'abc', :format => 'json'
       expect(response.status).to eq 406
       expect(json_response[:status]).to eq "error"
@@ -52,6 +56,7 @@ describe AttachmentsController do
     end
 
     it 'returns upload fields' do
+      skip "only upload from server"
       post :upload_fields, provider: 's3', bucket: 'mybucket', key: 'mykey', :format => 'json'
       expect(response.status).to eq 200
       expect(json_response[:status]).to eq "ok"

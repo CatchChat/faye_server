@@ -1,5 +1,4 @@
 class AttachmentsController < ApiController
-  skip_before_action :authenticate_user
 
   # GET /api/attachments/upload_token/:provider
   # params for qiniu: bucket, key
