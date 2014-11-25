@@ -266,7 +266,7 @@ GEM
       builder
       nokogiri (>= 1.4.1)
       trollop
-    rb-readline (0.4.2)
+    rb-readline (0.5.1)
     rdoc (4.1.2)
       json (~> 1.4)
     redis (3.1.0)
@@ -407,7 +407,7 @@ DEPENDENCIES
   rails (= 4.1.8)
   rails-i18n (~> 4.0.3)
   rails_config (~> 0.4.2)
-  rb-readline (~> 0.4.2)
+  rb-readline (~> 0.5.1)
   redis (~> 3.1.0)
   redis-namespace (~> 1.5.1)
   redis-objects (~> 1.0.1)
