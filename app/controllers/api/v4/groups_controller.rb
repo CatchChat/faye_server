@@ -6,7 +6,7 @@ class Api::V4::GroupsController < ApiController
   #   page
   #   per_page
   def index
-    @groups = current_user.groups.includes(:friends)
+    @groups = current_user.groups.eager_load(:friendships_groups, :friendships, :friends)
     @groups = @groups.page(params[:page]).per(params[:per_page])
     fresh_when([@groups, @groups.map(&:friendships), @groups.map(&:friends)], public: true)
   end
