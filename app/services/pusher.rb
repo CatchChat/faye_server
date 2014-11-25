@@ -13,16 +13,15 @@ class Pusher
   class << self
     def push_to_users(user_ids, options = {})
       fail 'No current access token' unless token = AccessToken.current
-
-      pusher = if token.company?    # Use Xinge
-                 new(XingePusher.new(Settings.xinge.to_hash.symbolize_keys))
-               else                 # Use JPush
-                 options[:environment] = false if token.local?
-                 new(JpushPusher.new(Settings.jpush.to_hash.symbolize_keys))
-               end
-
+      options[:environment] = false if token.local?
       options[:title] = I18n.t('catch_chat') if options[:title].blank?
-      pusher.push_to_accounts(options.merge(accounts: user_ids))
+
+      [
+        new(XingePusher.new(Settings.xinge.to_hash.symbolize_keys)),
+        new(JpushPusher.new(Settings.jpush.to_hash.symbolize_keys))
+      ].each do |pusher|
+        pusher.push_to_accounts(options.merge(accounts: user_ids))
+      end
     end
 
     alias_method :push_to_user, :push_to_users
