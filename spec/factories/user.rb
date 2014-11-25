@@ -11,11 +11,13 @@ FactoryGirl.define do
       tokens_count 1
       sms_code_count 1
       groups_count 1
+      message_count 1
     end
     after(:create) do |user, evaluator|
       create_list(:access_token, evaluator.tokens_count, user: user)
       create_list(:sms_verification_code, evaluator.sms_code_count, user: user)
       create_list(:group, evaluator.groups_count, owner: user)
+      create_list(:message, evaluator.message_count, sender: user, recipient: user)
     end
   end
 
@@ -36,6 +38,11 @@ FactoryGirl.define do
     sequence :name do |n|
       "group#{n}"
     end
+  end
+  factory :message do
+    recipient_type  'User'
+    media_type  Message.media_types['photo']
+    state Message::STATES[:draft]
   end
 end
 

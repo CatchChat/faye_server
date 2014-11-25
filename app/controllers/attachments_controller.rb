@@ -1,4 +1,5 @@
 class AttachmentsController < ApiController
+  skip_before_action :authenticate_user
 
   # GET /api/attachments/upload_token/:provider
   # params for qiniu: bucket, key
@@ -8,10 +9,13 @@ class AttachmentsController < ApiController
   # example:
   # http://localhost:3000/api/v4/attachments/upload_token/upyun.json?bucket=mybucket&file_path=myobject.txt&file_length=23
   def upload_token
-    @cdn = init_cdn
+    raise Cdn::MissingParam, "missing params for upload token" unless @message = Message.find_by(id: params[:id].to_i)
+    @provider = 'qiniu'
+    @cdn = init_qiniu_cdn
     @token = @cdn.get_upload_token
+
   rescue Cdn::MissingParam => e
-    render json: {status: 'error', message: e.message}, status: :not_acceptable
+    render json: {message: e.message}, status: :not_acceptable
   end
 
   def upload_fields
@@ -44,8 +48,9 @@ class AttachmentsController < ApiController
       # TODO: verify request come from qiniu
       _bucket = params[:bucket]
       key = params[:key]
-      _attachment = Attachment.find_or_create_by! storage: provider,  file: key
-      render json: {status: 'ok', provider: 'qiniu', file: key}
+      raise Cdn::MissingParam, "message not exist" unless @message = Message.find_by(id: params[:message_id].to_i)
+      attachment = Attachment.find_or_create_by! storage: provider,  file: key
+      render json: {provider: 'qiniu', file: key, message_id: @message.id, attachment_id: attachment.id}
     end
     if provider == 'upyun'
       key = params[:url]
@@ -53,7 +58,7 @@ class AttachmentsController < ApiController
       render json: {status: 'ok', provider: 'upyun', file: key}
     end
   rescue Cdn::MissingParam => e
-    render json: {status: 'error', message: e.message}, status: :not_acceptable
+    render json: {message: e.message}, status: :not_acceptable
   end
 
   def download_token
@@ -79,13 +84,15 @@ class AttachmentsController < ApiController
     secret_key    = ENV["qiniu_secret_key"]
     callback_url  = ENV["qiniu_callback_url"]
     callback_body = ENV["qiniu_callback_body"]
+    bucket        = ENV["qiniu_attachment_bucket"]
 
     init_hash = { access_key:     access_key,
                   secret_key:     secret_key,
                   callback_url:   callback_url,
                   callback_body:  callback_body,
-                  bucket:         params[:bucket],
-                  key:            params[:key]
+                  bucket:         bucket,
+                  key:            SecureRandom.uuid
+
                 }
     qiniu_client = QiniuCdn.new init_hash
     Cdn.new(qiniu_client)

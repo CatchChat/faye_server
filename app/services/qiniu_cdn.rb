@@ -13,6 +13,7 @@ class QiniuCdn
   attribute :callback_url, String
   attribute :callback_body, String
   attribute :file_location, String
+  attribute :x_vars, Hash[Symbol => String]
   def initialize(keys)
     super
     Qiniu.establish_connection! access_key: access_key,
@@ -42,7 +43,7 @@ class QiniuCdn
     self.attributes = self.attributes.merge args
 
     code, _result, _response_headers = Qiniu::Storage.upload_with_put_policy(
-      put_policy, file_location, key)
+      put_policy, file_location, key, x_vars)
     code
   end
 

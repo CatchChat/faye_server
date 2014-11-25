@@ -10,20 +10,19 @@ describe AttachmentsController do
 
   context "qiniu" do
     it 'check param' do
-      post :upload_token, provider: 'qiniu', bucket: 'abc', :format => 'json'
+      post :upload_token, :id => 'not exist', :format => 'json'
       expect(response.status).to eq 406
-      expect(json_response[:status]).to eq "error"
       expect(json_response[:message]).to eq "missing params for upload token"
     end
 
 
     it 'returns upload tokens' do
-      post :upload_token, provider: 'qiniu', bucket: 'mybucket', key: 'mykey', :format => 'json'
+      post :upload_token, :id=> user.id, :format => 'json'
       expect(response.status).to eq 200
-      expect(json_response[:token].length).to be > 10
       expect(json_response[:provider]).to eq "qiniu"
-      expect(json_response[:key]).to eq "mykey"
-      expect(json_response[:bucket]).to eq "mybucket"
+      expect(json_response[:options][:token].length).to be > 10
+      expect(json_response[:options][:key].length).to be > 10
+      expect(json_response[:options][:bucket]).to eq ENV['qiniu_attachment_bucket']
     end
   end
 
