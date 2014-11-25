@@ -17,7 +17,7 @@ describe AttachmentsController do
 
 
     it 'returns upload tokens' do
-      post :upload_token, :id=> user.id, :format => 'json'
+      post :upload_token, :id=> user.sent_messages.first.id, :format => 'json'
       expect(response.status).to eq 200
       expect(json_response[:provider]).to eq "qiniu"
       expect(json_response[:options][:token].length).to be > 10
