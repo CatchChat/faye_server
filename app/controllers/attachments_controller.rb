@@ -1,5 +1,5 @@
 class AttachmentsController < ApiController
-  skip_before_action :authenticate_user
+  skip_before_action :authenticate_user, only: :callback
 
   # GET /api/attachments/upload_token/:provider
   # params for qiniu: bucket, key
@@ -49,6 +49,11 @@ class AttachmentsController < ApiController
       key = params[:key]
       raise Cdn::MissingParam, "message not exist" unless @message = Message.find_by(id: params[:message_id].to_i)
       attachment = Attachment.find_or_create_by! storage: provider,  file: key
+      @message.attachments << attachment
+      @message.mark_as_unread
+      @message.push_notification
+
+
       render json: {provider: 'qiniu', file: key, message_id: @message.id, attachment_id: attachment.id}
     end
     if provider == 'upyun'

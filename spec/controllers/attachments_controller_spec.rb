@@ -24,6 +24,17 @@ describe AttachmentsController do
       expect(json_response[:options][:key].length).to be > 10
       expect(json_response[:options][:bucket]).to eq ENV['qiniu_attachment_bucket']
     end
+
+    it 'save attachment and push when callback' do
+
+      expect_any_instance_of(Message).to receive(:mark_as_unread)
+      expect_any_instance_of(Message).to receive(:push_notification)
+      post :callback, provider: 'qiniu',
+        bucket: ENV['qiniu_attachment_bucket'], message_id: user.sent_messages.first.id, key: 'test-key', format: 'json'
+      expect(response.status).to eq 200
+      expect(json_response[:attachment_id]).to be_a(Numeric)
+
+    end
   end
 
   context "upyun" do
