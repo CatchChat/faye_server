@@ -32,8 +32,9 @@ class DeviseCreateUsers < ActiveRecord::Migration
       # t.datetime :locked_at
 
       t.string :nickname
-      t.string :mobile
       t.string :email
+      t.string :mobile
+      t.boolean :mobile_verified, null: false, default: false
 
       t.references :country
       t.integer :state

@@ -167,20 +167,21 @@ ActiveRecord::Schema.define(version: 20141123141348) do
   add_index "unfriend_requests", ["user_id"], name: "index_unfriend_requests_on_user_id", using: :btree
 
   create_table "users", force: true do |t|
-    t.string   "username",               default: "", null: false
-    t.string   "encrypted_password",     default: "", null: false
+    t.string   "username",               default: "",    null: false
+    t.string   "encrypted_password",     default: "",    null: false
     t.string   "password_salt"
     t.string   "reset_password_token"
     t.datetime "reset_password_sent_at"
     t.datetime "remember_created_at"
-    t.integer  "sign_in_count",          default: 0,  null: false
+    t.integer  "sign_in_count",          default: 0,     null: false
     t.datetime "current_sign_in_at"
     t.datetime "last_sign_in_at"
     t.string   "current_sign_in_ip"
     t.string   "last_sign_in_ip"
     t.string   "nickname"
-    t.string   "mobile"
     t.string   "email"
+    t.string   "mobile"
+    t.boolean  "mobile_verified",        default: false, null: false
     t.integer  "country_id"
     t.integer  "state"
     t.string   "time_zone"
