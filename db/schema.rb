@@ -66,6 +66,8 @@ ActiveRecord::Schema.define(version: 20141123141348) do
     t.datetime "updated_at"
   end
 
+  add_index "countries", ["phone_code"], name: "index_countries_on_phone_code", unique: true, using: :btree
+
   create_table "friend_requests", force: true do |t|
     t.integer  "user_id"
     t.integer  "friend_id"

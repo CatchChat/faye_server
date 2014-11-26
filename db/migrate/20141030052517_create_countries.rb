@@ -6,5 +6,7 @@ class CreateCountries < ActiveRecord::Migration
 
       t.timestamps
     end
+
+    add_index :countries, :phone_code, unique: true
   end
 end
