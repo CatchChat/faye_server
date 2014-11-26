@@ -244,7 +244,7 @@ module PhoneNumberParser
   NONSTRICT_PHONE_NUMBER_REGEXPS = [/\A\+\d{2,20}\Z/,/\A00\d{2,20}\Z/,/\A\d{1,20}\Z/].freeze
 
   module ClassMethods
-    def parse(number, strict = true)
+    def parse_number(number, strict = true)
       number = number.to_s.gsub(/-/, '')
       regexps = strict ? STRICT_PHONE_NUMBER_REGEXPS : NONSTRICT_PHONE_NUMBER_REGEXPS
       strip = ''
