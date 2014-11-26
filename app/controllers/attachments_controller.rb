@@ -11,8 +11,8 @@ class AttachmentsController < ApiController
   def upload_token
     raise Cdn::MissingParam, "missing params for upload token" unless @message = Message.find_by(id: params[:id].to_i)
     @provider = 'qiniu'
-    @cdn = init_qiniu_cdn
-    @token = @cdn.get_upload_token
+    @cdn = QiniuHelper.client
+    @token = @cdn.get_upload_token key: SecureRandom.uuid
 
   rescue Cdn::MissingParam => e
     render json: {message: e.message}, status: :not_acceptable
@@ -74,32 +74,13 @@ class AttachmentsController < ApiController
   def init_cdn
     case params[:provider]
     when 'qiniu'
-      init_qiniu_cdn
+      QiniuHelper.client
     when 'upyun'
       init_upyun_cdn
     when 's3'
       init_s3_cdn
     end
 
-  end
-
-  def init_qiniu_cdn
-    access_key    = ENV["qiniu_access_key"]
-    secret_key    = ENV["qiniu_secret_key"]
-    callback_url  = ENV["qiniu_callback_url"]
-    callback_body = ENV["qiniu_callback_body"]
-    bucket        = ENV["qiniu_attachment_bucket"]
-
-    init_hash = { access_key:     access_key,
-                  secret_key:     secret_key,
-                  callback_url:   callback_url,
-                  callback_body:  callback_body,
-                  bucket:         bucket,
-                  key:            SecureRandom.uuid
-
-                }
-    qiniu_client = QiniuCdn.new init_hash
-    Cdn.new(qiniu_client)
   end
 
   def init_upyun_cdn
