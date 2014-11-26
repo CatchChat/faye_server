@@ -14,8 +14,8 @@ class Api::V4::MessagesController < ApiController
   # Required params
   #   recipient_id
   #   recipient_type  Only User or Group
-  #   media_type      0 is text, 1 is photo, 2 is video, default is text
   # Optional params
+  #   media_type      0 is text, 1 is photo, 2 is video, default is text
   #   text_content
   #   parent_id
   #   longitude

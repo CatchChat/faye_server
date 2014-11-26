@@ -1,7 +1,9 @@
 class Api::V4::FriendshipsGroupsController < ApiController
   before_action :load_group, only: %i(create destroy)
 
-  ### POST /api/v4/groups/:group_id/add_friendship/:friendship_id
+  ### POST /api/v4/groups/:group_id/add_friendship
+  # Required params
+  #   friendship_id
   def create
     unless friendship = current_user.friendships.find_by(id: params[:friendship_id])
       return render json: { error: t('.not_friend') }, status: :not_found
@@ -9,7 +11,7 @@ class Api::V4::FriendshipsGroupsController < ApiController
 
     friendships_group = @group.friendships_groups.build(friendship_id: friendship.id)
     if friendships_group.save
-      render json: { id: friendships_group.id }
+      render json: {}
     else
       render json: { error: friendships_group.errors.full_messages.join("\n") }, status: :unprocessable_entity
     end

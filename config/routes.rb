@@ -143,7 +143,7 @@ Rails.application.routes.draw do
       end
 
       resources :groups, only: %i(index create update destroy show) do
-        post 'add_friendship/:friendship_id', to: 'friendships_groups#create'
+        post 'add_friendship', to: 'friendships_groups#create'
         delete 'remove_friendship/:friendship_id', to: 'friendships_groups#destroy'
       end
 
