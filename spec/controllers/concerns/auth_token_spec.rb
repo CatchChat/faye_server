@@ -36,7 +36,9 @@ describe AuthToken do
   end
 
   it "check_mobile_and_sms_verification_code" do
-    expect(AuthToken.check_mobile_and_sms_verification_code(@user.mobile, @user.sms_verification_codes.last.token)).to be_an_instance_of User
+    user = AuthToken.check_mobile_and_sms_verification_code(@user.mobile, @user.sms_verification_codes.last.token)
+    expect(user).to be_an_instance_of User
+    expect(user.mobile_verified).to be true
   end
 
 end
