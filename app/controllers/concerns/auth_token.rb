@@ -34,7 +34,7 @@ module AuthToken
   end
 
   def self.check_access_token(request)
-    token = request.headers['AuthorizationToken']
+    token = find_token(request)
     raise TokenNotFound unless access_token = AccessToken.find_by(token: token)
     raise TokenInactive unless access_token.active
     # nil means never expire
@@ -49,6 +49,13 @@ module AuthToken
     if (sms_code = SmsVerificationCode.find_by(mobile: mobile, token: sms_str)) && sms_code.active == true && (!sms_code.expired_at or sms_code.expired_at > Time.now)
       sms_code.user
     end
+  end
+  private
+  def self.find_token(request)
+    header = request.headers['Authorization']
+    header.match(/Token token=\"(.*)\"/)[1]
+  rescue
+    raise TokenNotFound
   end
 end
 

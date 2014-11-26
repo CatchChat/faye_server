@@ -13,13 +13,18 @@ describe AuthToken do
 
 
   it "check_access_token and save to AccessToken.current" do
-    request = OpenStruct.new headers: {'AuthorizationToken' =>'test-token' }
+    request = OpenStruct.new headers: {'Authorization' =>'Token token="test-token"' }
     expect(AuthToken.check_access_token(request)).to be_an_instance_of User
     expect(AccessToken.current).to eq @user.access_tokens.last
   end
 
+  it "check_access_token and raise exception if header format error" do
+    request = OpenStruct.new headers: {'Authorization' =>'Token privatetoken="test-token"' }
+    expect {AuthToken.check_access_token(request)}.to raise_error AuthToken::Exceptions::TokenNotFound
+  end
+
   it "check_access_token and raise exception if expired" do
-    request = OpenStruct.new headers: {'AuthorizationToken' =>'test-token' }
+    request = OpenStruct.new headers: {'Authorization' =>'Token token="test-token"' }
     Timecop.freeze(Time.local(2015))
     expect {AuthToken.check_access_token(request)}.to raise_error AuthToken::Exceptions::TokenExpired
     Timecop.return

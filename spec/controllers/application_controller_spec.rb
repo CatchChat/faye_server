@@ -20,7 +20,7 @@ RSpec.describe TestsController, :type => :controller do
   end
 
   it 'access token not exist return error info in return json' do
-    request.headers['AuthorizationToken'] = 'xxx'
+    request.headers['Authorization'] = 'Token token="xxx"'
     get :index
     expect(response.body).to include "Token: Access denied"
     expect(response.status).to be 401

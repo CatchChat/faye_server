@@ -15,7 +15,7 @@ end
 
 Warden::Strategies.add(:token) do
   def valid?
-    request.headers['AuthorizationToken']
+    request.headers['Authorization']
   end
 
   def authenticate!
