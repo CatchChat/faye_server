@@ -180,6 +180,7 @@ ActiveRecord::Schema.define(version: 20141123141348) do
     t.string   "last_sign_in_ip"
     t.string   "nickname"
     t.string   "mobile"
+    t.string   "email"
     t.integer  "country_id"
     t.integer  "state"
     t.string   "time_zone"
@@ -191,6 +192,7 @@ ActiveRecord::Schema.define(version: 20141123141348) do
     t.datetime "updated_at"
   end
 
+  add_index "users", ["email"], name: "index_users_on_email", unique: true, using: :btree
   add_index "users", ["mobile"], name: "index_users_on_mobile", unique: true, using: :btree
   add_index "users", ["node_id"], name: "index_users_on_node_id", using: :btree
   add_index "users", ["node_password"], name: "index_users_on_node_password", using: :btree
