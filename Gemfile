@@ -28,6 +28,7 @@ gem 'http_accept_language', '~> 2.0.2'
 gem 'capistrano', '~> 3.2.1'
 gem 'capistrano-rails', '~> 1.1'
 gem "capistrano3-unicorn", "~> 0.2.1"
+gem 'activejob', "~> 4.2.0.beta1"
 
 group :development do
   gem 'spring', '~> 1.1.3'
