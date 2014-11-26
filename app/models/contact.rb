@@ -18,16 +18,19 @@ class Contact < ActiveRecord::Base
   # salted = (_str='', _salt=salt) ->
   #   return _.flatten(_.zip(_str,_salt)).toString().replace(/\,/g,'')
   def self.encrypt_number(number)
-    number = number.to_s
-    country_code, pure_number = parse_number(number)
-    return if pure_number.blank?
-
-    country_code  = '86' if country_code.blank?
-    full_number   = "+#{country_code}#{pure_number}"
+    full_number   = normailze_number(number)
     sha256_number = Digest::SHA256.hexdigest(full_number)
     slat          = Digest::SHA256.hexdigest('CatchChat')
     slated_str    = sha256_number.chars.zip(slat.chars).join.gsub(/\,/, '')
     Digest::SHA256.hexdigest(slated_str)
+  end
+
+  def self.normailze_number (number)
+    country_code, pure_number = parse_number(number)
+    return if pure_number.blank?
+
+    country_code  = COUNTRY_CODES['China'] if country_code.blank?
+    "+#{country_code}#{pure_number}"
   end
 
   def encrypt_number

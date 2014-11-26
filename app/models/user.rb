@@ -31,6 +31,8 @@ class User < ActiveRecord::Base
   }, through: :individual_recipients, source: :message
   has_many :contacts, dependent: :destroy
 
+  scope :mobile_verified, -> { where(User.table_name => { mobile_verified: true }) }
+
   STATES = { active: 1, blocked: 2 }.freeze
 
   state_machine :state, initial: :active do
