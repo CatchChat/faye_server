@@ -19,6 +19,7 @@ Warden::Strategies.add(:token) do
   end
 
   def authenticate!
+    request.env["devise.skip_trackable"] = true
     if user = AuthToken.check_access_token(request)
       success!(user)
     else
