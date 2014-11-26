@@ -35,8 +35,8 @@ class DeviseCreateUsers < ActiveRecord::Migration
       t.string :email
       t.string :mobile
       t.boolean :mobile_verified, null: false, default: false
+      t.string :phone_code
 
-      t.references :country
       t.integer :state
       t.string :time_zone
       t.string :avatar

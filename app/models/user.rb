@@ -17,7 +17,6 @@ class User < ActiveRecord::Base
   has_many :friendships, dependent: :destroy
   has_many :friends, through: :friendships
   has_many :groups, foreign_key: 'owner_id', dependent: :destroy
-  belongs_to :country
   has_many :individual_recipients, dependent: :destroy
   has_many :access_tokens, :dependent => :delete_all
   has_many :sms_verification_codes, :dependent => :delete_all

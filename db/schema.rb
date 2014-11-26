@@ -59,15 +59,6 @@ ActiveRecord::Schema.define(version: 20141123141348) do
   add_index "contacts", ["encrypted_number"], name: "index_contacts_on_encrypted_number", using: :btree
   add_index "contacts", ["user_id"], name: "index_contacts_on_user_id", using: :btree
 
-  create_table "countries", force: true do |t|
-    t.string   "name"
-    t.string   "phone_code"
-    t.datetime "created_at"
-    t.datetime "updated_at"
-  end
-
-  add_index "countries", ["phone_code"], name: "index_countries_on_phone_code", unique: true, using: :btree
-
   create_table "friend_requests", force: true do |t|
     t.integer  "user_id"
     t.integer  "friend_id"
@@ -184,7 +175,7 @@ ActiveRecord::Schema.define(version: 20141123141348) do
     t.string   "email"
     t.string   "mobile"
     t.boolean  "mobile_verified",        default: false, null: false
-    t.integer  "country_id"
+    t.string   "phone_code"
     t.integer  "state"
     t.string   "time_zone"
     t.string   "avatar"
