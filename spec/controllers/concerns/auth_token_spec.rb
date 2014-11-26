@@ -7,7 +7,7 @@ describe AuthToken do
   end
 
   before do
-    @user = create :user, mobile: '1234567'
+    @user = create :user, mobile: '1234567', email: 'a@b.c'
     # following token just contains uniq token
   end
 
@@ -27,6 +27,7 @@ describe AuthToken do
   it "check_password" do
     expect(AuthToken.check_password('ruanwztest','ruanwztest')).to be_an_instance_of User
     expect(AuthToken.check_password('1234567','ruanwztest')).to be_an_instance_of User
+    expect(AuthToken.check_password('a@b.c','ruanwztest')).to be_an_instance_of User
   end
 
   it "check_mobile_and_sms_verification_code" do

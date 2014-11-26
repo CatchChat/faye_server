@@ -28,6 +28,8 @@ module AuthToken
       user
     elsif (user = User.find_by(mobile: login)) && user.valid_password?(password)
       user
+    elsif (user = User.find_by(email: login)) && user.valid_password?(password)
+      user
     end
   end
 
