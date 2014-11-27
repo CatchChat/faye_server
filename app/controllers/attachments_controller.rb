@@ -49,6 +49,8 @@ class AttachmentsController < ApiController
       key = params[:key]
       raise Cdn::MissingParam, "message not exist" unless @message = Message.find_by(id: params[:message_id].to_i)
       attachment = Attachment.find_or_create_by! storage: provider,  file: key
+      # TODO: the method could change in rails 4.2
+      TransferAttachmentsJob.enqueue attachment.attributes.except *%w{updated_at created_at}
       @message.attachments << attachment
       @message.mark_as_unread
       @message.push_notification

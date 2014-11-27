@@ -29,6 +29,7 @@ gem 'capistrano', '~> 3.2.1'
 gem 'capistrano-rails', '~> 1.1'
 gem "capistrano3-unicorn", "~> 0.2.1"
 gem 'activejob', "~> 4.2.0.beta1"
+gem 'sidekiq', '~> 3.3.0'
 
 group :development do
   gem 'spring', '~> 1.1.3'
