@@ -1,0 +1,58 @@
+---
+http_interactions:
+- request:
+    method: get
+    uri: http://ruanwz-public.qiniudn.com/test-key?e=1417079760&token=BBHE3ccYQ8VQhEIvZbJARrte1U3ic2Om6CW7mxvN:Kl6IPF5USHtMavwB1fjJrVdQO5E=
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+      Accept:
+      - "*/*"
+      User-Agent:
+      - Ruby
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Date:
+      - Thu, 27 Nov 2014 08:17:01 GMT
+      Server:
+      - nginx/1.4.4
+      Content-Type:
+      - text/plain
+      Transfer-Encoding:
+      - chunked
+      Accept-Ranges:
+      - bytes
+      Access-Control-Allow-Origin:
+      - "*"
+      Access-Control-Max-Age:
+      - '2592000'
+      Cache-Control:
+      - public, max-age=31536000
+      Content-Disposition:
+      - inline; filename="test-key"
+      Content-Transfer-Encoding:
+      - binary
+      Etag:
+      - '"FqmZPjZHBoFquj4lcXhQwmyc0Nid.gz"'
+      X-Log:
+      - mc.g;IO:3
+      X-Reqid:
+      - TyIAAOlMSrpQd6oT
+      X-Whom:
+      - nb263
+      X-Via:
+      - 1.1 zjjhdx34:8107 (Cdn Cache Server V2.0), 1.1 jp44:7 (Cdn Cache Server V2.0)
+      Connection:
+      - keep-alive
+    body:
+      encoding: UTF-8
+      string: abc
+    http_version: 
+  recorded_at: Thu, 27 Nov 2014 08:16:00 GMT
+recorded_with: VCR 2.9.3

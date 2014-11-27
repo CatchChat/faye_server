@@ -18,13 +18,6 @@ class AttachmentsController < ApiController
     render json: {message: e.message}, status: :not_acceptable
   end
 
-  def upload_fields
-    @cdn = init_cdn
-    url, policy, encoded_policy, signature = @cdn.get_upload_form_url_fields
-    render json: {status: 'ok', url: url, policy: policy, encoded_policy: encoded_policy, signature: signature}
-  rescue Cdn::MissingParam => e
-    render json: {status: 'error', message: e.message}, status: :not_acceptable
-  end
 
   # POST "/api/attachments/callback/:provider"
   # parms: provider, bucket, key
@@ -71,50 +64,4 @@ class AttachmentsController < ApiController
     puts params
   end
 
-  private
-
-  def init_cdn
-    case params[:provider]
-    when 'qiniu'
-      QiniuHelper.client
-    when 'upyun'
-      init_upyun_cdn
-    when 's3'
-      init_s3_cdn
-    end
-
-  end
-
-  def init_upyun_cdn
-    username      = ENV["upyun_username"]
-    password      = ENV["upyun_password"]
-    init_hash     = {
-                      username:     username,
-                      password:     password,
-                      bucket:       params[:bucket],
-                      file_path:    params[:file_path],
-                      file_length:  params[:file_length]
-                    }
-    upyun_client = UpyunCdn.new init_hash
-    Cdn.new(upyun_client)
-
-  end
-
-  def init_s3_cdn
-    # TODO implement s3
-
-    aws_access_key_id     = ENV["AWS_ACCESS_KEY_ID"]
-    aws_secret_access_key = ENV["AWS_SECRET_ACCESS_KEY"]
-    aws_sqs_queue         = ENV["AWS_SQS_QUEUE"]
-
-    init_hash    = { aws_access_key_id:     aws_access_key_id,
-                     aws_secret_access_key: aws_secret_access_key,
-                     sqs_queue_name:        aws_sqs_queue,
-                     bucket:                params[:bucket],
-                     key:                   params[:key]
-                   }
-
-    s3_client = S3Cdn.new init_hash
-    Cdn.new(s3_client)
-  end
 end

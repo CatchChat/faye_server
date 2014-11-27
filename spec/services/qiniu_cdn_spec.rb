@@ -4,7 +4,7 @@ require 'vcr_helper'
 require 'services_helper'
 describe Cdn do
   before do
-    Timecop.freeze(Time.local(2014,11,25,15,54))
+    Timecop.freeze(Time.local(2014,11,27,16,16))
   end
 
   after do
@@ -37,17 +37,19 @@ describe Cdn do
                                               callback_url: 'http://ruanwz.ngrok.com/hi',
                                               callback_body: "key=$(key)&bucket=$(bucket)&message_id=$(x:message_id)",
                                                      x_vars: {:'x:message_id' => '1234321'}
-      expect(qiniu_upload_token).to eq "BBHE3ccYQ8VQhEIvZbJARrte1U3ic2Om6CW7mxvN:fru8z8N_5tHIxm-mpIENURtvsuM=:eyJzY29wZSI6InJ1YW53ei1wdWJsaWM6dGVzdC1rZXkiLCJjYWxsYmFja1VybCI6Imh0dHA6Ly9ydWFud3oubmdyb2suY29tL2hpIiwiY2FsbGJhY2tCb2R5Ijoia2V5PSQoa2V5KVx1MDAyNmJ1Y2tldD0kKGJ1Y2tldClcdTAwMjZtZXNzYWdlX2lkPSQoeDptZXNzYWdlX2lkKSIsImRlYWRsaW5lIjoxNDE2OTA1NjQwfQ=="
+      expect(qiniu_upload_token.length).to be > 30
     end
 
     it "provide download url for qiniu" do
-      qiniu_download_url = subject.get_download_url url: "http://hello.qiniu.com/a/b/c.jpg"
-      expect(qiniu_download_url).to eq "http://hello.qiniu.com/a/b/c.jpg?e=1416905640&token=BBHE3ccYQ8VQhEIvZbJARrte1U3ic2Om6CW7mxvN:6-eJeo77BGbyt8pc3voFtbWrF-M="
+      qiniu_download_url = subject.get_download_url url: "http://ruanwz-public.qiniudn.com/test-key"
+      expect(qiniu_download_url).to include "token="
     end
 
     it "upload file for qiniu" do
 
       t = Tempfile.new 'abc'
+      t.write 'abc'
+      t.close
       VCR.use_cassette('qiniu_upload_file') do
         code = subject.upload_file file_location: t.path,
                                           bucket: 'ruanwz-public',
@@ -58,8 +60,33 @@ describe Cdn do
 
         expect(code).to eq 200
       end
+    end
+
+    it "download file from qiniu in stream mode" do
+      VCR.use_cassette('qiniu_download_file') do
+
+        qiniu_download_url = subject.get_download_url url: "http://ruanwz-public.qiniudn.com/test-key"
+
+        uri = URI(qiniu_download_url)
+
+        t = Tempfile.new 'download'
+        Net::HTTP.start(uri.host, uri.port, :use_ssl => uri.scheme == 'https') do |http|
+          request = Net::HTTP::Get.new uri
+
+          http.request request do |response|
+            open t.path, 'w' do |io|
+              response.read_body do |chunk|
+                io.write chunk
+              end
+            end
+          end
+        end
+        expect(t.size).to eq 3
+      end
+
 
     end
+
   end
 
 end
