@@ -1,6 +1,6 @@
 FactoryGirl.define do
   factory :attachment do
     storage 'qiniu'
-    file    'thisisuuid'
+    file    'test-key'
   end
 end

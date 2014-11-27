@@ -32,10 +32,10 @@ describe Cdn do
 
     it "provide upload token for qiniu" do
       qiniu_upload_token = subject.get_upload_token bucket: 'ruanwz-public',
-                                                       test: 'abc',
+                                                      test: 'abc',
                                                        key: 'test-key',
                                               callback_url: 'http://ruanwz.ngrok.com/hi',
-                                              callback_body: "key=$(key)&bucket=$(bucket)&message_id=$(x:message_id)",
+                                             callback_body: "key=$(key)&bucket=$(bucket)&message_id=$(x:message_id)",
                                                      x_vars: {:'x:message_id' => '1234321'}
       expect(qiniu_upload_token.length).to be > 30
     end
@@ -83,8 +83,6 @@ describe Cdn do
         end
         expect(t.size).to eq 3
       end
-
-
     end
 
   end

@@ -17,5 +17,9 @@ module QiniuHelper
     qiniu_client = QiniuCdn.new init_hash
     Cdn.new(qiniu_client)
   end
+  def self.url(key)
+    bucket = ENV["qiniu_attachment_bucket"]
+    "http://#{bucket}.qiniudn.com/#{key}"
+  end
 
 end

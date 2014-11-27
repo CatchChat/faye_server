@@ -1,0 +1,105 @@
+---
+http_interactions:
+- request:
+    method: get
+    uri: http://ruanwz-public.qiniudn.com/test-key?e=1417084800&token=BBHE3ccYQ8VQhEIvZbJARrte1U3ic2Om6CW7mxvN:nv7S3c43hQLcERiryEVey3pKWPI=
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+      Accept:
+      - "*/*"
+      User-Agent:
+      - Ruby
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Date:
+      - Thu, 27 Nov 2014 09:59:15 GMT
+      Server:
+      - nginx/1.4.4
+      Content-Type:
+      - text/plain
+      Transfer-Encoding:
+      - chunked
+      Accept-Ranges:
+      - bytes
+      Access-Control-Allow-Origin:
+      - "*"
+      Access-Control-Max-Age:
+      - '2592000'
+      Cache-Control:
+      - public, max-age=31536000
+      Content-Disposition:
+      - inline; filename="test-key"
+      Content-Transfer-Encoding:
+      - binary
+      Etag:
+      - '"FqmZPjZHBoFquj4lcXhQwmyc0Nid.gz"'
+      X-Log:
+      - mc.g:1;IO:3
+      X-Reqid:
+      - BV0AACT1GdvkfKoT
+      X-Whom:
+      - nb263
+      X-Via:
+      - 1.1 zjjhdx38:8105 (Cdn Cache Server V2.0), 1.1 jp44:7 (Cdn Cache Server V2.0)
+      Connection:
+      - keep-alive
+    body:
+      encoding: UTF-8
+      string: abc
+    http_version: 
+  recorded_at: Thu, 27 Nov 2014 09:40:00 GMT
+- request:
+    method: post
+    uri: https://ruanwz-test.s3.cn-north-1.amazonaws.com.cn/
+    body:
+      encoding: UTF-8
+      string: "-------------RubyMultipartPost\r\nContent-Disposition: form-data; name=\"key\"\r\n\r\ntest-key\r\n-------------RubyMultipartPost\r\nContent-Disposition:
+        form-data; name=\"acl\"\r\n\r\nprivate\r\n-------------RubyMultipartPost\r\nContent-Disposition:
+        form-data; name=\"X-Amz-Algorithm\"\r\n\r\nAWS4-HMAC-SHA256\r\n-------------RubyMultipartPost\r\nContent-Disposition:
+        form-data; name=\"X-Amz-Signature\"\r\n\r\nee5ac985094986524f7d4e7f0d57def16ce7d087c255e75226efe951b3a9d1c1\r\n-------------RubyMultipartPost\r\nContent-Disposition:
+        form-data; name=\"X-Amz-Date\"\r\n\r\n20141127T174000Z\r\n-------------RubyMultipartPost\r\nContent-Disposition:
+        form-data; name=\"X-Amz-Credential\"\r\n\r\nAKIAOGBVMZAU5EZPGPIQ/20141127/cn-north-1/s3/aws4_request\r\n-------------RubyMultipartPost\r\nContent-Disposition:
+        form-data; name=\"Policy\"\r\n\r\neyJleHBpcmF0aW9uIjoiMjAxNC0xMS0yN1QxODo0MDowMC4wMDBaIiwiY29uZGl0aW9ucyI6W3siYnVja2V0IjoicnVhbnd6LXRlc3QifSx7ImtleSI6InRlc3Qta2V5In0seyJhY2wiOiJwcml2YXRlIn0seyJ4LWFtei1jcmVkZW50aWFsIjoiQUtJQU9HQlZNWkFVNUVaUEdQSVEvMjAxNDExMjcvY24tbm9ydGgtMS9zMy9hd3M0X3JlcXVlc3QifSx7IngtYW16LWFsZ29yaXRobSI6IkFXUzQtSE1BQy1TSEEyNTYifSx7IngtYW16LWRhdGUiOiIyMDE0MTEyN1QxNzQwMDBaIn1dfQ==\r\n-------------RubyMultipartPost\r\nContent-Disposition:
+        form-data; name=\"file\"; filename=\"download20141127-10126-teprp8\"\r\nContent-Length:
+        3\r\nContent-Type: image/jpeg\r\nContent-Transfer-Encoding: binary\r\n\r\nabc\r\n-------------RubyMultipartPost--\r\n\r\n"
+    headers:
+      User-Agent:
+      - Faraday v0.9.0
+      Content-Type:
+      - multipart/form-data; boundary=-----------RubyMultipartPost
+      Content-Length:
+      - '1380'
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+      Accept:
+      - "*/*"
+  response:
+    status:
+      code: 204
+      message: No Content
+    headers:
+      X-Amz-Id-2:
+      - NsxZQXUcFQ7x4NA9tgDimX1U3sGA+mKEcpD9SdnFqZUvlir+8m6mpPrPH+HdV4Hz
+      X-Amz-Request-Id:
+      - 097BC98D88BA2982
+      Date:
+      - Thu, 27 Nov 2014 09:59:17 GMT
+      Etag:
+      - '"900150983cd24fb0d6963f7d28e17f72"'
+      Location:
+      - https://ruanwz-test.s3.cn-north-1.amazonaws.com.cn/test-key
+      Server:
+      - AmazonS3
+    body:
+      encoding: UTF-8
+      string: ''
+    http_version: 
+  recorded_at: Thu, 27 Nov 2014 09:40:00 GMT
+recorded_with: VCR 2.9.3

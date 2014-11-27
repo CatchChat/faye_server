@@ -32,7 +32,6 @@ class QiniuCdn
     Qiniu::Auth.generate_uptoken(put_policy)
   end
 
-
   def get_download_url(args)
     self.attributes = self.attributes.merge args
     raise Cdn::MissingParam, "missing params for download url" unless DOWNLOADVALIDATOR.call(self).valid?

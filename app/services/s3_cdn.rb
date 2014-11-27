@@ -72,7 +72,11 @@ class S3Cdn
 
   def upload_file(args)
     url, policy, encoded_policy, signature = get_upload_form_url_fields(args)
-    mime_type =  MIME::Types.type_for(file_location).first
+    if mime_type =  MIME::Types.type_for(file_location).first
+      content_type = mime_type.content_type
+    else
+      content_type = "image/jpeg"
+    end
     payload = Hash.new.tap do |hash|
       hash[:key]                     = fetch_policy(policy,"key")
       hash[:acl]                     = fetch_policy(policy, 'acl')
@@ -83,7 +87,7 @@ class S3Cdn
       hash[:"X-Amz-Credential"]      = fetch_policy(policy, "x-amz-credential")
       hash[:"Policy"]                = encoded_policy
       hash[:"x-amz-meta-message-id"] = args[:message_id] if args[:message_id]
-      hash[:file]                    = Faraday::UploadIO.new(file_location, mime_type.content_type)
+      hash[:file]                    = Faraday::UploadIO.new(file_location, content_type)
     end
 
     conn = Faraday.new(url: url) do |faraday|
