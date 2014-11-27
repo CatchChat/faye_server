@@ -15,13 +15,12 @@ class Friendship < ActiveRecord::Base
   end
 
   def self.create_friendships(user, friend)
-    user_id   = user.is_a?(User) ? user.id : user
-    friend_id = friend.is_a?(User) ? friend.id : friend
     Friendship.transaction do
       begin
-        # TODO: Add contact_name after find contacts
-        Friendship.create!(user_id: user_id, friend_id: friend_id)
-        Friendship.create!(friend_id: user_id, user_id: friend_id)
+        user_contact_name_by_friend = user.contact_name_by_friend(friend)
+        friend_contact_name_by_user = friend.contact_name_by_friend(user)
+        Friendship.create!(user_id: user.id, friend_id: friend.id, contact_name: friend_contact_name_by_user)
+        Friendship.create!(friend_id: user.id, user_id: friend.id, contact_name: user_contact_name_by_friend)
         return true
       rescue => ex
         logger.debug "===> #{ex}"

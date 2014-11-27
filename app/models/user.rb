@@ -73,16 +73,24 @@ class User < ActiveRecord::Base
     nickname.presence || username
   end
 
-  def name_by_friend(friend, not_friend = false)
-    friend_id = friend.is_a?(User) ? friend.id : friend
+  def normalized_mobile
+    "+#{phone_code}#{mobile}"
+  end
 
-    if !not_friend && (friendship = friendships.find_by(friend_id: friend_id))
+  def name_by_friend(friend, not_friend = false)
+    if !not_friend && (friendship = friendships.find_by(friend_id: friend.id))
       friend_name = friendship.remarked_name.presence || friendship.contact_name.presence
-    elsif mobile.present? && (contact = Contact.by_user(friend_id).by_number(mobile).first)
-      friend_name = contact.name.presence
     end
 
-    friend_name || self.name
+    friend_name || contact_name_by_friend(friend) || self.name
+  end
+
+  def contact_name_by_friend(friend)
+    return if !mobile_verified || mobile.blank?
+
+    if contact = Contact.by_user(friend.id).by_number(normalized_mobile).first
+      contact.name.presence
+    end
   end
 
   def self.find_for_database_authentication(warden_conditions)

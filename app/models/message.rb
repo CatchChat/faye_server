@@ -33,7 +33,7 @@ class Message < ActiveRecord::Base
     individual_recipients.each do |individual_recipient|
       Pusher.push_to_user(individual_recipient.user_id, content: I18n.t(
         'notification.sent_message_to_you',
-        friend_name: sender.name_by_friend(individual_recipient.user_id),
+        friend_name: sender.name_by_friend(individual_recipient.user),
         media_type: Message.human_attribute_name(media_type)
       ))
     end

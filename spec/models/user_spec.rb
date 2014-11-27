@@ -1,8 +1,8 @@
 require 'rails_helper'
 
 RSpec.describe User, :type => :model do
-  let(:user) { create(:user, username: 'user', mobile: '18668158203') }
-  let(:friend) { create(:user, username: 'friend', mobile: '15158166372') }
+  let(:user) { create(:user, username: 'user', mobile: '18668158203', mobile_verified: true) }
+  let(:friend) { create(:user, username: 'friend', mobile: '15158166372', mobile_verified: true) }
 
   describe '#name_by_friend' do
     it 'is friend' do
