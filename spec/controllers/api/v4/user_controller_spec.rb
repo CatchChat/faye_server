@@ -49,7 +49,7 @@ RSpec.describe Api::V4::UserController, :type => :controller do
           "nickname"=>nil,
           "name"=>"friend7",
           "avatar_url"=>nil,
-          "common_friend_names"=>["friend5", "friend3", "friend4"]
+          "common_friend_names"=>["friend3", "friend4", "friend5"]
         },
         {
           "id"=>current_binding.local_variable_get(:friend8).id,
@@ -57,7 +57,7 @@ RSpec.describe Api::V4::UserController, :type => :controller do
           "nickname"=>nil,
           "name"=>"friend8",
           "avatar_url"=>nil,
-          "common_friend_names"=>["friend5", "friend4"]
+          "common_friend_names"=>["friend4", "friend5"]
         }
       ]
     })
