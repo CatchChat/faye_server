@@ -37,7 +37,7 @@ class Api::V4::ContactsController < ApiController
     conditions[0] = conditions[0].join(' OR ')
 
     User.mobile_verified.where(conditions).each do |user|
-      encrypted_numbers_hash[Contact.encrypt_number("+#{user.phone_code}#{user.mobile}")] = user.id
+      encrypted_numbers_hash[Contact.encrypt_number(user.normalized_mobile)] = user.id
     end
 
     contacts = current_user.contacts.where(encrypted_number: encrypted_numbers_hash.keys)
