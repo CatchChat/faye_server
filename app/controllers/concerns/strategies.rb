@@ -6,7 +6,12 @@ Warden::Strategies.add(:password) do
 
   def authenticate!
     if user = AuthToken.check_password(params[:login], params[:password])
-      success!(user)
+      if user.blocked?
+        errors.add :general, 'user_is_blocked'
+        halt!
+      else
+        success!(user)
+      end
     else
       errors.add :general, 'username_password_error'
     end
@@ -21,7 +26,12 @@ Warden::Strategies.add(:token) do
   def authenticate!
     request.env["devise.skip_trackable"] = true
     if user = AuthToken.check_access_token(request)
-      success!(user)
+      if user.blocked?
+        errors.add :general, 'user_is_blocked'
+        halt!
+      else
+        success!(user)
+      end
     else
       errors.add :general, 'access_token_error'
     end
@@ -35,7 +45,12 @@ Warden::Strategies.add(:node_password) do
 
   def authenticate!
     if user = AuthToken.check_node_username_password(params[:login], params[:password])
-      success!(user)
+      if user.blocked?
+        errors.add :general, 'user_is_blocked'
+        halt!
+      else
+        success!(user)
+      end
     else
       errors.add :general, 'username_password_error'
     end
@@ -50,7 +65,12 @@ Warden::Strategies.add(:mobile) do
 
   def authenticate!
     if user = AuthToken.check_mobile_and_sms_verification_code(params[:mobile], params[:verify_code])
-      success!(user)
+      if user.blocked?
+        errors.add :general, 'user_is_blocked'
+        halt!
+      else
+        success!(user)
+      end
     else
       errors.add :general, 'mobile_token_error'
     end

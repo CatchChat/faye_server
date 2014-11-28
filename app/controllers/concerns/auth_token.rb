@@ -63,5 +63,6 @@ module AuthToken
     user.mobile_verified = true
     user.save
   end
+
 end
 
