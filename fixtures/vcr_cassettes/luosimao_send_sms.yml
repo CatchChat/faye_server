@@ -23,7 +23,7 @@ http_interactions:
       Server:
       - nginx/1.4.2
       Date:
-      - Fri, 17 Oct 2014 23:25:11 GMT
+      - Fri, 28 Nov 2014 04:14:24 GMT
       Content-Type:
       - application/json
       Transfer-Encoding:
@@ -34,5 +34,5 @@ http_interactions:
       encoding: UTF-8
       string: '{"error":0,"msg":"ok"}'
     http_version: 
-  recorded_at: Tue, 31 Dec 2013 16:00:00 GMT
+  recorded_at: Fri, 28 Nov 2014 04:12:00 GMT
 recorded_with: VCR 2.9.3

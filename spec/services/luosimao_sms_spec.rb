@@ -4,7 +4,7 @@ require 'vcr_helper'
 require 'services_helper'
 describe Sms do
   before do
-    Timecop.freeze(Time.local(2014))
+    Timecop.freeze(Time.local(2014,11,28,12,12))
   end
 
   after do
