@@ -46,5 +46,14 @@ describe AttachmentsController do
       expect(json_response[:attachment_id]).to be_a(Numeric)
 
     end
+
+    it 'save public attachment when callback' do
+      expect(TransferAttachmentsJob).to receive(:enqueue)
+      post :public_callback, provider: 'qiniu',
+        bucket: ENV['qiniu_attachment_public_bucket'], key: 'test-key', format: 'json'
+
+      expect(response.status).to eq 200
+      expect(json_response[:attachment_id]).to be_a(Numeric)
+    end
   end
 end

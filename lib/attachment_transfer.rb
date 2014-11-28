@@ -3,7 +3,7 @@ class AttachmentTransfer
     return if attachment.fallback_file.present?
     return unless attachment.storage == 'qiniu'
 
-    qiniu_client = QiniuHelper.client
+    qiniu_client = attachment.public ? QiniuHelper.avatar_client : QiniuHelper.client
     url = qiniu_client.get_download_url url: QiniuHelper.url(attachment.file)
 
     uri = URI(url)
@@ -20,7 +20,7 @@ class AttachmentTransfer
         end
       end
     end
-    s3_client = S3Helper.client
+    s3_client = attachment.public ? S3Helper.avatar_client : S3Helper.client
 
     code = s3_client.upload_file file_location: t.path,
                                            key: attachment.file

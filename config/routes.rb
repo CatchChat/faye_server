@@ -27,7 +27,7 @@ Rails.application.routes.draw do
     end
     scope path: 'attachments' do
       post "callback/:provider" => 'attachments#callback'
-      post "public_callback/:provider" => 'attachments#_public_callback'
+      post "public_callback/:provider" => 'attachments#public_callback'
       get 'public_upload_token' => 'attachments#public_upload_token'
     end
     scope path: 'messages' do

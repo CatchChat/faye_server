@@ -78,6 +78,7 @@ class AttachmentsController < ApiController
       # TODO: the method could change in rails 4.2
       TransferAttachmentsJob.enqueue attachment.attributes.except *%w{updated_at created_at}
     end
+      render json: {provider: 'qiniu', file: key, attachment_id: attachment.id}
   end
   def download_token
     puts params
