@@ -19,4 +19,29 @@ LIMIT 50
     @users = User.find_by_sql(sql)
     fresh_when(@users, public: true)
   end
+
+  ### GET /api/v4/user
+  def show
+  end
+
+  ### PATCH /api/v4/user
+  # Optional params
+  #   nickname
+  #   mobile
+  #   phone_code
+  #   time_zone
+  #   avatar_url
+  def update
+    if current_user.update(update_params)
+      render :show
+    else
+      render json: { error: current_user.errors.full_messages.join("\n") }, status: :unprocessable_entity
+    end
+  end
+
+  private
+
+  def update_params
+    params.permit(:nickname, :mobile, :phone_code, :time_zone, :avatar_url)
+  end
 end
