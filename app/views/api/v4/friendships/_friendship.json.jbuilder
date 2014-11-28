@@ -6,6 +6,5 @@ json.updated_at format_time_to_iso8601(friendship.updated_at)
 json.updated_at_string format_time(friendship.created_at)
 
 json.friend do
-  json.extract! friendship.friend, :id, :username, :nickname
-  json.avatar_url friendship.friend.avatar
+  json.extract! friendship.friend, :id, :username, :nickname, :avatar_url
 end

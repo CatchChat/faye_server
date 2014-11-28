@@ -179,7 +179,7 @@ ActiveRecord::Schema.define(version: 20141123141348) do
     t.string   "phone_code"
     t.integer  "state"
     t.string   "time_zone"
-    t.string   "avatar"
+    t.string   "avatar_url"
     t.string   "node_id"
     t.string   "node_token"
     t.string   "node_password"

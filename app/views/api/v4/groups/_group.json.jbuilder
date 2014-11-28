@@ -9,6 +9,6 @@ json.friends do
     json.extract! friendships_group.friendship.friend, :id, :username, :nickname
     json.extract! friendships_group.friendship, :name, :contact_name, :remarked_name
     json.extract! friendships_group, :position
-    json.avatar_url friendships_group.friendship.friend.avatar
+    json.avatar_url friendships_group.friendship.friend.avatar_url
   end
 end

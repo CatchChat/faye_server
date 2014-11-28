@@ -9,5 +9,5 @@ json.updated_at_string format_time(friend_request.created_at)
 json.friend do
   json.extract! friend, :id, :username, :nickname
   json.name friend.name_by_friend(current_user)
-  json.avatar_url friend.avatar
+  json.avatar_url friend.avatar_url
 end
