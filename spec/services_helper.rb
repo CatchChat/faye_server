@@ -1,7 +1,9 @@
 ENV["qiniu_access_key"]="BBHE3ccYQ8VQhEIvZbJARrte1U3ic2Om6CW7mxvN"
 ENV["qiniu_secret_key"]="pQ5v3Bpg6AIx5hIXo9fXJgCLjgObH-DjKWOWU8dy"
 ENV["qiniu_attachment_bucket"]="ruanwz-public"
+ENV["qiniu_attachment_public_bucket"]="ruanwz-avatars"
 
+ENV["qiniu_public_callback_url"]="http://ruanwz.ngrok.com/hi"
 ENV["qiniu_callback_url"]="http://ruanwz.ngrok.com/hi"
 ENV["qiniu_callback_body"]="key=$(key)&bucket=$(bucket)&message_id=$(x:message_id)"
 

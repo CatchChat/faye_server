@@ -31,6 +31,7 @@ ActiveRecord::Schema.define(version: 20141123141348) do
     t.string   "file"
     t.string   "fallback_storage"
     t.string   "fallback_file"
+    t.boolean  "public",           default: false, null: false
     t.datetime "created_at"
     t.datetime "updated_at"
   end

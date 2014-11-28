@@ -25,10 +25,21 @@ describe AttachmentsController do
       expect(json_response[:options][:bucket]).to eq ENV['qiniu_attachment_bucket']
     end
 
+    it 'returns public upload tokens' do
+      post :public_upload_token, :format => 'json'
+      expect(response.status).to eq 200
+      expect(json_response[:provider]).to eq "qiniu"
+      expect(json_response[:options][:token].length).to be > 10
+      expect(json_response[:options][:key].length).to be > 10
+      expect(json_response[:options][:bucket]).to eq ENV['qiniu_attachment_public_bucket']
+      expect(json_response[:options][:callback_url]).to eq ENV['qiniu_public_callback_url']
+    end
+
     it 'save attachment and push when callback' do
 
       expect_any_instance_of(Message).to receive(:mark_as_unread)
       expect_any_instance_of(Message).to receive(:push_notification)
+      expect(TransferAttachmentsJob).to receive(:enqueue)
       post :callback, provider: 'qiniu',
         bucket: ENV['qiniu_attachment_bucket'], message_id: user.sent_messages.first.id, key: 'test-key', format: 'json'
       expect(response.status).to eq 200

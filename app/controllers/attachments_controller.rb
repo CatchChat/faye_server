@@ -18,7 +18,14 @@ class AttachmentsController < ApiController
     render json: {message: e.message}, status: :not_acceptable
   end
 
+  def public_upload_token
+    @provider = 'qiniu'
+    @cdn = QiniuHelper.avatar_client
+    @token = @cdn.get_upload_token key: SecureRandom.uuid
 
+  rescue Cdn::MissingParam => e
+    render json: {message: e.message}, status: :not_acceptable
+  end
   # POST "/api/attachments/callback/:provider"
   # parms: provider, bucket, key
   # example
@@ -60,6 +67,18 @@ class AttachmentsController < ApiController
     render json: {message: e.message}, status: :not_acceptable
   end
 
+  def public_callback
+    provider = params[:provider]
+    raise Cdn::MissingParam, "provider is not supported" unless provider == 'qiniu'
+
+    if provider == 'qiniu'
+      # TODO: verify request come from qiniu
+      key = params[:key]
+      attachment = Attachment.find_or_create_by! storage: provider,  file: key, public: true
+      # TODO: the method could change in rails 4.2
+      TransferAttachmentsJob.enqueue attachment.attributes.except *%w{updated_at created_at}
+    end
+  end
   def download_token
     puts params
   end
