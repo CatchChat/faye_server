@@ -32,6 +32,7 @@ class User < ActiveRecord::Base
   has_many :contacts, dependent: :destroy
 
   scope :mobile_verified, -> { where(User.table_name => { mobile_verified: true }) }
+  scope :active, -> { where(User.table_name => { state: STATES[:active] }) }
 
   STATES = { active: 1, blocked: 2 }.freeze
 

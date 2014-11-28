@@ -43,7 +43,12 @@ friendships.friend_id IN (
   #   page
   #   per_page
   def search
-    @friendships = current_user.friendships.includes(:friend).references(:friend).where(search_conditions)
+    if params[:q].present?
+      @friendships = current_user.friendships.includes(:friend).references(:friend).where(search_conditions)
+    else
+      @friendships = Friendship.none
+    end
+
     @friendships = @friendships.page(params[:page]).per(params[:per_page])
     render :index if stale?(@friendships, public: true)
   end

@@ -165,6 +165,10 @@ Rails.application.routes.draw do
       resource :user, controller: :user, only: %i(show update) do
         get :may_know_friends, on: :collection
       end
+
+      resources :users, only: [] do
+        get :search, on: :collection
+      end
     end
   end
 
