@@ -34,6 +34,7 @@ Warden::Strategies.add(:token) do
       end
     else
       errors.add :general, 'access_token_error'
+      halt!
     end
   end
 end
@@ -72,6 +73,7 @@ Warden::Strategies.add(:mobile) do
         success!(user)
       end
     else
+      halt!
       errors.add :general, 'mobile_token_error'
     end
   end
