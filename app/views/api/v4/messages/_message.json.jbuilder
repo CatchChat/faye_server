@@ -15,8 +15,17 @@ end
 
 json.attachments do
   json.array! message.attachments do |attachment|
-    attachment.file_url attachment.file
-    attachment.fallback_file_url attachment.fallback_file
-    attachment.extract! :storage, :fallback_storage
+    json.file do
+      expires_in, url = attachment.download_url
+      json.storage attachment.storage
+      json.expires_in expires_in
+      json.url url
+    end
+    json.fallback_file do
+      expires_in, url = attachment.fallback_url
+      json.storage attachment.fallback_storage
+      json.expires_in expires_in
+      json.url url
+    end
   end
 end
