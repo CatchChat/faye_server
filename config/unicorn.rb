@@ -5,7 +5,7 @@ pid RAILS_ROOT + "/tmp/pids/unicorn.pid"
 listen RAILS_ROOT + '/shared/tmp/sockets/unicorn.sock', :backlog => 2048
 before_fork do |server, worker|
 
-  old_pid = RAILS_ROOT + '/shared/tmp/pids/unicorn..pid'
+  old_pid = RAILS_ROOT + '/shared/tmp/pids/unicorn.pid'
   if File.exists?(old_pid) && server.pid != old_pid
     begin
       Process.kill("QUIT", File.read(old_pid).to_i)
