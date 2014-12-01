@@ -2,7 +2,7 @@ require 'rails_helper'
 
 RSpec.describe Api::V4::UserController, :type => :controller do
 
-  let(:user) { FactoryGirl.create(:user, username: 'user') }
+  let(:user) { FactoryGirl.create(:user, username: 'user', phone_code: nil) }
 
   before do
     sign_in user
