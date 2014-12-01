@@ -4,9 +4,7 @@ class Users::RegistrationsController < Devise::RegistrationsController
 
   # Post registration/create
   def create
-    @user = User.create! username:  params[:username],
-                         password:  params[:password],
-                         mobile:    params[:mobile]
+    @user = User.create! register_params
     @user.block
     @user.save
     @sent_sms = send_verify_code(@user)
@@ -56,5 +54,9 @@ class Users::RegistrationsController < Devise::RegistrationsController
   def get_expired_at
     valid_period = 3600
     Time.now + valid_period
+  end
+
+  def register_params
+    params.permit :username, :password, :mobile, :phone_code
   end
 end
