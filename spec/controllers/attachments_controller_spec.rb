@@ -1,7 +1,7 @@
 require 'rails_helper'
 require 'services_helper'
 
-describe AttachmentsController do
+describe AttachmentsController, sidekiq: :inline do
   render_views
   let(:user) {FactoryGirl.create(:user, mobile: '1234567')}
   before do

@@ -37,7 +37,7 @@ class Api::V4::MessagesController < ApiController
     end
 
     if result
-      message.push_notification if message.unread?
+      MessageNotificationJob.perform_async(message.id) if message.unread?
       render json: { id: message.id }
     else
       render json: { error: message.errors.full_messages.join("\n") }, status: :unprocessable_entity
