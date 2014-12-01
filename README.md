@@ -59,12 +59,17 @@ git rebase
 ### data is submitted as a form
 set header:
 
-application/x-www-form-urlencoded
+Content-Type: application/x-www-form-urlencoded
 
 ### data is in body as json format
 set header:
 
 Content-Type: application/json
+
+```bash
+curl -H "Content-Type: application/json" -d '{"login":"ruanwztest","password":"ruanwztest"}
+
+```
 ## Authenticate
 
 ### Login
