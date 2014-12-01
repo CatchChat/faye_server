@@ -40,7 +40,7 @@ describe AttachmentsController do
 
       expect_any_instance_of(Message).to receive(:mark_as_unread)
       expect_any_instance_of(Message).to receive(:push_notification)
-      expect(TransferAttachmentsJob).to receive(:enqueue)
+      expect(TransferAttachmentsJob).to receive(:perform_async)
       post :callback, provider: 'qiniu',
         bucket: ENV['qiniu_attachment_bucket'], message_id: user.sent_messages.first.id, key: 'test-key', format: 'json'
       expect(response.status).to eq 200
@@ -49,7 +49,7 @@ describe AttachmentsController do
     end
 
     it 'save public attachment when callback' do
-      expect(TransferAttachmentsJob).to receive(:enqueue)
+      expect(TransferAttachmentsJob).to receive(:perform_async)
       post :public_callback, provider: 'qiniu',
         bucket: ENV['qiniu_attachment_public_bucket'], key: 'test-key', format: 'json'
 

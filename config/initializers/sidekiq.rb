@@ -1,9 +1,9 @@
-require 'globalid'
-require 'active_support'
-require "active_job/base"
+Sidekiq.default_worker_options = { backtrace: true }
 
-# TODO: the setting could change in rails 4.2
-ActiveJob::Base.queue_adapter = :sidekiq
-# config.active_job.queue_adapter = :sidekiq
-# config.active_job.queue_name_prefix = Rails.env
+Sidekiq.configure_server do |config|
+  config.redis = Settings.redis.sidekiq.to_hash
+end
 
+Sidekiq.configure_client do |config|
+  config.redis = Settings.redis.sidekiq.to_hash
+end

@@ -1,12 +1,18 @@
 redis:
   store:
-    namespace: catchchat_server_dev
+    namespace: catchchat_server_dev:sotre
     host: 127.0.0.1
     db: 0
     port: 6379
     driver: hiredis
   cache:
     namespace: catchchat_server_dev:cache
+    host: 127.0.0.1
+    db: 0
+    port: 6379
+    driver: hiredis
+  sidekiq:
+    namespace: catchchat_server_dev:sidekiq
     host: 127.0.0.1
     db: 0
     port: 6379
