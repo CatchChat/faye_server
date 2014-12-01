@@ -47,7 +47,7 @@ describe Cdn do
 
     it "provide download url for s3" do
       s3_download_url = subject.get_download_url key: 'webcam.jpg'
-      expect(s3_download_url).to eq 'https://ruanwz-test.s3.cn-north-1.amazonaws.com.cn/webcam.jpg?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAOGBVMZAU5EZPGPIQ%2F20141114%2Fcn-north-1%2Fs3%2Faws4_request&X-Amz-Date=20141114T082500Z&X-Amz-Expires=3600&X-Amz-Signature=fb03cb107d2d6a0b02a72a4fd86b783dd610ec18623a43dcccdf664e932ec953&X-Amz-SignedHeaders=Host'
+      expect(s3_download_url).to eq 'https://ruanwz-test.s3.cn-north-1.amazonaws.com.cn/webcam.jpg?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAOGBVMZAU5EZPGPIQ%2F20141114%2Fcn-north-1%2Fs3%2Faws4_request&X-Amz-Date=20141114T082500Z&X-Amz-Expires=86400&X-Amz-Signature=6de2f0171f6c2eec726ec8df7f7e28370f3e11d892b9930c0c5f858905c6726b&X-Amz-SignedHeaders=Host'
     end
 
     it "upload file for s3" do

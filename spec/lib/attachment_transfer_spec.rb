@@ -5,7 +5,7 @@ require 'vcr_helper'
 describe AttachmentTransfer do
 
   before do
-    Timecop.freeze(Time.local(2014,11,27,17,40))
+    Timecop.freeze(Time.local(2014,12,1,14,17))
   end
 
   after do

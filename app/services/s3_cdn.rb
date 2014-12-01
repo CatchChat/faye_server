@@ -31,7 +31,7 @@ class S3Cdn
     self.attributes = self.attributes.merge args
     raise Cdn::MissingParam, "missing params for download url" unless DOWNLOADVALIDATOR.call(self).valid?
 
-    s3bucket.objects[key].url_for( :read, { :secure => true }).to_s
+    s3bucket.objects[key].url_for( :read, { :secure => true , :expires => 3600*24}).to_s
 
   end
 
