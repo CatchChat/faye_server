@@ -12,7 +12,7 @@ describe AttachmentsController do
     it 'check param' do
       post :upload_token, :id => 'not exist', :format => 'json'
       expect(response.status).to eq 406
-      expect(json_response[:message]).to eq "missing params for upload token"
+      expect(json_response[:error]).to eq "missing params for upload token"
     end
 
 

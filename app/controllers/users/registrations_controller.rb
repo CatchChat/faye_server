@@ -11,7 +11,7 @@ class Users::RegistrationsController < Devise::RegistrationsController
 
 
   rescue ActiveRecord::RecordInvalid => e
-    render json: {status: 'invalid user data', message: e.message}, status: :not_acceptable
+    render json: {status: 'invalid user data', error: e.message}, status: :not_acceptable
   end
 
   # Put registration/update
@@ -33,7 +33,7 @@ class Users::RegistrationsController < Devise::RegistrationsController
     sms_token.save
 
   rescue ActiveRecord::RecordNotFound => e
-    render json: {status: 'record not found', message: e.message}, status: :not_found
+    render json: {status: 'record not found', error: e.message}, status: :not_found
   end
 
   private

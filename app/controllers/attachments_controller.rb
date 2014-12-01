@@ -15,7 +15,7 @@ class AttachmentsController < ApiController
     @token = @cdn.get_upload_token key: SecureRandom.uuid
 
   rescue Cdn::MissingParam => e
-    render json: {message: e.message}, status: :not_acceptable
+    render json: {error: e.message}, status: :not_acceptable
   end
 
   def public_upload_token
@@ -24,7 +24,7 @@ class AttachmentsController < ApiController
     @token = @cdn.get_upload_token key: SecureRandom.uuid
 
   rescue Cdn::MissingParam => e
-    render json: {message: e.message}, status: :not_acceptable
+    render json: {error: e.message}, status: :not_acceptable
   end
   # POST "/api/attachments/callback/:provider"
   # parms: provider, bucket, key
@@ -64,7 +64,7 @@ class AttachmentsController < ApiController
       render json: {provider: 'upyun', file: key}
     end
   rescue Cdn::MissingParam => e
-    render json: {message: e.message}, status: :not_acceptable
+    render json: {error: e.message}, status: :not_acceptable
   end
 
   def public_callback
