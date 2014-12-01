@@ -177,6 +177,7 @@ ActiveRecord::Schema.define(version: 20141123141348) do
     t.string   "mobile"
     t.boolean  "mobile_verified",        default: false, null: false
     t.string   "phone_code"
+    t.boolean  "admin",                  default: false, null: false
     t.integer  "state"
     t.string   "time_zone"
     t.string   "avatar_url"

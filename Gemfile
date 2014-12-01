@@ -31,6 +31,7 @@ gem "capistrano3-unicorn", "~> 0.2.1"
 gem 'sidekiq', '~> 3.3.0'
 gem 'capistrano-sidekiq', '~> 0.4.0'
 gem 'rails_admin', "~> 0.6.5"
+gem 'sinatra', '~> 1.4.5'
 
 group :development do
   gem 'spring', '~> 1.1.3'
