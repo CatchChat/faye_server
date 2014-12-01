@@ -1,3 +1,6 @@
+require 'capistrano/sidekiq'
+require 'capistrano/sidekiq/monit'
+
 # config valid only for Capistrano 3.2.1
 lock '3.2.1'
 
@@ -17,17 +20,21 @@ set :ssh_options, {
 }
 
 # Default value for :pty is false
-set :pty, true
+set :pty, false
 set :unicorn_config_path, "#{current_path}/config/unicorn.rb"
 set :unicorn_rack_env, 'staging'
 set :bundle_bins, fetch(:bundle_bins, []).push("unicorn")
 
-set :linked_files, %w{config/database.yml .rbenv-vars .ruby-version config/secrets.yml config/settings.local.yml config/settings/production.yml config/settings/staging.yml config/unicorn.rb}
+set :linked_files, %w{config/database.yml .rbenv-vars .ruby-version config/secrets.yml config/settings.local.yml config/settings/production.yml config/settings/staging.yml config/unicorn.rb config/sidekiq.yml}
 set :linked_dirs, %w{bin log tmp/pids tmp/cache tmp/sockets vendor/bundle public/system}
 
 set :default_env, { path: "/opt/rbenv/shims:$PATH" }
 
 set :keep_releases, 5
+
+### Sidekiq
+set :sidekiq_config, -> { File.join(shared_path, 'config', 'sidekiq.yml') }
+set :sidekiq_env, fetch(:stage)
 
 namespace :deploy do
   task :restart do
