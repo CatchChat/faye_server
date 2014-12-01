@@ -17,6 +17,10 @@ module QiniuHelper
     "http://#{bucket}.qiniudn.com/#{key}"
   end
 
+  def self.public_url(key)
+    bucket = ENV["qiniu_attachment_public_bucket"]
+    "http://#{bucket}.qiniudn.com/#{key}"
+  end
   private
   def self.init_hash
     access_key    = ENV["qiniu_access_key"]

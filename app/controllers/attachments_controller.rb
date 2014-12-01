@@ -21,7 +21,9 @@ class AttachmentsController < ApiController
   def public_upload_token
     @provider = 'qiniu'
     @cdn = QiniuHelper.avatar_client
-    @token = @cdn.get_upload_token key: SecureRandom.uuid
+    key =  SecureRandom.uuid
+    @token = @cdn.get_upload_token key: key
+    @download_url = QiniuHelper.public_url(key)
 
   rescue Cdn::MissingParam => e
     render json: {error: e.message}, status: :not_acceptable
@@ -80,7 +82,7 @@ class AttachmentsController < ApiController
     end
       render json: {provider: 'qiniu', file: key, attachment_id: attachment.id}
   end
-  def download_token
+  def download_url
     puts params
   end
 

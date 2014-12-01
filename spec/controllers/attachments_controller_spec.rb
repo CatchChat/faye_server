@@ -32,6 +32,7 @@ describe AttachmentsController do
       expect(json_response[:options][:token].length).to be > 10
       expect(json_response[:options][:key].length).to be > 10
       expect(json_response[:options][:bucket]).to eq ENV['qiniu_attachment_public_bucket']
+      expect(json_response[:options][:download_url]).to include ENV['qiniu_attachment_public_bucket']
       expect(json_response[:options][:callback_url]).to eq ENV['qiniu_public_callback_url']
     end
 
