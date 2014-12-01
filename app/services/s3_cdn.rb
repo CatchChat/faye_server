@@ -10,6 +10,7 @@ class S3Cdn
   attribute :s3bucket, AWS::S3::Bucket
   attribute :key, String
   attribute :expires_in, Integer, default: 3600
+  attribute :download_expires_in, Integer, default: 3600*24
   attribute :file_location, String
   attribute :region, String, default: ENV['AWS_REGION'] || 'cn-north-1'
   attribute :success_action_redirect, String
@@ -31,7 +32,7 @@ class S3Cdn
     self.attributes = self.attributes.merge args
     raise Cdn::MissingParam, "missing params for download url" unless DOWNLOADVALIDATOR.call(self).valid?
 
-    s3bucket.objects[key].url_for( :read, { :secure => true , :expires => 3600*24}).to_s
+    s3bucket.objects[key].url_for( :read, { :secure => true , :expires => download_expires_in}).to_s
 
   end
 

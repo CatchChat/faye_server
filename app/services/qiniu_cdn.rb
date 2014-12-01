@@ -9,7 +9,8 @@ class QiniuCdn
   attribute :bucket, String
   attribute :key, String
   attribute :url, String
-  attribute :expires_in, String
+  attribute :expires_in, Integer, default: 3600
+  attribute :download_expires_in, Integer, default: 3600*24
   attribute :callback_url, String
   attribute :callback_body, String
   attribute :file_location, String
@@ -35,7 +36,7 @@ class QiniuCdn
   def get_download_url(args)
     self.attributes = self.attributes.merge args
     raise Cdn::MissingParam, "missing params for download url" unless DOWNLOADVALIDATOR.call(self).valid?
-    Qiniu::Auth.authorize_download_url(url, expires_in: 3600*24)
+    Qiniu::Auth.authorize_download_url(url, expires_in: download_expires_in)
   end
 
   def upload_file(args)
