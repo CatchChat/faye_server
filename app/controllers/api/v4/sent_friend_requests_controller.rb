@@ -33,7 +33,10 @@ class Api::V4::SentFriendRequestsController < ApiController
 
     @friend_request = current_user.sent_friend_requests.new(friend_id: friend.id)
     if @friend_request.save
-      Pusher.push_to_user(friend.id, content: t('notification.wants_to_be_friend', friend_name: current_user.name))
+      PushNotificationToUserJob.perform_async(
+        friend.id,
+        content: t('notification.wants_to_be_friend', friend_name: current_user.name)
+      )
       render :show
     else
       render json: { error: @friend_request.errors.full_messages.join("\n") }, status: :unprocessable_entity

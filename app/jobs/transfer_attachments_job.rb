@@ -1,6 +1,6 @@
 class TransferAttachmentsJob
   include Sidekiq::Worker
-  sidekiq_options name: :attachments, :retry => 3
+  sidekiq_options queue: :attachments, :retry => 3
 
   def perform(*args)
     id = args["id"].to_i
