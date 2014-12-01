@@ -2,7 +2,7 @@
 http_interactions:
 - request:
     method: get
-    uri: http://ruanwz-public.qiniudn.com/test-key?e=1417079760&token=BBHE3ccYQ8VQhEIvZbJARrte1U3ic2Om6CW7mxvN:Kl6IPF5USHtMavwB1fjJrVdQO5E=
+    uri: http://ruanwz-public.qiniudn.com/test-key?e=1417500360&token=BBHE3ccYQ8VQhEIvZbJARrte1U3ic2Om6CW7mxvN:hKZUUk6TVFk0otOaGMSzqZR8Hw4=
     body:
       encoding: US-ASCII
       string: ''
@@ -19,7 +19,7 @@ http_interactions:
       message: OK
     headers:
       Date:
-      - Thu, 27 Nov 2014 08:17:01 GMT
+      - Mon, 01 Dec 2014 06:05:43 GMT
       Server:
       - nginx/1.4.4
       Content-Type:
@@ -41,18 +41,18 @@ http_interactions:
       Etag:
       - '"FqmZPjZHBoFquj4lcXhQwmyc0Nid.gz"'
       X-Log:
-      - mc.g;IO:3
+      - mc.g:1;IO:8
       X-Reqid:
-      - TyIAAOlMSrpQd6oT
+      - VUwAAFv5vd14qqsT
       X-Whom:
       - nb263
       X-Via:
-      - 1.1 zjjhdx34:8107 (Cdn Cache Server V2.0), 1.1 jp44:7 (Cdn Cache Server V2.0)
+      - 1.1 zjjhdx32:8080 (Cdn Cache Server V2.0), 1.1 lp14:8 (Cdn Cache Server V2.0)
       Connection:
       - keep-alive
     body:
       encoding: UTF-8
       string: abc
     http_version: 
-  recorded_at: Thu, 27 Nov 2014 08:16:00 GMT
+  recorded_at: Mon, 01 Dec 2014 06:06:00 GMT
 recorded_with: VCR 2.9.3

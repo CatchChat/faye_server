@@ -4,7 +4,7 @@ require 'vcr_helper'
 require 'services_helper'
 describe Cdn do
   before do
-    Timecop.freeze(Time.local(2014,11,27,16,16))
+    Timecop.freeze(Time.local(2014,12,1,14,6))
   end
 
   after do

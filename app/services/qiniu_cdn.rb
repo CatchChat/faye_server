@@ -35,7 +35,7 @@ class QiniuCdn
   def get_download_url(args)
     self.attributes = self.attributes.merge args
     raise Cdn::MissingParam, "missing params for download url" unless DOWNLOADVALIDATOR.call(self).valid?
-    Qiniu::Auth.authorize_download_url(url)
+    Qiniu::Auth.authorize_download_url(url, expires_in: 3600*24)
   end
 
   def upload_file(args)
