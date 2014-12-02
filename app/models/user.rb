@@ -94,6 +94,11 @@ class User < ActiveRecord::Base
     end
   end
 
+  def current_admin
+    current_user.admin
+  end
+
+
   def self.find_for_database_authentication(warden_conditions)
     conditions = warden_conditions.dup
     if login = conditions.delete(:login)
@@ -102,4 +107,5 @@ class User < ActiveRecord::Base
       where(conditions).first
     end
   end
+
 end

@@ -5,7 +5,7 @@ Devise.setup do |config|
   # random tokens. Changing this key will render invalid all existing
   # confirmation, reset password and unlock tokens in the database.
   config.secret_key = '19af4dfcbbc1e948e8937a815c33e9bb8bc2efbf4124f71f7a5356f18b97c4ea0738399e2697f34328377ae5ce6279715a13964b844dea749053bda9fbfcef8f'
-  # config.parent_controller = 'ApiController'
+  config.parent_controller = 'ApiController'
 
 
   # ==> Mailer Configuration

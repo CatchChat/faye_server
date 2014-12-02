@@ -31,6 +31,10 @@ module CatchchatServer
     config.i18n.available_locales = [:'zh-CN', :en]
     config.i18n.default_locale = :"zh-CN"
 
+    config.i18n.fallbacks = true
+
+    config.i18n.fallbacks = [:en]
+
     config.generators do |g|
       g.assets false
     end

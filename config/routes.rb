@@ -1,8 +1,12 @@
 require 'sidekiq/web'
 Rails.application.routes.draw do
   mount Sidekiq::Web => '/sidekiq'
+
+  devise_for :admins,
+             controllers: {sessions: "admins/sessions"},
+             skip: [:passwords, :registrations]
   mount RailsAdmin::Engine => '/admin', as: 'rails_admin'
-  devise_for :users
+
   scope path: 'api/v4' do
     devise_for :users, path: 'auth',
                        skip: [:sessions, :passwords, :registrations]

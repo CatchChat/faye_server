@@ -1,4 +1,32 @@
 require 'auth_token'
+
+Warden::Strategies.add(:admin_password) do
+  def valid?
+    params[:user] && params[:user][:password] || session["user_id"]
+  end
+
+  def authenticate!
+    if user_id = session["user_id"]
+      if (user = User.find(user_id)) && user.admin
+        success!(user)
+      else
+        halt!
+      end
+    elsif params[:user] && user = AuthToken.check_password(params[:user][:username], params[:user][:password])
+      if user.blocked? || (user.admin == false)
+        errors.add :general, 'user_is_blocked'
+        halt!
+      else
+        session["user_id"]=user.id
+        success!(user)
+      end
+    else
+      puts 'error'
+      errors.add :general, 'username_password_error'
+    end
+  end
+end
+
 Warden::Strategies.add(:password) do
   def valid?
     params[:login] && params[:password]
