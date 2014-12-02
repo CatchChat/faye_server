@@ -1,0 +1,23 @@
+redis:
+  store:
+    namespace: catchchat_server_staging:store
+    host: 127.0.0.1
+    db: 0
+    port: 6379
+    driver: hiredis
+  cache:
+    namespace: catchchat_server_staging:cache
+    host: 127.0.0.1
+    db: 0
+    port: 6379
+    driver: hiredis
+  sidekiq:
+    namespace: catchchat_server_staging:sidekiq
+    host: 127.0.0.1
+    db: 0
+    port: 6379
+    driver: hiredis
+rate_limit:
+  user_login: 5000
+  api_request: 5000
+ssl_configured: true
