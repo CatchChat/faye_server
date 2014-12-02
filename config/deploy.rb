@@ -34,7 +34,19 @@ set :keep_releases, 5
 
 ### Sidekiq
 set :sidekiq_config, -> { File.join(shared_path, 'config', 'sidekiq.yml') }
-set :sidekiq_env, fetch(:stage)
+set :sidekiq_default_hooks, -> { true }
+set :sidekiq_pid, -> { File.join(shared_path, 'tmp', 'pids', 'sidekiq.pid') }
+set :sidekiq_env, -> { fetch(:rack_env, fetch(:rails_env, fetch(:stage))) }
+set :sidekiq_log, -> { File.join(shared_path, 'log', 'sidekiq.log') }
+set :sidekiq_timeout, -> { 10 }
+set :sidekiq_role, -> { :app }
+set :sidekiq_processes, -> { 1 }
+# Rbenv and RVM integration
+set :rbenv_map_bins, fetch(:rbenv_map_bins).to_a.concat(%w(sidekiq sidekiqctl))
+set :rvm_map_bins, fetch(:rvm_map_bins).to_a.concat(%w(sidekiq sidekiqctl))
+set :sidekiq_monit_conf_dir, -> { '/etc/monit/conf.d' }
+set :monit_bin, -> { '/usr/bin/monit' }
+set :sidekiq_monit_default_hooks, -> { true }
 
 namespace :deploy do
   task :restart do
