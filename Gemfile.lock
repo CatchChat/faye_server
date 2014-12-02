@@ -1,5 +1,5 @@
 GEM
-  remote: https://rubygems.org/
+  remote: http://ruby.taobao.org/
   specs:
     CFPropertyList (2.2.8)
     abstract_type (0.0.7)
