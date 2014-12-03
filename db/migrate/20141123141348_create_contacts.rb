@@ -8,6 +8,6 @@ class CreateContacts < ActiveRecord::Migration
       t.timestamps
     end
 
-    add_index :contacts, :encrypted_number
+    add_index :contacts, :encrypted_number, length: 191
   end
 end

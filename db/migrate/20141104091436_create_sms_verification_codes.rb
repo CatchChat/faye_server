@@ -9,7 +9,7 @@ class CreateSmsVerificationCodes < ActiveRecord::Migration
 
       t.timestamps
     end
-    add_index :sms_verification_codes, :token
-    add_index :sms_verification_codes, :mobile
+    add_index :sms_verification_codes, :token, length: 191
+    add_index :sms_verification_codes, :mobile, length: 191
   end
 end
