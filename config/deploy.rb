@@ -26,7 +26,7 @@ set :unicorn_rack_env, 'staging'
 set :bundle_bins, fetch(:bundle_bins, []).push("unicorn")
 
 set :linked_files, %w{config/database.yml .rbenv-vars .ruby-version config/secrets.yml config/settings.local.yml config/settings/production.yml config/unicorn.rb config/sidekiq.yml}
-set :linked_dirs, %w{bin log tmp/pids tmp/cache tmp/sockets vendor/bundle public/system public/javascripts public/stylesheets}
+set :linked_dirs, %w{bin log tmp/pids tmp/cache tmp/sockets vendor/bundle public/system}
 
 set :default_env, { path: "/opt/rbenv/shims:$PATH" }
 
