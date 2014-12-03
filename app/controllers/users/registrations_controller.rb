@@ -7,7 +7,7 @@ class Users::RegistrationsController < Devise::RegistrationsController
     @user = User.create! register_params
     @user.block
     @user.save
-    @sent_sms = send_verify_code(@user)
+    @sent_sms = send_verify_code(@user).to_s
 
 
   rescue ActiveRecord::RecordInvalid => e
@@ -48,7 +48,8 @@ class Users::RegistrationsController < Devise::RegistrationsController
                                           mobile:      mobile
     content = t('auth.sms_verification_code_message', code: sms_code.token)
 
-    sms_code.send_msg(content)
+    code, body = sms_code.send_msg(content)
+    [code, body]
   end
 
   def get_expired_at

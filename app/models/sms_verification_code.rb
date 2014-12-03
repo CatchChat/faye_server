@@ -9,7 +9,8 @@ class SmsVerificationCode < ActiveRecord::Base
 
   def send_sms(mobile, content)
     code, body = sms.send_sms mobile: mobile, message: content
-    return true if code == 200 && body == "{\"error\":0,\"msg\":\"ok\"}"
+    #return true if code == 200 && body == "{\"error\":0,\"msg\":\"ok\"}"
+    [code, body]
   end
 
   def sms
