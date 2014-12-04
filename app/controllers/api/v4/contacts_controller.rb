@@ -9,9 +9,9 @@ class Api::V4::ContactsController < ApiController
   def upload
     contacts, country_code_and_numbers = [], []
     JSON.parse(params[:contacts]).each do |contact|
-      country_code, pure_number = Contact.parse_number(contact['number'])
-      country_code = Contact::COUNTRY_CODES['China'] if country_code.blank?
-      country_code_and_numbers << [country_code, pure_number]
+      next unless GlobalPhone.validate(contact['number'])
+      number = GlobalPhone.parse(contact['number'])
+      country_code_and_numbers << [number.country_code, number.national_string]
       contacts << Contact.new(contact.merge(user_id: current_user.id))
     end
 

@@ -16,15 +16,11 @@ RSpec.describe Api::V4::ContactsController, :type => :controller do
       expect(json_response[:error]).to eq subject.t('.contacts_error')
     end
 
-    it 'validation fails' do
-      post :upload, format: :json, contacts: [{ name: '', number: '' }].to_json
-      expect(response).to be_unprocessable
-      expect(json_response[:error]).to eq subject.t('.contacts_error')
-
+    it 'overwrite the old contacts' do
       user.contacts.create!(name: 'xxx', number: '15158166372')
       post :upload, format: :json, contacts: [{ name: 'tumayun', number: '15158166372' }].to_json
-      expect(response).to be_unprocessable
-      expect(json_response[:error]).to eq subject.t('.contacts_error')
+      expect(response).to be_success
+      expect(json_response[:registered_contacas]).to eq []
     end
 
     it 'no registered contacas' do

@@ -41,6 +41,7 @@ gem 'turbolinks', '~> 2.4.0'
 gem 'sass-rails', '~> 4.0'
 gem 'coffee-rails', '~> 4.1.0'
 gem 'uglifier', '~> 2.5.3'
+gem 'global_phone', '~> 1.0.1'
 
 group :development do
   gem 'spring', '~> 1.1.3'
