@@ -8,9 +8,9 @@ class User < ActiveRecord::Base
          :recoverable, :rememberable, :trackable, :validatable
 
   validates :username, presence: true,
-                       uniqueness: { case_sensitive: false }
-                       # length: { in: 4..16 },
-                       # format: { with: /\A[a-zA-Z0-9]+\z/ }
+                       uniqueness: { case_sensitive: false },
+                       length: { in: 4..16 },
+                       format: { with: /\A[a-zA-Z0-9]+\z/ }
 
   attr_accessor :login
 

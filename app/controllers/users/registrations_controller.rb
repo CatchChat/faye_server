@@ -6,7 +6,7 @@ class Users::RegistrationsController < Devise::RegistrationsController
   def create
     @user = User.create! register_params
     @user.block
-    @user.save
+    @user.save!
     @sent_sms = send_verify_code(@user).to_s
 
 

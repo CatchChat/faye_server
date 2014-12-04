@@ -19,7 +19,7 @@ describe Users::RegistrationsController do
     expect(User.find_by(username: 'newusername').blocked?).to be true
     expect(User.find_by(username: 'newusername').phone_code).to eq '86'
     expect(response.body).to include '"state_name":"blocked"'
-    expect(response.body).to include '"sent_sms":true'
+    expect(response.body).to include 'true'
   end
 
   it 'update the user state when receive sms token' do
