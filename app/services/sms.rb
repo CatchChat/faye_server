@@ -4,7 +4,7 @@ class Sms
   def_delegators :@provider, :send_sms
   attr_accessor :options, :provider
 
-  def initialize(provider, options)
+  def initialize(provider, options={})
     @options  = options
     @provider = provider
     provider.prepare(self)

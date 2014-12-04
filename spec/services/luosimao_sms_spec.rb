@@ -17,7 +17,7 @@ describe Sms do
       apikey           = ENV["luosimao_apikey"]
       @init_hash       = {username: username, apikey: apikey}
       @luosimao_client = LuosimaoSms.new @init_hash
-      @sms             = Sms.new(@luosimao_client, @init_hash)
+      @sms             = Sms.new(@luosimao_client)
     end
 
     subject {@sms}
