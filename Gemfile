@@ -33,6 +33,8 @@ gem 'capistrano-sidekiq', '~> 0.4.0'
 gem 'rails_admin', "~> 0.6.5"
 gem 'sinatra', '~> 1.4.5'
 
+gem 'nexmo'
+
 # for rails_admin assets
 gem 'turbolinks', '~> 2.4.0'
 # gem 'therubyracer', '~> 0.12.1'
