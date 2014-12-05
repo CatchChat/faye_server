@@ -34,6 +34,6 @@ class LuosimaoSms
 
     conn.basic_auth username, apikey
     resp = conn.post url_path, mobile: mobile, message: message_with_suffix
-    [resp.status, resp.body]
+    resp.body
   end
 end
