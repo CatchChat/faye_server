@@ -1,5 +1,6 @@
 require 'capistrano/sidekiq'
 require 'capistrano/sidekiq/monit'
+require 'capistrano/slackify'
 
 # config valid only for Capistrano 3.2.1
 lock '3.2.1'
@@ -47,6 +48,9 @@ set :rvm_map_bins, fetch(:rvm_map_bins).to_a.concat(%w(sidekiq sidekiqctl))
 set :sidekiq_monit_conf_dir, -> { '/etc/monit/conf.d' }
 set :monit_bin, -> { '/usr/bin/monit' }
 set :sidekiq_monit_default_hooks, -> { true }
+
+### slack
+set :slack_url, 'https://hooks.slack.com/services/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'
 
 namespace :deploy do
   task :restart do

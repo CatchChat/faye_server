@@ -33,7 +33,8 @@ gem 'capistrano-sidekiq', '~> 0.4.0'
 gem 'rails_admin', "~> 0.6.5"
 gem 'sinatra', '~> 1.4.5'
 
-gem 'nexmo'
+gem 'nexmo', '~> 2.0.0'
+gem 'capistrano-slackify', '~> 2.1.0', require: false
 
 # for rails_admin assets
 gem 'turbolinks', '~> 2.4.0'
