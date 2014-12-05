@@ -43,7 +43,7 @@ describe Users::SessionsController do
   end
 
   it 'logins with mobile and sms verification code then returns token json' do
-    post :create_by_mobile, mobile: @user.mobile, verify_code: @user.sms_verification_codes.last.token, :format => 'json'
+    post :create_by_mobile, mobile: @user.mobile, verify_code: @user.sms_verification_codes.last.token, phone_code: @user.phone_code, :format => 'json'
     expect(response.body).to include 'mobile'
     expect(response.body).to include 'access_token'
     expect(response.body).not_to include 'null'

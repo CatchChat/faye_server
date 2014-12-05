@@ -45,8 +45,8 @@ module AuthToken
     access_token.user
   end
 
-  def self.check_mobile_and_sms_verification_code(mobile, sms_str)
-    if (sms_code = SmsVerificationCode.find_by(mobile: mobile, token: sms_str)) && sms_code.active == true && (!sms_code.expired_at or sms_code.expired_at > Time.now)
+  def self.check_mobile_and_sms_verification_code(phone_code, mobile, sms_str)
+    if (sms_code = SmsVerificationCode.find_by(phone_code: phone_code, mobile: mobile, token: sms_str)) && sms_code.active == true && (!sms_code.expired_at or sms_code.expired_at > Time.now)
       set_mobile_verified(sms_code)
       sms_code.user
     end

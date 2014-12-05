@@ -89,11 +89,11 @@ end
 
 Warden::Strategies.add(:mobile) do
   def valid?
-    params[:mobile] && params[:verify_code]
+    params[:mobile] && params[:verify_code] && params[:phone_code]
   end
 
   def authenticate!
-    if user = AuthToken.check_mobile_and_sms_verification_code(params[:mobile], params[:verify_code])
+    if user = AuthToken.check_mobile_and_sms_verification_code(params[:phone_code], params[:mobile], params[:verify_code])
       if user.blocked?
         errors.add :general, 'user_is_blocked'
         halt!

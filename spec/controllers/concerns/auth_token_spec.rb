@@ -10,7 +10,7 @@ describe AuthToken do
 
   before do
     allow(request).to receive(:headers) { {'Authorization' =>'Token token="test-token"' } }
-    @user = create :user, mobile: '1234567', email: 'a@b.c'
+    @user = create :user, phone_code: '86', mobile: '1234567', email: 'a@b.c'
     # following token just contains uniq token
   end
 
@@ -38,7 +38,7 @@ describe AuthToken do
   end
 
   it "check_mobile_and_sms_verification_code" do
-    user = AuthToken.check_mobile_and_sms_verification_code(@user.mobile, @user.sms_verification_codes.last.token)
+    user = AuthToken.check_mobile_and_sms_verification_code(@user.phone_code, @user.mobile, @user.sms_verification_codes.last.token)
     expect(user).to be_an_instance_of User
     expect(user.mobile_verified).to be true
   end
