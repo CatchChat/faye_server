@@ -26,22 +26,6 @@ ActiveRecord::Schema.define(version: 20141204095544) do
 
   add_index "access_tokens", ["user_id"], name: "index_access_tokens_on_user_id", using: :btree
 
-  create_table "admins", force: true do |t|
-    t.string   "email",                  default: "", null: false
-    t.string   "encrypted_password",     default: "", null: false
-    t.string   "reset_password_token"
-    t.datetime "reset_password_sent_at"
-    t.datetime "remember_created_at"
-    t.integer  "sign_in_count",          default: 0,  null: false
-    t.datetime "current_sign_in_at"
-    t.datetime "last_sign_in_at"
-    t.string   "current_sign_in_ip"
-    t.string   "last_sign_in_ip"
-  end
-
-  add_index "admins", ["email"], name: "index_admins_on_email", unique: true, using: :btree
-  add_index "admins", ["reset_password_token"], name: "index_admins_on_reset_password_token", unique: true, using: :btree
-
   create_table "attachments", force: true do |t|
     t.string   "storage"
     t.string   "file"
@@ -52,8 +36,8 @@ ActiveRecord::Schema.define(version: 20141204095544) do
     t.datetime "updated_at"
   end
 
-  add_index "attachments", ["fallback_file"], name: "index_attachments_on_fallback_file", using: :btree
-  add_index "attachments", ["file"], name: "index_attachments_on_file", using: :btree
+  add_index "attachments", ["fallback_file"], name: "index_attachments_on_fallback_file", length: {"fallback_file"=>191}, using: :btree
+  add_index "attachments", ["file"], name: "index_attachments_on_file", length: {"file"=>191}, using: :btree
 
   create_table "attachments_messages", force: true do |t|
     t.integer  "attachment_id"
@@ -73,7 +57,7 @@ ActiveRecord::Schema.define(version: 20141204095544) do
     t.datetime "updated_at"
   end
 
-  add_index "contacts", ["encrypted_number"], name: "index_contacts_on_encrypted_number", using: :btree
+  add_index "contacts", ["encrypted_number"], name: "index_contacts_on_encrypted_number", length: {"encrypted_number"=>191}, using: :btree
   add_index "contacts", ["user_id"], name: "index_contacts_on_user_id", using: :btree
 
   create_table "friend_requests", force: true do |t|
@@ -149,7 +133,7 @@ ActiveRecord::Schema.define(version: 20141204095544) do
   end
 
   add_index "messages", ["parent_id"], name: "index_messages_on_parent_id", using: :btree
-  add_index "messages", ["recipient_id", "recipient_type"], name: "index_messages_on_recipient_id_and_recipient_type", using: :btree
+  add_index "messages", ["recipient_id", "recipient_type"], name: "index_messages_on_recipient_id_and_recipient_type", length: {"recipient_id"=>nil, "recipient_type"=>191}, using: :btree
   add_index "messages", ["sender_id"], name: "index_messages_on_sender_id", using: :btree
 
   create_table "sms_verification_codes", force: true do |t|
@@ -163,8 +147,8 @@ ActiveRecord::Schema.define(version: 20141204095544) do
     t.string   "phone_code", default: "86"
   end
 
-  add_index "sms_verification_codes", ["mobile"], name: "index_sms_verification_codes_on_mobile", using: :btree
-  add_index "sms_verification_codes", ["token"], name: "index_sms_verification_codes_on_token", using: :btree
+  add_index "sms_verification_codes", ["mobile"], name: "index_sms_verification_codes_on_mobile", length: {"mobile"=>191}, using: :btree
+  add_index "sms_verification_codes", ["token"], name: "index_sms_verification_codes_on_token", length: {"token"=>191}, using: :btree
   add_index "sms_verification_codes", ["user_id"], name: "index_sms_verification_codes_on_user_id", using: :btree
 
   create_table "unfriend_requests", force: true do |t|
@@ -205,12 +189,12 @@ ActiveRecord::Schema.define(version: 20141204095544) do
     t.datetime "updated_at"
   end
 
-  add_index "users", ["email"], name: "index_users_on_email", unique: true, using: :btree
-  add_index "users", ["mobile"], name: "index_users_on_mobile", unique: true, using: :btree
-  add_index "users", ["node_id"], name: "index_users_on_node_id", using: :btree
-  add_index "users", ["node_password"], name: "index_users_on_node_password", using: :btree
-  add_index "users", ["node_token"], name: "index_users_on_node_token", using: :btree
-  add_index "users", ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true, using: :btree
-  add_index "users", ["username"], name: "index_users_on_username", unique: true, using: :btree
+  add_index "users", ["email"], name: "index_users_on_email", unique: true, length: {"email"=>191}, using: :btree
+  add_index "users", ["mobile"], name: "index_users_on_mobile", unique: true, length: {"mobile"=>191}, using: :btree
+  add_index "users", ["node_id"], name: "index_users_on_node_id", length: {"node_id"=>191}, using: :btree
+  add_index "users", ["node_password"], name: "index_users_on_node_password", length: {"node_password"=>191}, using: :btree
+  add_index "users", ["node_token"], name: "index_users_on_node_token", length: {"node_token"=>191}, using: :btree
+  add_index "users", ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true, length: {"reset_password_token"=>191}, using: :btree
+  add_index "users", ["username"], name: "index_users_on_username", unique: true, length: {"username"=>191}, using: :btree
 
 end
