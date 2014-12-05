@@ -4,6 +4,9 @@ class Users::RegistrationsController < Devise::RegistrationsController
 
   # Post registration/create
   def create
+    unless params[:username] && params[:mobile] && params[:token] && params[:phone_code]
+      return render json:{status: 'not enough data'}, status: :not_acceptable
+    end
     @user = User.create! register_params
     @user.block
     @user.save!
