@@ -175,9 +175,6 @@ Rails.application.routes.draw do
     end
   end
 
-  devise_for :admins,
-             controllers: {sessions: "admins/sessions"},
-             skip: [:passwords, :registrations]
   mount RailsAdmin::Engine => '/admin', as: 'rails_admin'
 
   root to: "home#index"

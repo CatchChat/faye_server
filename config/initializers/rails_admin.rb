@@ -1,13 +1,19 @@
+require 'auth_token'
 RailsAdmin.config do |config|
 
   ### Popular gems integration
 
   ## == Devise ==
-  config.authenticate_with do
-    warden.authenticate! :admin_password, scope: :admin
+  # config.authenticate_with do
+  #   warden.authenticate! :admin_password, scope: :admin
+  # end
+  # config.current_user_method(&:current_admin)
+  ## == Manually  ==
+  config.authorize_with do
+    authenticate_or_request_with_http_basic('Site Message') do |username, password|
+      (user = AuthToken.check_password(username, password)) && user.admin
+    end
   end
-  config.current_user_method(&:current_admin)
-
   ## == Cancan ==
   # config.authorize_with :cancan
 

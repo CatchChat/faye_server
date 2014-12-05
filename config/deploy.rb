@@ -54,7 +54,7 @@ set :slack_url, 'https://hooks.slack.com/services/T02AFSW1P/B034FPVH6/isORBjgSSi
 set :slack_channel, '#server-side'
 set :slack_username, 'Deploybot'
 set :slack_emoji, ':trollface:'
-set :slack_user, ENV['GIT_AUTHOR_NAME']
+set :slack_user, 'Capistrano'
 set :slack_text, -> {
   elapsed = Integer(fetch(:time_finished) - fetch(:time_started))
   "Revision #{fetch(:current_revision, fetch(:branch))} of " \
