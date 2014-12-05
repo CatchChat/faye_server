@@ -19,7 +19,7 @@ class Users::RegistrationsController < Devise::RegistrationsController
     unless (username = params[:username]) && (mobile = params[:mobile]) && (token = params[:token]) && (phone_code = params[:phone_code])
       return render json:{status: 'not enough data'}, status: :not_acceptable
     end
-    @user = User.find_by! username: username, mobile: mobile
+    @user = User.find_by! username: username, mobile: mobile, phone_code: phone_code
 
     sms_token = SmsVerificationCode.find_by! user_id: @user.id, mobile: mobile, token: token, phone_code: phone_code, active: true
 

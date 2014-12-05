@@ -53,7 +53,7 @@ describe Users::SessionsController do
     # TODO: expect_any_instance_of is a design smell
     expect_any_instance_of(SmsVerificationCode).to receive(:send_msg).and_return(true)
 
-    post :send_verify_code, mobile: @user.mobile, expiring: 1000, :format => 'json'
+    post :send_verify_code, mobile: @user.mobile, phone_code: @user.phone_code, expiring: 1000, :format => 'json'
     expect(@user.sms_verification_codes.last.active).to be true
     expect(@user.sms_verification_codes.last.expired_at.to_i/10).to eq (Time.now.to_i + 1000)/10
     expect(json_response.keys).to eq ['mobile', 'status']
