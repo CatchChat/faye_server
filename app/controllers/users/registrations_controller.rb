@@ -54,6 +54,8 @@ class Users::RegistrationsController < Devise::RegistrationsController
     content = t('auth.sms_verification_code_message', code: sms_code.token)
 
     sms_code.send_msg(content)
+  rescue => e
+    render json: {status: 'sms provider error', error: e.message}, status: :service_unavailable
   end
 
   def get_expired_at
