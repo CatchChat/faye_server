@@ -144,6 +144,7 @@ Rails.application.routes.draw do
         collection do
           get :recent
           get :search
+          get :by_friend, path: '/with/:friend_id'
         end
       end
 
@@ -166,11 +167,17 @@ Rails.application.routes.draw do
       end
 
       resource :user, controller: :user, only: %i(show update) do
-        get :may_know_friends, on: :collection
+        collection do
+          get :may_know_friends
+          patch :update_mobile
+        end
       end
 
       resources :users, only: [] do
-        get :search, on: :collection
+        collection do
+          get :search
+          get :username_validate
+        end
       end
     end
   end

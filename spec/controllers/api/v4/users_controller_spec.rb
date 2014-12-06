@@ -23,4 +23,31 @@ RSpec.describe Api::V4::UsersController, :type => :controller do
       expect(assigns(:users)).to include user
     end
   end
+
+  describe 'GET username_validate' do
+    before do
+      sign_out user
+    end
+
+    it 'username is invalid' do
+      get :username_validate, format: :json, username: 'qwe'
+      expect(json_response).to eq({ 'available' => false, 'message' => subject.t('.username_invalid') })
+
+      get :username_validate, format: :json, username: 'qweqwe123qweqweqw'
+      expect(json_response).to eq({ 'available' => false, 'message' => subject.t('.username_invalid') })
+
+      get :username_validate, format: :json, username: 'user.name'
+      expect(json_response).to eq({ 'available' => false, 'message' => subject.t('.username_invalid') })
+    end
+
+    it 'username has been used' do
+      get :username_validate, format: :json, username: user.username
+      expect(json_response).to eq({ 'available' => false, 'message' => subject.t('.has_been_used') })
+    end
+
+    it 'available' do
+      get :username_validate, format: :json, username: 'Tumayun123'
+      expect(json_response).to eq({ 'available' => true })
+    end
+  end
 end

@@ -77,6 +77,14 @@ friendships.friend_id IN (
     end
   end
 
+  ### GET /api/v4/friendships/with/:friend_id
+  def by_friend
+    @friendship = current_user.friendships.find_by(friend_id: params[:friend_id])
+    return render json: { error: t('.not_found') }, status: :not_found unless @friendship
+
+    render :show if stale?(@friendship, public: true)
+  end
+
   private
 
   def load_friendship

@@ -49,6 +49,8 @@ en:
         move_to_top:
           not_found: The friend is not found
           move_to_top_error: An error occurred, please try again later
+        with_friend:
+          not_found: The friend is not found
       messages:
         create:
           not_found_recipient: The friend is not found
@@ -63,3 +65,12 @@ en:
       contacts:
         upload:
           contacts_error: Upload failed, please try again
+      user:
+        update_mobile:
+          has_been_used: Phone number has been used
+          phone_code_invalid: Country code is invalid
+          mobile_invalid: Phone number is invalid
+      users:
+        username_validate:
+          has_been_used: User name has been used
+          username_invalid: User name is invalid

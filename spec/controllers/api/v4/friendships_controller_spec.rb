@@ -4,7 +4,7 @@ RSpec.describe Api::V4::FriendshipsController, :type => :controller do
   let(:current_user) { subject.current_user }
   let(:user) { FactoryGirl.create(:user, username: 'user') }
   let(:friend) { FactoryGirl.create(:user, username: 'friend') }
-  let(:friendship) {
+  let!(:friendship) {
     user.friendships.create!(friend: friend, remarked_name: 'remarked_name', contact_name: 'contact_name')
   }
 
@@ -38,12 +38,12 @@ RSpec.describe Api::V4::FriendshipsController, :type => :controller do
         user.friends << create(:user, username: "friend#{index}")
       end
 
-      expect(user.friends.count).to eq(10)
+      expect(user.friends.count).to eq(11)
       get :index, format: :json
       expect(response).to be_success
       expect(response).to render_template(:index)
-      expect(json_response[:count]).to eq 10
-      expect(json_response[:friendships].size).to eq 10
+      expect(json_response[:count]).to eq 11
+      expect(json_response[:friendships].size).to eq 11
     end
   end
 
@@ -122,8 +122,8 @@ RSpec.describe Api::V4::FriendshipsController, :type => :controller do
       get :search, format: :json, q: 'contact_name'
       expect(response).to be_success
       expect(response).to render_template(:index)
-      expect(json_response[:count]).to eq 10
-      expect(json_response[:friendships].size).to eq 10
+      expect(json_response[:count]).to eq 11
+      expect(json_response[:friendships].size).to eq 11
 
       get :search, format: :json, q: 'contact_name1'
       expect(response).to be_success
@@ -188,6 +188,25 @@ RSpec.describe Api::V4::FriendshipsController, :type => :controller do
       patch :move_to_top, format: :json, id: _friendship.id
       expect(response).to be_success
       expect(_friendship.reload).to be_first
+    end
+  end
+
+  describe 'GET by_friend' do
+
+    it 'friendship is not found' do
+      user = create(:user, username: 'test')
+      get :by_friend, format: :json, friend_id: user.id
+      expect(response).to be_not_found
+      expect(json_response[:error]).to eq subject.t('.not_found')
+    end
+
+    it 'success' do
+      get :by_friend, format: :json, friend_id: friend.id
+      expect(response).to be_success
+      expect(response).to render_template(:show)
+      expect(json_response[:name]).to eq friendship.name
+      expect(json_response[:remarked_name]).to eq 'remarked_name'
+      expect(json_response[:contact_name]).to eq 'contact_name'
     end
   end
 end

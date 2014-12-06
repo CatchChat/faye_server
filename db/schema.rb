@@ -190,7 +190,7 @@ ActiveRecord::Schema.define(version: 20141204095544) do
   end
 
   add_index "users", ["email"], name: "index_users_on_email", unique: true, length: {"email"=>191}, using: :btree
-  add_index "users", ["mobile"], name: "index_users_on_mobile", unique: true, length: {"mobile"=>191}, using: :btree
+  add_index "users", ["mobile", "phone_code"], name: "index_users_on_mobile_and_phone_code", unique: true, length: {"mobile"=>191, "phone_code"=>191}, using: :btree
   add_index "users", ["node_id"], name: "index_users_on_node_id", length: {"node_id"=>191}, using: :btree
   add_index "users", ["node_password"], name: "index_users_on_node_password", length: {"node_password"=>191}, using: :btree
   add_index "users", ["node_token"], name: "index_users_on_node_token", length: {"node_token"=>191}, using: :btree

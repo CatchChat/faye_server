@@ -49,6 +49,8 @@ zh-CN:
         move_to_top:
           not_found: 该好友不存在
           move_to_top_error: 置顶发生错误，请稍后再试
+        with_friend:
+          not_found: 该好友不存在
       messages:
         create:
           not_found_recipient: 该好友不存在
@@ -63,3 +65,12 @@ zh-CN:
       contacts:
         upload:
           contacts_error: 上传失败，请重试
+      user:
+        update_mobile:
+          has_been_used: 手机号已经被使用
+          phone_code_invalid: 无效的国家码
+          mobile_invalid: 无效的手机号
+      users:
+        username_validate:
+          has_been_used: 用户名已经被使用
+          username_invalid: 无效的用户名

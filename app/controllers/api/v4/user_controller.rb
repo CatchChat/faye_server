@@ -39,6 +39,30 @@ LIMIT 50
     end
   end
 
+  ### PATCH /api/v4/user/update_mobile
+  # Required params
+  #   mobile
+  #   phone_code
+  def update_mobile
+    unless GlobalPhone.db.region(params[:phone_code])
+      return render json: { error: t('.phone_code_invalid') }, status: :unprocessable_entity
+    end
+
+    unless GlobalPhone.validate("+#{params[:phone_code]}#{params[:mobile]}")
+      return render json: { error: t('.mobile_invalid') }, status: :unprocessable_entity
+    end
+
+    if User.where(phone_code: params[:phone_code], mobile: params[:mobile]).where.not(id: current_user.id).count > 0
+      return render json: { error: t('.has_been_used') }, status: :unprocessable_entity
+    end
+
+    if current_user.update(params.permit(:phone_code, :mobile))
+      render json: { phone_code: current_user.phone_code, mobile: current_user.mobile }
+    else
+      render json: { error: current_user.errors.full_messages.join("\n") }, status: :unprocessable_entity
+    end
+  end
+
   private
 
   def update_params

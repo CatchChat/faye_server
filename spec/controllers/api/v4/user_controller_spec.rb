@@ -108,4 +108,50 @@ RSpec.describe Api::V4::UserController, :type => :controller do
       "avatar_url"      => "http://catch-avatars.qiniudn.com/sJAUYG6nc84glXkq.jpg"
     })
   end
+
+  describe 'PATCH update_mobile' do
+
+    it 'phone_code is invalid' do
+      patch :update_mobile, {
+        format: :json,
+        phone_code: '12345',
+        mobile: '15158166372'
+      }
+      expect(response).to be_unprocessable
+      expect(json_response[:error]).to eq subject.t('.phone_code_invalid')
+    end
+
+    it 'mobile is invalid' do
+      patch :update_mobile, {
+        format: :json,
+        phone_code: '86',
+        mobile: '15158166372111'
+      }
+      expect(response).to be_unprocessable
+      expect(json_response[:error]).to eq subject.t('.mobile_invalid')
+    end
+
+    it 'mobile has been used' do
+      create(:user, username: 'test', phone_code: '86', mobile: '15158166372')
+
+      patch :update_mobile, {
+        format: :json,
+        phone_code: '86',
+        mobile: '15158166372'
+      }
+      expect(response).to be_unprocessable
+      expect(json_response[:error]).to eq subject.t('.has_been_used')
+    end
+
+    it 'update success' do
+      patch :update_mobile, {
+        format: :json,
+        phone_code: '86',
+        mobile: '15158166372'
+      }
+      expect(response).to be_success
+      expect(subject.current_user.phone_code).to eq '86'
+      expect(subject.current_user.mobile).to eq '15158166372'
+    end
+  end
 end
