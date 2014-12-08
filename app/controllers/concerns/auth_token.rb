@@ -46,22 +46,15 @@ module AuthToken
   end
 
   def self.check_mobile_and_sms_verification_code(phone_code, mobile, sms_str)
-    if (sms_code = SmsVerificationCode.find_by(phone_code: phone_code, mobile: mobile, token: sms_str)) && sms_code.active == true && (!sms_code.expired_at or sms_code.expired_at > Time.now)
-      set_mobile_verified(sms_code)
-      sms_code.user
-    end
+    SmsVerificationCode.verify_token  phone_code: phone_code, mobile: mobile, token: sms_str
   end
+
   private
   def self.find_token(request)
     header = request.headers['Authorization']
     header.match(/Token token=\"(.*)\"/)[1]
   rescue
     raise TokenNotFound
-  end
-  def self.set_mobile_verified(sms_code)
-    user = sms_code.user
-    user.mobile_verified = true
-    user.save
   end
 
 end

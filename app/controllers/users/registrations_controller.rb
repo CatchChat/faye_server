@@ -24,16 +24,11 @@ class Users::RegistrationsController < Devise::RegistrationsController
     end
     @user = User.find_by! username: username, mobile: mobile, phone_code: phone_code
 
-    sms_token = SmsVerificationCode.find_by! user_id: @user.id, mobile: mobile, token: token, phone_code: phone_code, active: true
-
-    if Time.now > sms_token.expired_at
+    unless SmsVerificationCode.verify_token phone_code: phone_code, mobile: mobile, token: token
       return render json: {status: 'token time out'}, status: :request_timeout
     end
-
     @user.unblock
     @user.save
-    sms_token.active = false
-    sms_token.save
 
   rescue ActiveRecord::RecordNotFound => e
     render json: {status: 'record not found', error: e.message}, status: :not_found
