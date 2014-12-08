@@ -1,14 +1,14 @@
-class Admins::SessionsController < Devise::SessionsController
-  skip_before_action :authenticate_user
-
+require 'strategies'
+class Admins::SessionsController < ApiController
+  skip_before_action :authenticate_user, only: [:new, :create]
   def new
     @user = User.new
   end
 
   def create
-    self.resource = warden.authenticate!(:admin_password, scope: :admin)
-    sign_in(resource_name, resource)
-    yield resource if block_given?
-    respond_with resource, location: '/admin'
+    resource = warden.authenticate!(:admin_password)
+    redirect_to new_admins_session unless resource
+    sign_in(resource)
+    redirect_to admins_users_url
   end
 end

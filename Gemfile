@@ -39,9 +39,14 @@ gem 'capistrano-slackify', '~> 2.1.0', require: false
 # for rails_admin assets
 gem 'turbolinks', '~> 2.4.0'
 # gem 'therubyracer', '~> 0.12.1'
-gem 'sass-rails', '~> 4.0'
-gem 'coffee-rails', '~> 4.1.0'
-gem 'uglifier', '~> 2.5.3'
+# gem 'sass-rails', '~> 4.0'
+# gem 'coffee-rails', '~> 4.1.0'
+# gem 'uglifier', '~> 2.5.3'
+# bootstrap for rails
+gem 'bootstrap-sass', '~> 3.3.1'
+gem 'bootstrap_form', '~> 2.2.0'
+gem 'autoprefixer-rails', '~> 4.0.1'
+
 gem 'global_phone', '~> 1.0.1'
 
 group :development do

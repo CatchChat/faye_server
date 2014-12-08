@@ -2,6 +2,16 @@ require 'sidekiq/web'
 Rails.application.routes.draw do
   mount Sidekiq::Web => '/sidekiq'
 
+  namespace :admins do
+    resources :sessions do
+      collection do
+        post :create
+      end
+    end
+
+    resources :users
+  end
+
   scope path: 'api/v4' do
     devise_for :users, path: 'auth',
                        skip: [:sessions, :passwords, :registrations]
