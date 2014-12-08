@@ -10,14 +10,14 @@ describe AttachmentsController, sidekiq: :inline do
 
   context "qiniu" do
     it 'check param' do
-      post :upload_token, :id => 'not exist', :format => 'json'
+      get :upload_token, :id => 'not exist', :format => 'json'
       expect(response.status).to eq 406
       expect(json_response[:error]).to eq "missing params for upload token"
     end
 
 
     it 'returns upload tokens' do
-      post :upload_token, :id=> user.sent_messages.first.id, :format => 'json'
+      get :upload_token, :id=> user.sent_messages.first.id, :format => 'json'
       expect(response.status).to eq 200
       expect(json_response[:provider]).to eq "qiniu"
       expect(json_response[:options][:token].length).to be > 10
@@ -26,7 +26,7 @@ describe AttachmentsController, sidekiq: :inline do
     end
 
     it 'returns public upload tokens' do
-      post :public_upload_token, :format => 'json'
+      get :public_upload_token, :format => 'json'
       expect(response.status).to eq 200
       expect(json_response[:provider]).to eq "qiniu"
       expect(json_response[:options][:token].length).to be > 10
