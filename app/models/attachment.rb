@@ -4,7 +4,7 @@ class Attachment < ActiveRecord::Base
   validates :file, presence: true
 
   def download_url(expires_in=3600*24)
-    raise 'provider is not supported yet' unless storage == 'qiniu'
+    return [expires_in, nil] unless storage == 'qiniu'
     bucket        = ENV["qiniu_attachment_bucket"]
 
     cdn = QiniuHelper.client
@@ -13,7 +13,7 @@ class Attachment < ActiveRecord::Base
   end
 
   def fallback_url(expires_in=3600*24)
-    raise 'provider is not supported yet' unless fallback_storage == 's3'
+    return [expires_in, nil] unless fallback_storage == 's3'
     cdn = S3Helper.client
     [expires_in, cdn.get_download_url(key: fallback_file, download_expires_in: expires_in)]
   end
