@@ -27,7 +27,7 @@ class UpyunCdn
 
   def get_upload_token(args = {})
     self.attributes = self.attributes.merge args
-    raise Cdn::MissingParam, "missing params for upload token" unless UPLOADVALIDATOR.call(self).valid?
+    raise Cdn::MissingParam, "missing params for upload token" unless UpyunValidator::UPLOADVALIDATOR.call(self).valid?
 
     http_method    ||= 'PUT'
 
@@ -37,7 +37,7 @@ class UpyunCdn
 
   def get_download_token(args = {})
     self.attributes = self.attributes.merge args
-    raise Cdn::MissingParam, "missing params for download token" unless DOWNLOADVALIDATOR.call(self).valid?
+    raise Cdn::MissingParam, "missing params for download token" unless UpyunValidator::DOWNLOADVALIDATOR.call(self).valid?
     http_method    ||= 'GET'
     content_length    = '0'
     sign http_method,
@@ -48,7 +48,7 @@ class UpyunCdn
 
   def upload_file(args = {})
     self.attributes = self.attributes.merge args
-    raise Cdn::MissingParam, "missing params for upload file" unless UPLOADVALIDATOR.call(self).valid?
+    raise Cdn::MissingParam, "missing params for upload file" unless UpyunValidator::UPLOADVALIDATOR.call(self).valid?
     token         = get_upload_token(args)
 
     url = "#{api_host}/#{bucket}#{file_path}"
@@ -70,7 +70,7 @@ class UpyunCdn
 
   def callback_upload_file(args = {})
     self.attributes = self.attributes.merge args
-    rase Cdn::MissingParam unless CALLBACKUPLOADVALIDATOR.call(self).valid?
+    rase Cdn::MissingParam unless UpyunValidator::CALLBACKUPLOADVALIDATOR.call(self).valid?
 
     conn = Faraday.new(url: api_host) do |faraday|
       faraday.request :multipart
@@ -123,6 +123,8 @@ class UpyunCdn
     @date ||= Time.now.utc.strftime('%a, %d %b %Y %H:%M:%S GMT')
   end
 
+end
+module UpyunValidator
   DOWNLOADVALIDATOR = Vanguard::Validator.build do
       validates_presence_of :bucket, :file_path
   end

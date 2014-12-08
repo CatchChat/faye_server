@@ -2,6 +2,17 @@ require 'qiniu'
 require 'vanguard'
 require 'virtus'
 
+require 'vanguard'
+module QiniuValidator
+  DOWNLOADVALIDATOR = Vanguard::Validator.build do
+      validates_presence_of :url
+  end
+
+  UPLOADVALIDATOR = Vanguard::Validator.build do
+      validates_presence_of :bucket, :key, :callback_url, :callback_body
+  end
+end
+
 class QiniuCdn
   include Virtus.model
   attribute :access_key, String
@@ -27,7 +38,7 @@ class QiniuCdn
 
   def get_upload_token(args = {})
     self.attributes = self.attributes.merge args
-    raise Cdn::MissingParam, "missing params for upload token" unless UPLOADVALIDATOR.call(self).valid?
+    raise Cdn::MissingParam, "missing params for upload token" unless QiniuValidator::UPLOADVALIDATOR.call(self).valid?
 
     put_policy.callback_url = callback_url
     Qiniu::Auth.generate_uptoken(put_policy)
@@ -35,7 +46,7 @@ class QiniuCdn
 
   def get_download_url(args)
     self.attributes = self.attributes.merge args
-    raise Cdn::MissingParam, "missing params for download url" unless DOWNLOADVALIDATOR.call(self).valid?
+    raise Cdn::MissingParam, "missing params for download url" unless QiniuValidator::DOWNLOADVALIDATOR.call(self).valid?
     Qiniu::Auth.authorize_download_url(url, expires_in: download_expires_in)
   end
 
@@ -47,13 +58,6 @@ class QiniuCdn
     code
   end
 
-  DOWNLOADVALIDATOR = Vanguard::Validator.build do
-      validates_presence_of :url
-  end
-
-  UPLOADVALIDATOR = Vanguard::Validator.build do
-      validates_presence_of :bucket, :key, :callback_url, :callback_body
-  end
 
   private
   def put_policy

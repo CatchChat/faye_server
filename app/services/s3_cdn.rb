@@ -2,6 +2,16 @@ require 'aws-sdk-v1'
 require 'vanguard'
 require 'virtus'
 
+module S3Validator
+  DOWNLOADVALIDATOR = Vanguard::Validator.build do
+      validates_presence_of :key
+  end
+
+  UPLOADVALIDATOR = Vanguard::Validator.build do
+      validates_presence_of :key
+  end
+end
+
 class S3Cdn
   include Virtus.model
   attribute :aws_access_key_id, String
@@ -30,7 +40,7 @@ class S3Cdn
 
   def get_download_url(args)
     self.attributes = self.attributes.merge args
-    raise Cdn::MissingParam, "missing params for download url" unless DOWNLOADVALIDATOR.call(self).valid?
+    raise Cdn::MissingParam, "missing params for download url" unless S3Validator::DOWNLOADVALIDATOR.call(self).valid?
 
     s3bucket.objects[key].url_for( :read, { :secure => true , :expires => download_expires_in}).to_s
 
@@ -38,7 +48,7 @@ class S3Cdn
 
   def get_upload_form_url_fields(args = {})
     self.attributes = self.attributes.merge args
-    raise Cdn::MissingParam, "missing params for upload fields" unless UPLOADVALIDATOR.call(self).valid?
+    raise Cdn::MissingParam, "missing params for upload fields" unless S3Validator::UPLOADVALIDATOR.call(self).valid?
 
     date = Time.now.strftime("%Y%m%dT%H%M%SZ")
     #format for expire_date: 2013-08-06T12:00:00.000Z
@@ -129,13 +139,6 @@ class S3Cdn
     end
   end
 
-  DOWNLOADVALIDATOR = Vanguard::Validator.build do
-      validates_presence_of :key
-  end
-
-  UPLOADVALIDATOR = Vanguard::Validator.build do
-      validates_presence_of :key
-  end
 
   private
 
