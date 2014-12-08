@@ -2,7 +2,7 @@ require 'rails_helper'
 
 RSpec.describe Api::V4::UserController, :type => :controller do
 
-  let(:user) { FactoryGirl.create(:user, username: 'user', phone_code: nil) }
+  let(:user) { FactoryGirl.create(:user, username: 'user', mobile_verified: true, mobile: '15158166666', phone_code: '86') }
 
   before do
     sign_in user
@@ -72,10 +72,10 @@ RSpec.describe Api::V4::UserController, :type => :controller do
       "name"            => "user",
       "username"        => "user",
       "nickname"        => nil,
-      "phone_code"      => nil,
-      "mobile"          => nil,
-      "mobile_verified" => false,
-      "time_zone"       => nil,
+      "phone_code"      => '86',
+      "mobile"          => '15158166666',
+      "mobile_verified" => true,
+      "time_zone"       => 'Beijing',
       "state"           => 1,
       "state_string"    => user.human_state_name,
       "avatar_url"      => nil
@@ -86,27 +86,15 @@ RSpec.describe Api::V4::UserController, :type => :controller do
     patch :update, {
       format: :json,
       nickname: 'tumayun',
-      phone_code: '86',
-      mobile: '15158166372',
       time_zone: 'Beijing',
       avatar_url: 'http://catch-avatars.qiniudn.com/sJAUYG6nc84glXkq.jpg'
     }
 
     expect(response).to be_success
     expect(response).to render_template(:show)
-    expect(json_response).to eq({
-      "id"              => user.id,
-      "name"            => "tumayun",
-      "username"        => "user",
-      "nickname"        => "tumayun",
-      "phone_code"      => "86",
-      "mobile"          => "15158166372",
-      "mobile_verified" => false,
-      "time_zone"       => "Beijing",
-      "state"           => 1,
-      "state_string"    => user.human_state_name,
-      "avatar_url"      => "http://catch-avatars.qiniudn.com/sJAUYG6nc84glXkq.jpg"
-    })
+    expect(json_response[:nickname]).to eq 'tumayun'
+    expect(json_response[:time_zone]).to eq 'Beijing'
+    expect(json_response[:avatar_url]).to eq 'http://catch-avatars.qiniudn.com/sJAUYG6nc84glXkq.jpg'
   end
 
   describe 'PATCH update_mobile' do
@@ -152,6 +140,7 @@ RSpec.describe Api::V4::UserController, :type => :controller do
       expect(response).to be_success
       expect(subject.current_user.phone_code).to eq '86'
       expect(subject.current_user.mobile).to eq '15158166372'
+      expect(subject.current_user.mobile_verified).to eq false
     end
   end
 end

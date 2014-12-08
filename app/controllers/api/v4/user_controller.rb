@@ -4,7 +4,10 @@ class Api::V4::UserController < ApiController
   def may_know_friends
     friend_ids = current_user.friendships.pluck(:friend_id)
 
-    sql = <<-SQL
+    if friend_ids.blank?
+      @users = User.none
+    else
+      @users = User.find_by_sql <<-SQL
 SELECT `users`.*, GROUP_CONCAT(IFNULL(`users_friendships`.`nickname`, `users_friendships`.`username`)) common_friend_names
 FROM `users`
 INNER JOIN `friendships` ON `friendships`.`friend_id` = `users`.`id`
@@ -15,8 +18,9 @@ GROUP BY `users`.id
 HAVING COUNT(`users`.id) > 1
 ORDER BY COUNT(`users`.id) DESC
 LIMIT 50
-    SQL
-    @users = User.find_by_sql(sql)
+      SQL
+    end
+
     fresh_when(@users, public: true)
   end
 
@@ -27,8 +31,6 @@ LIMIT 50
   ### PATCH /api/v4/user
   # Optional params
   #   nickname
-  #   mobile
-  #   phone_code
   #   time_zone
   #   avatar_url
   def update
@@ -56,8 +58,14 @@ LIMIT 50
       return render json: { error: t('.has_been_used') }, status: :unprocessable_entity
     end
 
-    if current_user.update(params.permit(:phone_code, :mobile))
-      render json: { phone_code: current_user.phone_code, mobile: current_user.mobile }
+    current_user.phone_code = params[:phone_code]
+    current_user.mobile     = params[:mobile]
+    if current_user.mobile_changed? || current_user.phone_code_changed?
+      current_user.mobile_verified = false
+    end
+
+    if current_user.save
+      render json: { phone_code: current_user.phone_code, mobile: current_user.mobile, mobile_verified: current_user.mobile_verified }
     else
       render json: { error: current_user.errors.full_messages.join("\n") }, status: :unprocessable_entity
     end
@@ -66,6 +74,6 @@ LIMIT 50
   private
 
   def update_params
-    params.permit(:nickname, :mobile, :phone_code, :time_zone, :avatar_url)
+    params.permit(:nickname, :time_zone, :avatar_url)
   end
 end

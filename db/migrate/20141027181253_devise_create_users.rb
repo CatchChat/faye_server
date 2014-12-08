@@ -35,11 +35,11 @@ class DeviseCreateUsers < ActiveRecord::Migration
       t.string :email
       t.string :mobile
       t.boolean :mobile_verified, null: false, default: false
-      t.string :phone_code
+      t.string :phone_code, null: false, default: '86'
       t.boolean :admin, null: false, default: false
 
       t.integer :state
-      t.string :time_zone
+      t.string :time_zone, null: false, default: 'Beijing'
       t.string :avatar_url
 
       t.string :node_id

@@ -11,6 +11,7 @@ class User < ActiveRecord::Base
                        uniqueness: { case_sensitive: false },
                        length: { in: 4..16 },
                        format: { with: /\A[a-zA-Z0-9]+\z/ }
+  validates :time_zone, presence: true, inclusion: { in: ActiveSupport::TimeZone.all.map(&:name), allow_nil: true }
 
   attr_accessor :login
 
