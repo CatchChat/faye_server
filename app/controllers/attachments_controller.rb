@@ -1,5 +1,5 @@
 class AttachmentsController < ApiController
-  skip_before_action :authenticate_user, only: :callback
+  skip_before_action :authenticate_user, only: [:callback, :public_callback]
 
   # GET /api/attachments/upload_token/:provider
   # params for qiniu: bucket, key
