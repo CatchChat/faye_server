@@ -26,21 +26,20 @@ class Api::V4::MessagesController < ApiController
 
     media_type = params[:media_type].to_i
     media_type = Message.media_types[:text] unless Message.media_types.values.include? media_type
-    message = current_user.sent_messages.new(create_params)
-    message.media_type = media_type
-    message.recipient  = recipient
+    @message = current_user.sent_messages.new(create_params)
+    @message.media_type = media_type
+    @message.recipient  = recipient
 
     result = false
-    if message.save
+    if @message.save
       result = true
-      result = message.mark_as_unread if message.text?
+      result = @message.mark_as_unread if @message.text?
     end
 
     if result
-      MessageNotificationJob.perform_async(message.id) if message.unread?
-      render json: { id: message.id }
+      MessageNotificationJob.perform_async(@message.id) if @message.unread?
     else
-      render json: { error: message.errors.full_messages.join("\n") }, status: :unprocessable_entity
+      render json: { error: @message.errors.full_messages.join("\n") }, status: :unprocessable_entity
     end
   end
 
