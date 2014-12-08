@@ -35,7 +35,7 @@ class SmsVerificationCode < ActiveRecord::Base
       apikey           = ENV["luosimao_apikey"]
       init_hash       = {username: username, apikey: apikey}
       luosimao_client = LuosimaoSms.new init_hash
-      Sms.new(luosimao_client, init_hash)
+      Sms.new(luosimao_client)
     else
       key              = ENV["nexmo_key"]
       secret           = ENV["nexmo_secret"]
