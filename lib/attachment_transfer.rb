@@ -26,7 +26,7 @@ class AttachmentTransfer
                                            key: attachment.file
     raise 'transfer failed' unless code == 204
 
-    attachment.fallback_storage == 's3'
+    attachment.fallback_storage = 's3'
     attachment.fallback_file = attachment.file
     attachment.save
   end
