@@ -17,8 +17,8 @@ describe Users::PasswordsController do
   end
 
   it 'send sms token' do
-    expect_any_instance_of(SmsVerificationCode).to receive(:send_msg).and_return(true)
-    post :send_verify_code, mobile: user.mobile, format: 'json'
+    expect_any_instance_of(SmsVerificationCode).to receive(:send_msg)
+    post :send_verify_code, mobile: user.mobile, phone_code: '86', format: 'json'
 
   end
 
