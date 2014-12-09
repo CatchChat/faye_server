@@ -1,4 +1,4 @@
-json.extract! message, :id, :recipient_id, :recipient_type, :text_content, :parent_id, :longitude, :latitude
+json.extract! message, :id, :recipient_id, :recipient_type, :text_content, :parent_id, :longitude, :latitude, :battery_level
 json.media_type message.media_type
 json.media_type_string Message.human_attribute_name(message.media_type)
 json.state message.state

@@ -122,12 +122,13 @@ ActiveRecord::Schema.define(version: 20141204095544) do
     t.integer  "sender_id"
     t.integer  "recipient_id"
     t.string   "recipient_type"
-    t.integer  "media_type",                default: 0, null: false
+    t.integer  "media_type",                default: 0,  null: false
     t.text     "text_content"
-    t.integer  "parent_id",                 default: 0, null: false
+    t.integer  "parent_id",                 default: 0,  null: false
     t.integer  "state"
     t.float    "longitude",      limit: 24
     t.float    "latitude",       limit: 24
+    t.integer  "battery_level",             default: 50, null: false
     t.datetime "created_at"
     t.datetime "updated_at"
   end

@@ -9,6 +9,7 @@ class CreateMessages < ActiveRecord::Migration
       t.integer :state
       t.float :longitude
       t.float :latitude
+      t.integer :battery_level, null: false, default: 50
 
       t.timestamps
     end

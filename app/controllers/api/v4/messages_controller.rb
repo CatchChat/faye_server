@@ -14,6 +14,7 @@ class Api::V4::MessagesController < ApiController
   # Required params
   #   recipient_id
   #   recipient_type  Only User or Group
+  #   battery_level   0 - 100
   # Optional params
   #   media_type      0 is text, 1 is photo, 2 is video, default is text
   #   text_content
@@ -26,9 +27,13 @@ class Api::V4::MessagesController < ApiController
 
     media_type = params[:media_type].to_i
     media_type = Message.media_types[:text] unless Message.media_types.values.include? media_type
+    battery_level = (params[:battery_level].presence || 50).to_i
+    battery_level = 0 if battery_level < 0
+    battery_level = 100 if battery_level > 100
     @message = current_user.sent_messages.new(create_params)
     @message.media_type = media_type
     @message.recipient  = recipient
+    @message.battery_level = battery_level
 
     result = false
     if @message.save

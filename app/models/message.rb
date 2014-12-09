@@ -10,6 +10,7 @@ class Message < ActiveRecord::Base
 
   validates :sender_id, :recipient_id, :recipient_type, :media_type, presence: true
   validates :recipient_type, inclusion: { in: %w(User Group), allow_blank: true }
+  validates :battery_level, inclusion: { in: 0..100 }
 
   STATES = { draft: 1, unread: 2, read: 3 }.freeze
   state_machine :state, initial: :draft do
