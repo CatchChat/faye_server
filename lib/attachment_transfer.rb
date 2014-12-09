@@ -13,7 +13,7 @@ class AttachmentTransfer
       request = Net::HTTP::Get.new uri
 
       http.request request do |response|
-        open t.path, 'w' do |io|
+        open t.path, 'wb' do |io|
           response.read_body do |chunk|
             io.write chunk
           end
