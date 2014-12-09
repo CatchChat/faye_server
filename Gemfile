@@ -48,7 +48,8 @@ gem 'bootstrap_form', '~> 2.2.0'
 gem 'autoprefixer-rails', '~> 4.0.1'
 
 gem 'global_phone', '~> 1.0.1'
-
+# for rails console
+gem 'rb-readline', '~> 0.5.1'
 group :development do
   gem 'spring', '~> 1.1.3'
   gem 'spring-commands-rspec', '~> 1.0.2'
