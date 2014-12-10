@@ -74,3 +74,4 @@ namespace :deploy do
 
   after 'deploy:publishing', 'restart'
 end
+
