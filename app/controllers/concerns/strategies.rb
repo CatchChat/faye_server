@@ -21,8 +21,8 @@ Warden::Strategies.add(:admin_password) do
         success!(user)
       end
     else
-      puts 'error'
       errors.add :general, 'username_password_error'
+      halt!
     end
   end
 end

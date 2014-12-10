@@ -58,6 +58,9 @@ end
 group :development, :test do
   gem "pry", '~> 0.10.1'
   gem 'pry-byebug', '~> 2.0.0'
+  gem 'pry-rescue', '~> 1.4.1'
+  gem 'pry-stack_explorer', '~> 0.4.9.1'
+  gem 'pry-timetravel', '~> 0.0.3'
   gem 'rubocop', '~> 0.27.1', require: false
   gem 'guard-rubocop', '~> 1.2.0'
 end
