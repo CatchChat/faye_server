@@ -3,9 +3,10 @@ Rails.application.routes.draw do
   mount Sidekiq::Web => '/sidekiq'
 
   namespace :admins do
-    resources :sessions do
+    resources :sessions, only: %i(new create) do
+      get :logout, on: :collection
       collection do
-        post :create
+        #post :create
       end
     end
 

@@ -11,4 +11,10 @@ class Admins::SessionsController < ApiController
     sign_in(resource)
     redirect_to admins_users_url
   end
+
+  def logout
+    session['user_id']=nil
+    redirect_to new_admins_session_path
+  end
+
 end
