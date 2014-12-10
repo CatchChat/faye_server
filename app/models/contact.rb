@@ -3,7 +3,7 @@ class Contact < ActiveRecord::Base
 
   before_validation :encrypt_number, on: :create
   validates :name, :encrypted_number, :user_id, presence: true
-  validates :encrypted_number, uniqueness: { scope: :user_id, allow_blank: true }
+  #validates :encrypted_number, uniqueness: { scope: :user_id, allow_blank: true }
 
   attr_accessor :number
 
