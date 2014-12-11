@@ -352,4 +352,34 @@ RSpec.describe Api::V4::MessagesController, :type => :controller, sidekiq: :inli
       it_behaves_like 'show examples'
     end
   end
+
+  context 'POST report' do
+    let(:message) {
+      message = friend.messages.create!(
+        recipient: user,
+        text_content: 'This is a test!',
+        attachments: [Attachment.new(storage: 'qiniu', file: 'xxxxxx')]
+      )
+      message.mark_as_unread!
+      message
+    }
+
+    it 'message is not found' do
+      post :report, format: :json, id: 0
+      expect(response).to be_not_found
+    end
+
+    it 'success report' do
+      post :report, format: :json, id: message.id
+      expect(response).to be_success
+      report = user.reports.find_by(message_id: message.id)
+      expect(report.message.attachments).to be_all(&:reserved?)
+    end
+
+    it 'report error' do
+      user.report_message(message)
+      post :report, format: :json, id: message.id
+      expect(response).to be_unprocessable
+    end
+  end
 end

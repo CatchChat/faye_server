@@ -1,0 +1,13 @@
+en:
+  activerecord:
+    models:
+      report:
+    attributes:
+      report:
+        message_id: The message
+    errors:
+      models:
+        report:
+          attributes:
+            message_id:
+              taken: is reported

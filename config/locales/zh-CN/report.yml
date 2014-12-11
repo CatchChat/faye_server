@@ -1,0 +1,13 @@
+zh-CN:
+  activerecord:
+    models:
+      report:
+    attributes:
+      report:
+        message_id: 这条消息
+    errors:
+      models:
+        report:
+          attributes:
+            message_id:
+              taken: 您已经举报过了

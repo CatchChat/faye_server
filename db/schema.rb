@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20141211093822) do
+ActiveRecord::Schema.define(version: 20141211162424) do
 
   create_table "access_tokens", force: true do |t|
     t.integer  "user_id"
@@ -49,6 +49,16 @@ ActiveRecord::Schema.define(version: 20141211093822) do
 
   add_index "attachments_messages", ["attachment_id"], name: "index_attachments_messages_on_attachment_id", using: :btree
   add_index "attachments_messages", ["message_id"], name: "index_attachments_messages_on_message_id", using: :btree
+
+  create_table "attachments_reports", force: true do |t|
+    t.integer  "attachment_id"
+    t.integer  "report_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "attachments_reports", ["attachment_id"], name: "index_attachments_reports_on_attachment_id", using: :btree
+  add_index "attachments_reports", ["report_id"], name: "index_attachments_reports_on_report_id", using: :btree
 
   create_table "contacts", force: true do |t|
     t.integer  "user_id"
@@ -150,6 +160,28 @@ ActiveRecord::Schema.define(version: 20141211093822) do
   end
 
   add_index "official_messages", ["attachment_id"], name: "index_official_messages_on_attachment_id", using: :btree
+
+  create_table "reports", force: true do |t|
+    t.integer  "whistleblower_id"
+    t.integer  "message_id"
+    t.integer  "sender_id"
+    t.integer  "recipient_id"
+    t.string   "recipient_type"
+    t.integer  "media_type",                  default: 0,  null: false
+    t.text     "text_content"
+    t.integer  "parent_id",                   default: 0,  null: false
+    t.integer  "state"
+    t.float    "longitude",        limit: 24
+    t.float    "latitude",         limit: 24
+    t.integer  "battery_level",               default: 50, null: false
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "reports", ["message_id"], name: "index_reports_on_message_id", using: :btree
+  add_index "reports", ["recipient_id", "recipient_type"], name: "index_reports_on_recipient_id_and_recipient_type", length: {"recipient_id"=>nil, "recipient_type"=>191}, using: :btree
+  add_index "reports", ["sender_id"], name: "index_reports_on_sender_id", using: :btree
+  add_index "reports", ["whistleblower_id"], name: "index_reports_on_whistleblower_id", using: :btree
 
   create_table "sms_verification_codes", force: true do |t|
     t.integer  "user_id"

@@ -21,16 +21,17 @@ class User < ActiveRecord::Base
   has_many :individual_recipients, dependent: :destroy
   has_many :access_tokens, :dependent => :delete_all
   has_many :sms_verification_codes, :dependent => :delete_all
-  has_many :friend_requests, dependent: :destroy, class_name: 'FriendRequest'
+  has_many :friend_requests, dependent: :destroy
   has_many :received_friend_requests, foreign_key: 'friend_id', class_name: 'FriendRequest'
   has_many :unfriend_requests, dependent: :destroy
-  has_many :messages, dependent: :destroy, class_name: 'Message', foreign_key: :sender_id
+  has_many :messages, dependent: :destroy, foreign_key: :sender_id
   has_many :individual_recipients
   has_many :received_messages, through: :individual_recipients, source: :message
   has_many :unread_messages, -> {
     where.not(individual_recipients: { state: IndividualRecipient::STATES[:read] })
   }, through: :individual_recipients, source: :message
   has_many :contacts, dependent: :destroy
+  has_many :reports, foreign_key: :whistleblower_id
 
   scope :mobile_verified, -> { where(User.table_name => { mobile_verified: true }) }
   scope :active, -> { where(User.table_name => { state: STATES[:active] }) }
@@ -111,5 +112,16 @@ class User < ActiveRecord::Base
 
   def official_account?
     Settings.official_accounts.include?(self.username)
+  end
+
+  def report_message(message)
+    attributes = message.attributes.except('updated_at', 'created_at', 'id')
+    report = self.reports.new(attributes)
+    report.message = message
+    report.attachments = message.attachments
+    if report.save && report.attachments.present?
+      report.attachments.update_all(reserved: true)
+    end
+    report
   end
 end
