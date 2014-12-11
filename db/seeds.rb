@@ -22,12 +22,19 @@ friend = User.create username:       'tumayun',
                      mobile:         '87654321',
                      node_password:  '62d30f88375b7f4f1461aa0e19b47e6e52c6141409a8c5e6bcb2c45e8186a4a1'
 
-friend_request = user.sent_friend_requests.create!(friend_id: friend.id)
+friend_request = user.friend_requests.create!(friend_id: friend.id)
 friend_request.accept!
 
 group = user.groups.create!(name: 'group')
 group.friendships << user.friendships.last
 
-user.sent_messages.create!(recipient: friend, text_content: 'This is a test!')
-user.sent_messages.create!(recipient: group, text_content: 'This is a test!')
-user.sent_messages.each(&:mark_as_unread!)
+user.messages.create!(recipient: friend, text_content: 'This is a test!')
+user.messages.create!(recipient: group, text_content: 'This is a test!')
+user.messages.each(&:mark_as_unread!)
+
+OfficialMessage.destroy_all
+
+ENV["qiniu_attachment_bucket"] = 'catch'
+attachment = Attachment.create_by_parsing_qiniu_private_url('http://catch.qiniudn.com/2YW0zWlW5NMeAi0kKSIIOVXLolmK1t7K.jpg?e=1419282506&token=YSMhpYfzim6GOG-_sqsm3C0CpWI7RAPeq5IxjHeD:gDiLihZRY4_bkgp4rl1tA_cg-FY=')
+attachment.update_column(:reserved, true)
+OfficialMessage.create!(text_content: '您好！欢迎您使用秒视。', attachment: attachment, media_type: OfficialMessage.media_types[:photo])

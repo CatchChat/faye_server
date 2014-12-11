@@ -7,7 +7,7 @@ RSpec.describe IndividualRecipient, :type => :model do
   context 'Should update message state when mark as read' do
 
     it 'use message' do
-      message = user.sent_messages.create!(recipient: friend, text_content: 'This is a test!')
+      message = user.messages.create!(recipient: friend, text_content: 'This is a test!')
       message.mark_as_unread!
       expect(message).to be_unread
       message.individual_recipients.first.mark_as_read!
@@ -22,7 +22,7 @@ RSpec.describe IndividualRecipient, :type => :model do
       group.friendships << user.friendships.find_by(friend: friend)
       group.friendships << user.friendships.find_by(friend: friend1)
 
-      message = user.sent_messages.create!(recipient: group, text_content: 'This is a test!')
+      message = user.messages.create!(recipient: group, text_content: 'This is a test!')
       message.mark_as_unread!
       expect(message).to be_unread
       message.individual_recipients.first.mark_as_read!

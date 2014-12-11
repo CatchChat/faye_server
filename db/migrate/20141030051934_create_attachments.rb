@@ -6,6 +6,7 @@ class CreateAttachments < ActiveRecord::Migration
       t.string  :fallback_storage
       t.string  :fallback_file
       t.boolean :public, default: false, null: false
+      t.boolean :reserved, default: false, null: false
 
       t.timestamps
     end

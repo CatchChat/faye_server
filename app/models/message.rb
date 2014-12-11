@@ -30,7 +30,6 @@ class Message < ActiveRecord::Base
   end
 
   def push_notification
-    # TODO: Use sidekiq
     individual_recipients.each do |individual_recipient|
       Pusher.push_to_user(individual_recipient.user_id, content: I18n.t(
         'notification.sent_message_to_you',
@@ -60,6 +59,25 @@ class Message < ActiveRecord::Base
   # recipient is user
   def direct_message?
     recipient_type == User.name
+  end
+
+  def self.create_by_official_message!(sender, recipient)
+    official_message = OfficialMessage.order('RAND()').limit(1).first
+    if official_message
+      message = sender.messages.create!(
+        recipient: recipient,
+        media_type: official_message.media_type,
+        text_content: official_message.text_content,
+        longitude: official_message.longitude,
+        latitude: official_message.latitude,
+        battery_level: official_message.battery_level
+      )
+      attachment = official_message.attachment
+      message.attachments << attachment if attachment
+      message
+    else
+      sender.messages.create!(recipient: recipient, text_content: '您好！欢迎使用秒视。')
+    end
   end
 
   private

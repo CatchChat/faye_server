@@ -17,7 +17,7 @@ describe AttachmentsController, sidekiq: :inline do
 
 
     it 'returns upload tokens' do
-      get :upload_token, :id=> user.sent_messages.first.id, :format => 'json'
+      get :upload_token, :id=> user.messages.first.id, :format => 'json'
       expect(response.status).to eq 200
       expect(json_response[:provider]).to eq "qiniu"
       expect(json_response[:options][:token].length).to be > 10
@@ -42,7 +42,7 @@ describe AttachmentsController, sidekiq: :inline do
       expect_any_instance_of(Message).to receive(:push_notification)
       expect(TransferAttachmentsJob).to receive(:perform_async)
       post :callback, provider: 'qiniu',
-        bucket: ENV['qiniu_attachment_bucket'], message_id: user.sent_messages.first.id, key: 'test-key', format: 'json'
+        bucket: ENV['qiniu_attachment_bucket'], message_id: user.messages.first.id, key: 'test-key', format: 'json'
       expect(response.status).to eq 200
       expect(json_response[:attachment_id]).to be_a(Numeric)
 

@@ -13,12 +13,12 @@ RSpec.describe Api::V4::MessagesController, :type => :controller, sidekiq: :inli
     before do
       friend.friends << user
       10.times do |index|
-        message = friend.sent_messages.create!(recipient: user, text_content: 'This is a test!')
+        message = friend.messages.create!(recipient: user, text_content: 'This is a test!')
         message.mark_as_unread!
       end
 
       10.times do |index|
-        message = friend.sent_messages.create!(recipient: user, text_content: 'This is a test!')
+        message = friend.messages.create!(recipient: user, text_content: 'This is a test!')
         message.mark_as_unread!
         message.individual_recipients.each { |individual_recipient|
           individual_recipient.deliver!; individual_recipient.mark_as_read!
@@ -61,6 +61,27 @@ RSpec.describe Api::V4::MessagesController, :type => :controller, sidekiq: :inli
         expect(json_response).to eq({ 'error' => subject.t('.not_found_recipient') })
       end
 
+      context 'recipient is official account' do
+        before do
+          user.friends << friend
+          Settings.official_accounts << friend.username
+        end
+
+        after do
+          Settings.official_accounts.pop
+        end
+
+        it 'should send official message to user' do
+          count = user.unread_messages.count
+          expect(user.friends).to include friend
+          allow_any_instance_of(Message).to receive(:push_notification)
+          post :create, format: :json, recipient_id: friend.id, recipient_type: friend.class.name, text_content: 'This is a test!'
+          expect(response).to be_success
+          expect(user.reload.unread_messages.count).to eq(count + 1)
+          expect(user.unread_messages.last.sender).to eq(friend)
+        end
+      end
+
       context 'success' do
         before do
           user.friends << friend
@@ -80,7 +101,7 @@ RSpec.describe Api::V4::MessagesController, :type => :controller, sidekiq: :inli
           expect(user.friends).to include friend
           post :create, format: :json, recipient_id: friend.id, recipient_type: friend.class.name, text_content: 'This is a test!', media_type: Message.media_types[:photo]
           expect(response).to be_success
-          message = user.sent_messages.last
+          message = user.messages.last
           expect(message).to be_photo
           expect(message).to be_draft
         end
@@ -89,7 +110,7 @@ RSpec.describe Api::V4::MessagesController, :type => :controller, sidekiq: :inli
           expect(user.friends).to include friend
           post :create, format: :json, recipient_id: friend.id, recipient_type: friend.class.name, text_content: 'This is a test!', media_type: Message.media_types[:video]
           expect(response).to be_success
-          message = user.sent_messages.last
+          message = user.messages.last
           expect(message).to be_video
           expect(message).to be_draft
         end
@@ -129,7 +150,7 @@ RSpec.describe Api::V4::MessagesController, :type => :controller, sidekiq: :inli
           expect(@group.friends).to include friend
           post :create, format: :json, recipient_id: friend.id, recipient_type: friend.class.name, text_content: 'This is a test!', media_type: Message.media_types[:photo]
           expect(response).to be_success
-          message = user.sent_messages.last
+          message = user.messages.last
           expect(message).to be_photo
           expect(message).to be_draft
         end
@@ -138,7 +159,7 @@ RSpec.describe Api::V4::MessagesController, :type => :controller, sidekiq: :inli
           expect(@group.friends).to include friend
           post :create, format: :json, recipient_id: @group.id, recipient_type: @group.class.name, text_content: 'This is a test!', media_type: Message.media_types[:video]
           expect(response).to be_success
-          message = user.sent_messages.last
+          message = user.messages.last
           expect(message).to be_video
           expect(message).to be_draft
         end
@@ -187,7 +208,7 @@ RSpec.describe Api::V4::MessagesController, :type => :controller, sidekiq: :inli
     context 'individual message' do
       before do
         friend.friends << user
-        @message = friend.sent_messages.create!(recipient: user, text_content: 'This is a test!')
+        @message = friend.messages.create!(recipient: user, text_content: 'This is a test!')
       end
 
       it_behaves_like 'mark_as_read examples'
@@ -198,7 +219,7 @@ RSpec.describe Api::V4::MessagesController, :type => :controller, sidekiq: :inli
         friend.friends << user
         group = friend.groups.last
         group.friendships << friend.friendships.find_by(friend_id: user.id)
-        @message = friend.sent_messages.create!(recipient: group, text_content: 'This is a test!')
+        @message = friend.messages.create!(recipient: group, text_content: 'This is a test!')
       end
 
       it_behaves_like 'mark_as_read examples'
@@ -209,8 +230,8 @@ RSpec.describe Api::V4::MessagesController, :type => :controller, sidekiq: :inli
     let(:friend1) { create(:user, username: 'friend1') }
 
     before do
-      user.sent_friend_requests.create!(friend: friend1).accept!
-      user.sent_friend_requests.create!(friend: friend).accept!
+      user.friend_requests.create!(friend: friend1).accept!
+      user.friend_requests.create!(friend: friend).accept!
     end
 
     shared_examples 'deliver examples' do
@@ -257,7 +278,7 @@ RSpec.describe Api::V4::MessagesController, :type => :controller, sidekiq: :inli
 
     context 'individual message' do
       before do
-        @message = friend.sent_messages.create!(recipient: user, text_content: 'This is a test!')
+        @message = friend.messages.create!(recipient: user, text_content: 'This is a test!')
       end
 
       it_behaves_like 'deliver examples'
@@ -267,7 +288,7 @@ RSpec.describe Api::V4::MessagesController, :type => :controller, sidekiq: :inli
       before do
         group = friend.groups.last
         group.friendships << friend.friendships.find_by(friend_id: user.id)
-        @message = friend.sent_messages.create!(recipient: group, text_content: 'This is a test!')
+        @message = friend.messages.create!(recipient: group, text_content: 'This is a test!')
       end
 
       it_behaves_like 'deliver examples'
@@ -315,7 +336,7 @@ RSpec.describe Api::V4::MessagesController, :type => :controller, sidekiq: :inli
 
     context 'individual message' do
       before do
-        @message = friend.sent_messages.create!(recipient: user, text_content: 'This is a test!')
+        @message = friend.messages.create!(recipient: user, text_content: 'This is a test!')
       end
 
       it_behaves_like 'show examples'
@@ -325,7 +346,7 @@ RSpec.describe Api::V4::MessagesController, :type => :controller, sidekiq: :inli
       before do
         @group = friend.groups.last
         @group.friendships << friend.friendships.find_by(friend_id: user.id)
-        @message = friend.sent_messages.create!(recipient: @group, text_content: 'This is a test!')
+        @message = friend.messages.create!(recipient: @group, text_content: 'This is a test!')
       end
 
       it_behaves_like 'show examples'

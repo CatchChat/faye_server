@@ -21,10 +21,10 @@ class User < ActiveRecord::Base
   has_many :individual_recipients, dependent: :destroy
   has_many :access_tokens, :dependent => :delete_all
   has_many :sms_verification_codes, :dependent => :delete_all
-  has_many :sent_friend_requests, dependent: :destroy, class_name: 'FriendRequest'
+  has_many :friend_requests, dependent: :destroy, class_name: 'FriendRequest'
   has_many :received_friend_requests, foreign_key: 'friend_id', class_name: 'FriendRequest'
   has_many :unfriend_requests, dependent: :destroy
-  has_many :sent_messages, dependent: :destroy, class_name: 'Message', foreign_key: :sender_id
+  has_many :messages, dependent: :destroy, class_name: 'Message', foreign_key: :sender_id
   has_many :individual_recipients
   has_many :received_messages, through: :individual_recipients, source: :message
   has_many :unread_messages, -> {
@@ -109,4 +109,7 @@ class User < ActiveRecord::Base
     end
   end
 
+  def official_account?
+    Settings.official_accounts.include?(self.username)
+  end
 end

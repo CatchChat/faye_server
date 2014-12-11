@@ -30,7 +30,7 @@ class Api::V4::MessagesController < ApiController
     battery_level = (params[:battery_level].presence || 50).to_i
     battery_level = 0 if battery_level < 0
     battery_level = 100 if battery_level > 100
-    @message = current_user.sent_messages.new(create_params)
+    @message = current_user.messages.new(create_params)
     @message.media_type = media_type
     @message.recipient  = recipient
     @message.battery_level = battery_level
@@ -42,6 +42,9 @@ class Api::V4::MessagesController < ApiController
     end
 
     if result
+      if recipient.is_a?(User) && recipient.official_account?
+        SendOfficialMessageJob.perform_async(recipient.id, current_user.id)
+      end
       MessageNotificationJob.perform_async(@message.id) if @message.unread?
     else
       render json: { error: @message.errors.full_messages.join("\n") }, status: :unprocessable_entity

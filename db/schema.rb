@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20141204095544) do
+ActiveRecord::Schema.define(version: 20141211093822) do
 
   create_table "access_tokens", force: true do |t|
     t.integer  "user_id"
@@ -32,6 +32,7 @@ ActiveRecord::Schema.define(version: 20141204095544) do
     t.string   "fallback_storage"
     t.string   "fallback_file"
     t.boolean  "public",           default: false, null: false
+    t.boolean  "reserved",         default: false, null: false
     t.datetime "created_at"
     t.datetime "updated_at"
   end
@@ -136,6 +137,19 @@ ActiveRecord::Schema.define(version: 20141204095544) do
   add_index "messages", ["parent_id"], name: "index_messages_on_parent_id", using: :btree
   add_index "messages", ["recipient_id", "recipient_type"], name: "index_messages_on_recipient_id_and_recipient_type", length: {"recipient_id"=>nil, "recipient_type"=>191}, using: :btree
   add_index "messages", ["sender_id"], name: "index_messages_on_sender_id", using: :btree
+
+  create_table "official_messages", force: true do |t|
+    t.integer  "attachment_id"
+    t.integer  "media_type"
+    t.string   "text_content"
+    t.float    "longitude",     limit: 24
+    t.float    "latitude",      limit: 24
+    t.integer  "battery_level",            default: 50, null: false
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "official_messages", ["attachment_id"], name: "index_official_messages_on_attachment_id", using: :btree
 
   create_table "sms_verification_codes", force: true do |t|
     t.integer  "user_id"

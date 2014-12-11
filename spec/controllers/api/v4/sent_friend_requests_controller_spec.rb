@@ -36,7 +36,7 @@ RSpec.describe Api::V4::SentFriendRequestsController, :type => :controller do
       before do
         1.upto(10) do |index|
           friend = FactoryGirl.create(:user, username: "test#{index}")
-          user.sent_friend_requests.create(friend_id: friend.id)
+          user.friend_requests.create(friend_id: friend.id)
         end
       end
 
@@ -64,7 +64,7 @@ RSpec.describe Api::V4::SentFriendRequestsController, :type => :controller do
       before do
         8.times do |index|
           friend = FactoryGirl.create(:user, username: "test#{index}")
-          user.sent_friend_requests.create(friend_id: friend.id, state: (index % 4) + 1)
+          user.friend_requests.create(friend_id: friend.id, state: (index % 4) + 1)
         end
       end
 
@@ -96,14 +96,14 @@ RSpec.describe Api::V4::SentFriendRequestsController, :type => :controller do
     end
 
     it 'should return :unprocessable_entity when already request' do
-      friend_request = current_user.sent_friend_requests.create!(friend_id: friend.id)
+      friend_request = current_user.friend_requests.create!(friend_id: friend.id)
       expect(friend_request).to be_pending
       post :create, friend_id: friend.id
       expect(response).to be_unprocessable
     end
 
     it 'should return :forbidden when blocked' do
-      current_user.sent_friend_requests.create!(
+      current_user.friend_requests.create!(
         friend_id: friend.id,
         state: FriendRequest::STATES[:blocked]
       )
@@ -114,9 +114,9 @@ RSpec.describe Api::V4::SentFriendRequestsController, :type => :controller do
 
     it 'should return :success when success' do
       allow(Pusher).to receive(:push_to_user)
-      count = current_user.sent_friend_requests.count
+      count = current_user.friend_requests.count
       post :create, friend_id: friend.id, format: :json
-      expect(current_user.sent_friend_requests.count).to eq(count + 1)
+      expect(current_user.friend_requests.count).to eq(count + 1)
       expect(response).to be_success
       expect(response).to render_template(:show)
     end
@@ -131,7 +131,7 @@ RSpec.describe Api::V4::SentFriendRequestsController, :type => :controller do
     end
 
     it 'should return :success when success' do
-      friend_request = current_user.sent_friend_requests.create!(friend_id: friend.id)
+      friend_request = current_user.friend_requests.create!(friend_id: friend.id)
       delete :destroy, id: friend_request.id, format: :json
       expect(response).to be_success
       expect { friend_request.reload }.to raise_error(ActiveRecord::RecordNotFound)
