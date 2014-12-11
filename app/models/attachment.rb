@@ -35,7 +35,7 @@ class Attachment < ActiveRecord::Base
   end
 
   def queue_to_delete_storage(record)
-    binding.pry
+      DeleteAttachmentsJob.perform_async record.attributes.except(*%w{updated_at created_at})
 
   end
 end
