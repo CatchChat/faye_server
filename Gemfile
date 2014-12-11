@@ -49,7 +49,9 @@ gem 'autoprefixer-rails', '~> 4.0.1'
 
 gem 'global_phone', '~> 1.0.1'
 # for rails console
-gem 'rb-readline', '~> 0.5.1'
+group :staging do
+  gem 'rb-readline', '~> 0.5.1'
+end
 group :development do
   gem 'spring', '~> 1.1.3'
   gem 'spring-commands-rspec', '~> 1.0.2'
