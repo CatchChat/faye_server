@@ -5,7 +5,7 @@ class Attachment < ActiveRecord::Base
 
   validates :file, presence: true
 
-  after_destroy :queue_to_delete_storage
+  before_destroy :queue_to_delete_storage
 
   def download_url(expires_in=3600*24)
     return [expires_in, nil] unless storage == 'qiniu'
@@ -34,8 +34,8 @@ class Attachment < ActiveRecord::Base
     self.create! storage: 'qiniu', file: key
   end
 
-  def queue_to_delete_storage(record)
-      DeleteAttachmentsJob.perform_async record.attributes.except(*%w{updated_at created_at})
+  def queue_to_delete_storage
+      DeleteAttachmentsJob.perform_async attributes.except(*%w{updated_at created_at})
 
   end
 end
