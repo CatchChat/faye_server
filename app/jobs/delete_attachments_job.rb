@@ -1,10 +1,10 @@
+require 'ostruct'
 class DeleteAttachmentsJob
   include Sidekiq::Worker
   sidekiq_options queue: :delete_attachments, :retry => 3
 
   def perform(args)
-    id = args["id"].to_i
-    attachment = Attachment.find(id)
+    attachment = OpenStruct.new args
     AttachmentTransfer.delete attachment
   end
 end
