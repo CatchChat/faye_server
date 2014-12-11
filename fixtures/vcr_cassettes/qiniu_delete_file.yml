@@ -1,0 +1,107 @@
+---
+http_interactions:
+- request:
+    method: post
+    uri: http://upload.qiniu.com/
+    body:
+      encoding: ASCII-8BIT
+      string: "--813271\r\nContent-Disposition: form-data; name=\"file\"; filename=\"cba20141211-20481-k21ez\"\r\nContent-Type:
+        text/plain\r\n\r\ncba\r\n--813271\r\nContent-Disposition: form-data; name=\"token\"\r\n\r\nBBHE3ccYQ8VQhEIvZbJARrte1U3ic2Om6CW7mxvN:APLbaw2MOmzusSLDRek7_JIM_Fs=:eyJzY29wZSI6InJ1YW53ei1wdWJsaWM6Y2JhIiwiY2FsbGJhY2tVcmwiOiJodHRwOi8vNTQuMjIzLjE0My4yMzIvYXBpL3Y0L2F0dGFjaG1lbnRzL2NhbGxiYWNrL3Fpbml1IiwiY2FsbGJhY2tCb2R5Ijoia2V5PSQoa2V5KVx1MDAyNmJ1Y2tldD0kKGJ1Y2tldClcdTAwMjZtZXNzYWdlX2lkPSQoeDptZXNzYWdlX2lkKSIsImRlYWRsaW5lIjoxNDE4Mjg5NDIwfQ==\r\n--813271\r\nContent-Disposition:
+        form-data; name=\"key\"\r\n\r\ncba\r\n--813271\r\nContent-Disposition: form-data;
+        name=\"x:message_id\"\r\n\r\n1\r\n--813271--\r\n"
+    headers:
+      Accept:
+      - application/json
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - close
+      User-Agent:
+      - QiniuRuby/6.3.2 (x86_64-linux) Ruby/2.1.1
+      Content-Length:
+      - '671'
+      Content-Type:
+      - multipart/form-data; boundary=813271
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Server:
+      - nginx/1.4.4
+      Date:
+      - Thu, 11 Dec 2014 08:29:31 GMT
+      Content-Type:
+      - application/json
+      Content-Length:
+      - '67'
+      Connection:
+      - close
+      Access-Control-Allow-Headers:
+      - X-File-Name, X-File-Type, X-File-Size
+      Access-Control-Allow-Methods:
+      - OPTIONS, HEAD, POST
+      Access-Control-Allow-Origin:
+      - "*"
+      Access-Control-Max-Age:
+      - '2592000'
+      Cache-Control:
+      - no-store, no-cache, must-revalidate
+      Pragma:
+      - no-cache
+      X-Content-Type-Options:
+      - nosniff
+      X-Log:
+      - s.ph;s.put.tw;s.put.tr;s.put.tw;s.put.tr;s.ph;s.put.tw;s.put.tr;s.ph;PFDS;PFDS:3;PFDS:3;rs9_5.sel/not
+        found;rdb.g/no such key;DBD/404;DBG/404;v4.sel:2;rs10_5.ups;qtbl.ups:4;mc.s;RS:4;rs.put:7;rs-upload.putFile:11;UP.CB:106;UP:118
+      X-Reqid:
+      - RVoAAHEv-WAfxK4T
+    body:
+      encoding: UTF-8
+      string: '{"attachment_id":52,"file":"cba","message_id":1,"provider":"qiniu"}'
+    http_version: 
+  recorded_at: Thu, 11 Dec 2014 08:17:00 GMT
+- request:
+    method: post
+    uri: http://rs.qiniu.com/delete/cnVhbnd6LXB1YmxpYzpjYmE=
+    body:
+      encoding: ASCII-8BIT
+      string: ''
+    headers:
+      Accept:
+      - application/json
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - close
+      User-Agent:
+      - QiniuRuby/6.3.2 (x86_64-linux) Ruby/2.1.1
+      Authorization:
+      - QBox BBHE3ccYQ8VQhEIvZbJARrte1U3ic2Om6CW7mxvN:xOq0gccw11I5PklFZwZGH8ecyIE=
+      Content-Length:
+      - '0'
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Server:
+      - nginx/1.4.4
+      Date:
+      - Thu, 11 Dec 2014 08:29:31 GMT
+      Content-Type:
+      - application/json
+      Content-Length:
+      - '0'
+      Connection:
+      - close
+      X-Log:
+      - rs10_5.sel:1;rs9_5.sel/not found;rdb.g/no such key;DBD/404;DBG/404;v4.sel:2;rs10_5.ups:1;qtbl.rm:5;MQ;mc.d;RS:7
+      X-Reqid:
+      - VhcAAOdHt3EfxK4T
+    body:
+      encoding: UTF-8
+      string: ''
+    http_version: 
+  recorded_at: Thu, 11 Dec 2014 08:17:00 GMT
+recorded_with: VCR 2.9.3

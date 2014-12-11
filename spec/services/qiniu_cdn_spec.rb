@@ -86,6 +86,27 @@ describe Cdn do
       end
     end
 
+    it "delete file" do
+      Timecop.freeze(Time.local(2014,12,11,16,17))
+      VCR.use_cassette('qiniu_delete_file') do
+
+        t = Tempfile.new 'cba'
+        t.write 'cba'
+        t.close
+
+        code = subject.upload_file file_location: t.path,
+                                          bucket: 'ruanwz-public',
+                                             key: 'cba',
+                                    callback_url: 'http://54.223.143.232/api/v4/attachments/callback/qiniu',
+                                    callback_body: "key=$(key)&bucket=$(bucket)&message_id=$(x:message_id)",
+                                           x_vars: {:'x:message_id' => '1'}
+
+        expect(code).to eq 200
+        result = subject.delete_file bucket: 'ruanwz-public', key: 'cba'
+        expect(result).to be true
+      end
+      Timecop.return
+    end
   end
 
 end

@@ -30,4 +30,8 @@ class AttachmentTransfer
     attachment.fallback_file = attachment.file
     attachment.save
   end
+
+  def self.delete(attachment)
+
+  end
 end

@@ -58,6 +58,11 @@ class QiniuCdn
     code
   end
 
+  def delete_file(args)
+    self.attributes = self.attributes.merge args
+    Qiniu.delete(bucket, key)
+  end
+
 
   private
   def put_policy

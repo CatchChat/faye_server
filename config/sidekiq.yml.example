@@ -13,3 +13,4 @@ production:
   - message_notification
   - push_notification_to_user
   - attachments
+  - delete_attachments

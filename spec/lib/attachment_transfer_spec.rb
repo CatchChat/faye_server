@@ -15,9 +15,14 @@ describe AttachmentTransfer do
   let(:attachment) {create :attachment}
 
   it "transfer file from qiniu to s3" do
-    allow(TransferAttachmentsJob).to receive(:perform_async)
     VCR.use_cassette('transfer_qiniu_to_s3') do
       AttachmentTransfer.transfer_s3 attachment
+    end
+  end
+
+  it "delete file from both qiniu and s3" do
+    VCR.use_cassette('delete_from_qiniu_and_s3') do
+      AttachmentTransfer.delete attachment
     end
   end
 end

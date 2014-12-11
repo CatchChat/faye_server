@@ -5,6 +5,8 @@ class Attachment < ActiveRecord::Base
 
   validates :file, presence: true
 
+  after_destroy :queue_to_delete_storage
+
   def download_url(expires_in=3600*24)
     return [expires_in, nil] unless storage == 'qiniu'
     bucket        = ENV["qiniu_attachment_bucket"]
@@ -30,5 +32,10 @@ class Attachment < ActiveRecord::Base
     raise AttachmentParsingError, "must set to the same bucket before parsing" unless bucket == ENV["qiniu_attachment_bucket"]
 
     self.create! storage: 'qiniu', file: key
+  end
+
+  def queue_to_delete_storage(record)
+    binding.pry
+
   end
 end

@@ -32,4 +32,8 @@ RSpec.describe Attachment, :type => :model do
     expect(attachment.storage).to eq 'qiniu'
     expect(attachment.file).to eq 'S1SYur5I1a4qIYIsAY9Djm0i7X8tpbyP.jpg'
   end
+
+  it 'queue to delete storage after destroy' do
+
+  end
 end
