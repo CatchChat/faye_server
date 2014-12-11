@@ -45,13 +45,10 @@ LIMIT 50
   # Required params
   #   mobile
   #   phone_code
+  #   token
   def update_mobile
-    unless GlobalPhone.db.region(params[:phone_code])
-      return render json: { error: t('.phone_code_invalid') }, status: :unprocessable_entity
-    end
-
-    unless GlobalPhone.validate("+#{params[:phone_code]}#{params[:mobile]}")
-      return render json: { error: t('.mobile_invalid') }, status: :unprocessable_entity
+    unless SmsVerificationCode.verify_token(mobile: params[:mobile], phone_code: params[:phone_code], token: params[:token])
+      return render json: { error: t('.invalid_token') }, status: :unprocessable_entity
     end
 
     if User.where(phone_code: params[:phone_code], mobile: params[:mobile]).where.not(id: current_user.id).count > 0
@@ -60,9 +57,7 @@ LIMIT 50
 
     current_user.phone_code = params[:phone_code]
     current_user.mobile     = params[:mobile]
-    if current_user.mobile_changed? || current_user.phone_code_changed?
-      current_user.mobile_verified = false
-    end
+    current_user.mobile_verified = true
 
     if current_user.save
       render json: { phone_code: current_user.phone_code, mobile: current_user.mobile, mobile_verified: current_user.mobile_verified }

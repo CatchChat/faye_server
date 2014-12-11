@@ -68,8 +68,7 @@ en:
       user:
         update_mobile:
           has_been_used: Phone number has been used
-          phone_code_invalid: Country code is invalid
-          mobile_invalid: Phone number is invalid
+          invalid_token: Invalid validation code
       users:
         username_validate:
           has_been_used: User name has been used

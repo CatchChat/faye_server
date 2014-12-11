@@ -68,8 +68,7 @@ zh-CN:
       user:
         update_mobile:
           has_been_used: 手机号已经被使用
-          phone_code_invalid: 无效的国家码
-          mobile_invalid: 无效的手机号
+          invalid_token: 短信验证码错误
       users:
         username_validate:
           has_been_used: 用户名已经被使用
