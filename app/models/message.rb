@@ -27,6 +27,7 @@ class Message < ActiveRecord::Base
     end
 
     after_transition draft: :unread, do: :create_individual_recipients
+    after_transition unread: :read, do: :delete_attachments_storage
   end
 
   def push_notification
@@ -92,5 +93,9 @@ class Message < ActiveRecord::Base
     end
 
     self.save!
+  end
+
+  def delete_attachments_storage
+    attachments.map(&:queue_to_delete_storage)
   end
 end

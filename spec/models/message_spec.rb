@@ -53,4 +53,20 @@ RSpec.describe Message, :type => :model do
       message.push_notification
     end
   end
+
+  context 'after read' do
+
+    it 'delete attachments storage' do
+      attachment = create(:attachment)
+      message = user.messages.create!(
+        recipient: friend,
+        text_content: 'This is a test!',
+        media_type: Message.media_types[:photo],
+        attachments: [attachment]
+      )
+      message.mark_as_unread!
+      expect(attachment).to receive(:queue_to_delete_storage)
+      message.mark_as_read!
+    end
+  end
 end
