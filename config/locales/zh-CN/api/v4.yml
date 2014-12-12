@@ -62,8 +62,6 @@ zh-CN:
           deliver_error: 出错，请稍后再试
         show:
           not_found: 该消息不存在
-        report:
-          not_found: 该消息不存在
       contacts:
         upload:
           contacts_error: 上传失败，请重试
@@ -75,3 +73,7 @@ zh-CN:
         username_validate:
           has_been_used: 用户名已经被使用
           username_invalid: 无效的用户名
+      reports:
+        create:
+          message_not_found: 该消息不存在
+

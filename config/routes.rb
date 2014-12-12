@@ -170,10 +170,10 @@ Rails.application.routes.draw do
         member do
           patch :mark_as_read
           patch :deliver
-          post :report
         end
       end
 
+      resources :reports, only: %i(create)
       resources :unfriend_requests, only: %i(create)
       resources :contacts, only: [] do
         post :upload, on: :collection

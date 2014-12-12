@@ -86,19 +86,6 @@ class Api::V4::MessagesController < ApiController
     fresh_when(@message, public: true)
   end
 
-  ### POST /api/v4/messages/:id/report
-  def report
-    message = current_user.received_messages.find_by(id: params[:id])
-    return render json: { error: t('.not_found') }, status: :not_found unless message
-
-    report = current_user.report_message(message)
-    if report.errors.empty?
-      render json: {}
-    else
-      render json: { error: report.errors.full_messages.join("\n") }, status: :unprocessable_entity
-    end
-  end
-
   private
 
   def find_recipient

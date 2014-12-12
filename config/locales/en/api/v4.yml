@@ -62,8 +62,6 @@ en:
           deliver_error: An error occurred, please try again later
         show:
           not_found: The message is not found
-        report:
-          not_found: The message is not found
       contacts:
         upload:
           contacts_error: Upload failed, please try again
@@ -75,3 +73,6 @@ en:
         username_validate:
           has_been_used: User name has been used
           username_invalid: User name is invalid
+      reports:
+        create:
+          message_not_found: The message is not found
