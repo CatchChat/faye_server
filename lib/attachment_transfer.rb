@@ -37,7 +37,6 @@ class AttachmentTransfer
       result = qiniu_client.delete_file key: attachment.file
       raise unless result
     end
-    ## TODO: delete from S3
     if attachment.fallback_storage == 's3' && attachment.fallback_file
       s3_client = attachment.public ? S3Helper.avatar_client : S3Helper.client
       result = s3_client.delete_file key: attachment.fallback_file
