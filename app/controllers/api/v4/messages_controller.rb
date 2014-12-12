@@ -43,7 +43,7 @@ class Api::V4::MessagesController < ApiController
 
     if result
       if recipient.is_a?(User) && recipient.official_account?
-        SendOfficialMessageJob.perform_async(recipient.id, current_user.id)
+        SendOfficialMessageJob.perform_async(recipient.id, current_user.id, @message.id)
       end
       MessageNotificationJob.perform_async(@message.id) if @message.unread?
     else

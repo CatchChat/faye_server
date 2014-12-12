@@ -3,6 +3,7 @@ class Message < ActiveRecord::Base
   belongs_to :recipient, polymorphic: true
   has_and_belongs_to_many :attachments, dependent: :destroy
   has_many :individual_recipients, dependent: :destroy
+  belongs_to :parent, class_name: 'Message', foreign_key: :parent_id
 
   scope :draft, -> { where(table_name => { state: STATES[:draft] }) }
 
@@ -62,23 +63,29 @@ class Message < ActiveRecord::Base
     recipient_type == User.name
   end
 
-  def self.create_by_official_message!(sender, recipient)
+  def self.create_by_official_message!(sender, recipient, parent = nil)
+    parent_id = parent ? parent.id : 0
     official_message = OfficialMessage.order('RAND()').limit(1).first
-    if official_message
-      message = sender.messages.create!(
-        recipient: recipient,
-        media_type: official_message.media_type,
-        text_content: official_message.text_content,
-        longitude: official_message.longitude,
-        latitude: official_message.latitude,
-        battery_level: official_message.battery_level
-      )
-      attachment = official_message.attachment
-      message.attachments << attachment if attachment
-      message
-    else
-      sender.messages.create!(recipient: recipient, text_content: '您好！欢迎使用秒视。')
-    end
+    message = if official_message
+                sender.messages.create!(
+                  recipient: recipient,
+                  media_type: official_message.media_type,
+                  text_content: official_message.text_content,
+                  longitude: official_message.longitude,
+                  latitude: official_message.latitude,
+                  battery_level: official_message.battery_level,
+                  parent_id: parent_id,
+                  attachments: official_message.attachments
+                )
+              else
+                sender.messages.create!(
+                  recipient: recipient,
+                  text_content: I18n.t('welcome_message'),
+                  parent_id: parent_id
+                )
+              end
+    message.mark_as_unread!
+    message
   end
 
   private

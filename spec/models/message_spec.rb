@@ -69,4 +69,27 @@ RSpec.describe Message, :type => :model do
       message.mark_as_read!
     end
   end
+
+  context '.create_by_official_message!' do
+    before do
+      Friendship.create_friendships(user, friend)
+    end
+
+    it 'has parent' do
+      parent = user.messages.first
+      message = Message.create_by_official_message!(user, friend, parent)
+      expect(message.sender).to eq user
+      expect(message.recipient).to eq friend
+      expect(message).to be_unread
+      expect(message.parent).to eq parent
+    end
+
+    it 'no parent' do
+      message = Message.create_by_official_message!(user, friend)
+      expect(message.sender).to eq user
+      expect(message.recipient).to eq friend
+      expect(message).to be_unread
+      expect(message.parent).to eq nil
+    end
+  end
 end

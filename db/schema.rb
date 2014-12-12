@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20141211162424) do
+ActiveRecord::Schema.define(version: 20141212132833) do
 
   create_table "access_tokens", force: true do |t|
     t.integer  "user_id"
@@ -49,6 +49,16 @@ ActiveRecord::Schema.define(version: 20141211162424) do
 
   add_index "attachments_messages", ["attachment_id"], name: "index_attachments_messages_on_attachment_id", using: :btree
   add_index "attachments_messages", ["message_id"], name: "index_attachments_messages_on_message_id", using: :btree
+
+  create_table "attachments_official_messages", force: true do |t|
+    t.integer  "attachment_id"
+    t.integer  "official_message_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "attachments_official_messages", ["attachment_id"], name: "index_attachments_official_messages_on_attachment_id", using: :btree
+  add_index "attachments_official_messages", ["official_message_id"], name: "index_attachments_official_messages_on_official_message_id", using: :btree
 
   create_table "attachments_reports", force: true do |t|
     t.integer  "attachment_id"

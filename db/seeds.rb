@@ -44,4 +44,4 @@ OfficialMessage.destroy_all
 ENV["qiniu_attachment_bucket"] = 'catch'
 attachment = Attachment.create_by_parsing_qiniu_private_url('http://catch.qiniudn.com/2YW0zWlW5NMeAi0kKSIIOVXLolmK1t7K.jpg?e=1419282506&token=YSMhpYfzim6GOG-_sqsm3C0CpWI7RAPeq5IxjHeD:gDiLihZRY4_bkgp4rl1tA_cg-FY=')
 attachment.update_column(:reserved, true)
-OfficialMessage.create!(text_content: '您好！欢迎您使用秒视。', attachment: attachment, media_type: OfficialMessage.media_types[:photo])
+OfficialMessage.create!(text_content: '您好！欢迎您使用秒视。', attachments: [attachment], media_type: OfficialMessage.media_types[:photo])

@@ -22,6 +22,7 @@
 en:
   catch_chat: CatchChat
   rate_limit_exceeded: API rate limit exceeded for you, please try again later
+  welcome_message: Thank you for using CatchChat!
   time:
     formats:
       iso8601: ! '%Y-%m-%dT%H:%M:%SZ'
