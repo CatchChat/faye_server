@@ -73,6 +73,10 @@ en:
         username_validate:
           has_been_used: User name has been used
           username_invalid: User name is invalid
+        mobile_validate:
+          has_been_used: Phone number has been used
+          phone_code_invalid: Invalid country code
+          mobile_invalid: Invalid phone number
       reports:
         create:
           message_not_found: The message is not found

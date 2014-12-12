@@ -73,6 +73,10 @@ zh-CN:
         username_validate:
           has_been_used: 用户名已经被使用
           username_invalid: 无效的用户名
+        mobile_validate:
+          has_been_used: 手机号已经被使用
+          phone_code_invalid: 无效的国家码
+          mobile_invalid: 无效的手机号
       reports:
         create:
           message_not_found: 该消息不存在

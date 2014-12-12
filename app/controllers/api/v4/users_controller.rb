@@ -1,5 +1,5 @@
 class Api::V4::UsersController < ApiController
-  skip_before_action :authenticate_user, only: %i(username_validate)
+  skip_before_action :authenticate_user, only: %i(username_validate mobile_validate)
 
   ### GET api/v4/users/search
   # Required params
@@ -27,6 +27,26 @@ class Api::V4::UsersController < ApiController
     end
 
     if User.where(username: username).count > 0
+      return render json: { available: false, message: t('.has_been_used') }
+    end
+
+    render json: { available: true }
+  end
+
+  ### GET api/v4/users/mobile_validate
+  # Required params
+  #   phone_code
+  #   mobile
+  def mobile_validate
+    unless GlobalPhone.db.region(params[:phone_code])
+      return render json: { available: false, message: t('.phone_code_invalid') }
+    end
+
+    unless GlobalPhone.validate("+#{params[:phone_code]}#{params[:mobile]}")
+      return render json: { available: false, message: t('.mobile_invalid') }
+    end
+
+    if User.where(phone_code: params[:phone_code], mobile: params[:mobile]).count > 0
       return render json: { available: false, message: t('.has_been_used') }
     end
 

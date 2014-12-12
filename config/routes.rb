@@ -190,6 +190,7 @@ Rails.application.routes.draw do
         collection do
           get :search
           get :username_validate
+          get :mobile_validate
         end
       end
     end

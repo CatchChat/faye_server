@@ -50,4 +50,56 @@ RSpec.describe Api::V4::UsersController, :type => :controller do
       expect(json_response).to eq({ 'available' => true })
     end
   end
+
+  describe 'GET username_validate' do
+    before do
+      sign_out user
+    end
+
+    it 'phone_code is invalid' do
+      get :mobile_validate, {
+        format: :json,
+        phone_code: '12345',
+        mobile: '15158166372'
+      }
+      expect(response).to be_success
+      expect(json_response[:available]).to eq false
+      expect(json_response[:message]).to eq subject.t('.phone_code_invalid')
+    end
+
+    it 'mobile is invalid' do
+      get :mobile_validate, {
+        format: :json,
+        phone_code: '86',
+        mobile: '15158166372111'
+      }
+
+      expect(response).to be_success
+      expect(json_response[:available]).to eq false
+      expect(json_response[:message]).to eq subject.t('.mobile_invalid')
+    end
+
+    it 'mobile has been used' do
+      create(:user, username: 'test', phone_code: '86', mobile: '15158166372')
+
+      get :mobile_validate, {
+        format: :json,
+        phone_code: '86',
+        mobile: '15158166372'
+      }
+      expect(response).to be_success
+      expect(json_response[:available]).to eq false
+      expect(json_response[:message]).to eq subject.t('.has_been_used')
+    end
+
+    it 'available' do
+      get :mobile_validate, {
+        format: :json,
+        phone_code: '86',
+        mobile: '15158166372'
+      }
+      expect(response).to be_success
+      expect(json_response[:available]).to eq true
+    end
+  end
 end
