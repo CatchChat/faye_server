@@ -10,6 +10,7 @@ user = User.create username:       'ruanwztest',
                    password:       'ruanwztest',
                    admin:          true,
                    mobile:         '12345678',
+                   phone_code:     '86',
                    node_password:  '62d30f88375b7f4f1461aa0e19b47e6e52c6141409a8c5e6bcb2c45e8186a4a1'
 user.access_tokens << token = AccessToken.create(token: 'test-token', active: true)
 token.save
@@ -20,8 +21,14 @@ sms_code.save
 friend = User.create username:       'tumayun',
                      password:       '123456',
                      mobile:         '87654321',
+                     phone_code:     '86',
                      node_password:  '62d30f88375b7f4f1461aa0e19b47e6e52c6141409a8c5e6bcb2c45e8186a4a1'
 
+friend = User.create username:       'catchchat',
+                     password:       '123456',
+                     mobile:         '876543210',
+                     phone_code:     '86',
+                     node_password:  '62d30f88375b7f4f1461aa0e19b47e6e52c6141409a8c5e6bcb2c45e8186a4a1'
 friend_request = user.friend_requests.create!(friend_id: friend.id)
 friend_request.accept!
 

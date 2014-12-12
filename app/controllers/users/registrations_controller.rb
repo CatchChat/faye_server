@@ -29,6 +29,7 @@ class Users::RegistrationsController < Devise::RegistrationsController
     end
     @user.unblock
     @user.save
+    add_official_as_friend_receive_welcome_message
 
   rescue ActiveRecord::RecordNotFound => e
     render json: {status: 'record not found', error: e.message}, status: :not_found
@@ -60,5 +61,14 @@ class Users::RegistrationsController < Devise::RegistrationsController
 
   def register_params
     params.permit :username, :password, :mobile, :phone_code
+  end
+
+  def add_official_as_friend_receive_welcome_message
+     Friendship.create_friendships(@user, official_user)
+     Message.create_by_official_message!(official_user, @user)
+  end
+
+  def official_user
+    User.find_by username: Settings.official_accounts.first
   end
 end

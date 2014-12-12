@@ -4,6 +4,7 @@ describe Users::RegistrationsController do
   render_views
 
   before do
+    create(:user, username: Settings.official_accounts.first, mobile: '53534')
     @request.env["devise.mapping"] = Devise.mappings[:user]
   end
   it 'reject invalid params to create a new user ' do
