@@ -29,4 +29,32 @@ RSpec.describe User, :type => :model do
       expect(friend.name_by_friend(user)).to eq friend.name
     end
   end
+
+  it '#report_message' do
+    Friendship.create_friendships(user, friend)
+    attachment = create(:attachment)
+    message = user.messages.create!(
+      recipient: friend,
+      text_content: 'This is a test!',
+      media_type: Message.media_types[:photo],
+      attachments: [attachment]
+    )
+    message.mark_as_unread!
+
+    report = friend.report_message(message)
+    expect(report).to be_persisted
+    expect(report.message).to eq message
+    expect(report.whistleblower).to eq friend
+    expect(report.sender).to eq user
+    expect(report.recipient).to eq friend
+    expect(report.media_type).to eq message.attributes['media_type']
+    expect(report.text_content).to eq message.text_content
+    expect(report.parent_id).to eq message.parent_id
+    expect(report.state).to eq message.state
+    expect(report.longitude).to eq message.longitude
+    expect(report.latitude).to eq message.latitude
+    expect(report.battery_level).to eq message.battery_level
+    expect(report.attachments).to eq([attachment.reload])
+    expect(attachment).to be_reserved
+  end
 end
