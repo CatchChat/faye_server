@@ -32,10 +32,16 @@ class AttachmentTransfer
   end
 
   def self.delete(attachment)
-    if attachment.storage == 'qiniu'
+    if attachment.storage == 'qiniu' && attachment.file
       qiniu_client = attachment.public ? QiniuHelper.avatar_client : QiniuHelper.client
-      qiniu_client.delete_file key: attachment.file
+      result = qiniu_client.delete_file key: attachment.file
+      raise unless result
     end
     ## TODO: delete from S3
+    if attachment.fallback_storage == 's3' && attachment.fallback_file
+      s3_client = attachment.public ? S3Helper.avatar_client : S3Helper.client
+      result = s3_client.delete_file key: attachment.fallback_file
+      raise unless result
+    end
   end
 end

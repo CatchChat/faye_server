@@ -13,6 +13,7 @@ describe AttachmentTransfer do
   end
 
   let(:attachment) {create :attachment}
+  let(:attachment2) {create :attachment, fallback_storage: 's3', fallback_file: 'abc'}
 
   it "transfer file from qiniu to s3" do
     VCR.use_cassette('transfer_qiniu_to_s3') do
@@ -21,8 +22,7 @@ describe AttachmentTransfer do
   end
 
   it "delete file from both qiniu and s3" do
-    VCR.use_cassette('delete_from_qiniu_and_s3') do
-      AttachmentTransfer.delete attachment
-    end
+    allow_any_instance_of(Cdn).to receive(:delete_file).and_return(true)
+    AttachmentTransfer.delete attachment2
   end
 end

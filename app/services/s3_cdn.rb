@@ -139,6 +139,13 @@ class S3Cdn
     end
   end
 
+  def delete_file(args)
+    self.attributes = self.attributes.merge args
+
+    s3client = AWS::S3::Client.new :signature_version => :v4
+    s3client.delete_object(bucket_name: bucket, key: key).successful?
+
+  end
 
   private
 

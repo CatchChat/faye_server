@@ -76,6 +76,25 @@ describe Cdn do
       end
 
     end
+
+    it "delete file" do
+
+      Timecop.freeze(Time.local(2014,12,12,10,17))
+      t = Tempfile.new ['test-delete-key', '.jpeg']
+      VCR.use_cassette('s3_delete_file') do
+        code = subject.upload_file file_location: t.path,
+                                             key: 'test-delete-key.jpg',
+                                             message_id: '12345'
+
+        expect(code).to eq 204
+
+        resp = subject.delete_file key: 'test-delete-key.jpg'
+        expect(resp).to be true
+
+      end
+
+      Timecop.return
+    end
   end
 
   context 'global s3' do
