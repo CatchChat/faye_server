@@ -19,7 +19,7 @@ class Users::SessionsController < Devise::SessionsController
       return render json:{status: 'not enough data'}, status: :not_acceptable
     end
     random_num = rand(100000).to_s
-    user = User.find_by!(mobile: mobile, phone_code: phone_code)
+    user = current_user or User.find_by!(mobile: mobile, phone_code: phone_code)
     sms_code = SmsVerificationCode.create token:       random_num.to_s,
                                           active:      true,
                                           expired_at:  get_expired_at,
