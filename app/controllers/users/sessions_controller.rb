@@ -1,7 +1,7 @@
 class Users::SessionsController < Devise::SessionsController
   include RateLimit
   # before_filter :configure_sign_in_params, only: [:create]
-  before_action :authenticate_user, except: [:send_verify_code]
+  before_action :authenticate_user, except: [:send_verify_code, :check_verify_code]
 
   # Post auth/token_by_login
   def create
@@ -34,6 +34,16 @@ class Users::SessionsController < Devise::SessionsController
 
   rescue ActiveRecord::RecordNotFound => e
     render json: {status: 'record not found', error: e.message}, status: :not_found
+  end
+
+  def check_verify_code
+    unless (mobile = params[:mobile]) && (phone_code = params[:phone_code]) && (token = params[:token])
+      return render json:{status: 'not enough data'}, status: :not_acceptable
+    end
+    unless SmsVerificationCode.verify_token mobile: mobile, token: token, phone_code: phone_code
+      return render json: {status: 'token is not active or expired'}, status: :gone unless sms_token.active && sms_token.expired_at > Time.now
+    end
+    render json: {status: 'mobile verified'}, status: :ok
   end
 
   private

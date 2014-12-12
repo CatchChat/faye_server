@@ -23,10 +23,10 @@ describe Users::PasswordsController do
   end
 
   it 'change password with sms token then remove old access tokens' do
-    user = User.create username: 'passworduser', password: 'oldpassword', mobile: '111222333'
+    user = User.create username: 'passworduser', password: 'oldpassword', mobile: '111222333', phone_code: '86'
     AccessToken.create user_id: user.id, token: 'asdsd'
     sms_token = SmsVerificationCode.create mobile: user.mobile, user_id: user.id, token: '123', active: true, expired_at: Time.now + 3600
-    post :change_password, token: sms_token.token, mobile: user.mobile, new_password: 'abcabc123', new_password_confirm: 'abcabc123'
+    post :change_password, token: sms_token.token, mobile: user.mobile, new_password: 'abcabc123', new_password_confirm: 'abcabc123', phone_code: '86'
     expect(user.reload.valid_password?('abcabc123')).to eq true
     expect(AccessToken.find_by(user_id: user.id)).to be nil
   end

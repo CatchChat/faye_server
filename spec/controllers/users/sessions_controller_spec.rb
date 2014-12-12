@@ -59,4 +59,10 @@ describe Users::SessionsController do
     expect(json_response.keys).to eq ['mobile', 'status']
     expect(json_response['status']).to eq 'sms sent'
   end
+
+  it 'verify if sms verification ok' do
+    create :sms_verification_code, mobile: '454545', token: 'thesecret', user_id: @user.id
+    get :check_verify_code, phone_code: '86', mobile: '454545', token: 'thesecret'
+    expect(json_response['status']).to eq 'mobile verified'
+  end
 end

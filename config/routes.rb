@@ -20,9 +20,10 @@ Rails.application.routes.draw do
                        #controllers: {sessions:  "users/sessions"}
     scope path: 'auth' do
       as :user do
-        post 'token_by_login'   => 'users/sessions#create'
+        post 'token_by_login'    => 'users/sessions#create'
         post 'token_by_mobile'   => 'users/sessions#create_by_mobile'
         post 'send_verify_code'  => 'users/sessions#send_verify_code'
+        get  'check_verify_code' => 'users/sessions#check_verify_code'
       end
     end
 

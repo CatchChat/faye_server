@@ -53,9 +53,10 @@ class Users::PasswordsController < Devise::PasswordsController
   end
 
   def change_password_with_token
+    return :not_acceptable unless phone_code = params[:phone_code]
     return :not_acceptable unless token = params[:token]
     return :not_acceptable unless mobile = params[:mobile]
-    sms_token = SmsVerificationCode.find_by mobile: mobile, token: token
+    sms_token = SmsVerificationCode.find_by mobile: mobile, token: token, phone_code: phone_code
     return :not_found unless sms_token
     user = User.find_by mobile: sms_token.mobile
     return :not_found unless user
