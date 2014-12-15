@@ -47,6 +47,13 @@ friend_request1.accept!
 friend_request2.accept!
 friend_request3.accept!
 
+friend_request1 = friend0.friend_requests.create!(friend_id: friend1.id)
+friend_request2 = friend0.friend_requests.create!(friend_id: friend2.id)
+friend_request3 = friend0.friend_requests.create!(friend_id: friend3.id)
+friend_request1.accept!
+friend_request2.accept!
+friend_request3.accept!
+
 group = user.groups.create!(name: 'group')
 group.friendships << user.friendships.last
 
