@@ -16,12 +16,17 @@ describe Users::PasswordsController do
     expect(AccessToken.find_by(user_id: subject.current_user.id)).to be nil
   end
 
-  it 'send sms token' do
+  it 'send sms token when provide username' do
+    expect_any_instance_of(SmsVerificationCode).to receive(:send_msg)
+    post :send_verify_code, username: user.username, format: 'json'
+
+  end
+
+  it 'send sms token when provide mobile info' do
     expect_any_instance_of(SmsVerificationCode).to receive(:send_msg)
     post :send_verify_code, mobile: user.mobile, phone_code: '86', format: 'json'
 
   end
-
   it 'change password with sms token then remove old access tokens' do
     user = User.create username: 'passworduser', password: 'oldpassword', mobile: '111222333', phone_code: '86'
     AccessToken.create user_id: user.id, token: 'asdsd'

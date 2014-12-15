@@ -17,14 +17,19 @@ class Users::PasswordsController < Devise::PasswordsController
   # Post password/create
   def send_verify_code
 
-    unless params[:mobile]  && params[:phone_code]
+    unless (params[:mobile]  && params[:phone_code]) || params[:username]
       return render json:{error: 'not enough data'}, status: :not_acceptable
     end
-    mobile = params[:mobile]
-    phone_code = params[:phone_code]
-    random_num = rand(100000).to_s
-    user = User.find_by mobile: mobile
+
+    if username = params[:username]
+      user = User.find_by username: username
+    else
+      mobile = params[:mobile]
+      phone_code = params[:phone_code]
+      user = User.find_by mobile: mobile, phone_code: phone_code
+    end
     return render json: {status: "Not Found"}, status: :not_found unless user
+    random_num = rand(100000).to_s
     sms_code = SmsVerificationCode.create token:       random_num.to_s,
                                           active:      true,
                                           expired_at:  get_expired_at,
