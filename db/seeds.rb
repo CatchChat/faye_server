@@ -18,31 +18,31 @@ token.save
 user.sms_verification_codes << sms_code = SmsVerificationCode.create(mobile: user.mobile, token: '12345', active: true)
 sms_code.save
 
-friend = User.create username:       'tumayun',
+friend0 = User.create username:       'tumayun',
                      password:       '123456',
                      mobile:         '87654321',
                      phone_code:     '86',
                      node_password:  '62d30f88375b7f4f1461aa0e19b47e6e52c6141409a8c5e6bcb2c45e8186a4a1'
 
-friend2 = User.create username:      'nick',
+friend1 = User.create username:      'nick',
+                     password:       '123456',
+                     mobile:         '8765432100',
+                     phone_code:     '86',
+                     node_password:  '62d30f88375b7f4f1461aa0e19b47e6e52c6141409a8c5e6bcb2c45e8186a4a1'
+friend2 = User.create username:       'catchchat',
                      password:       '123456',
                      mobile:         '876543210',
                      phone_code:     '86',
                      node_password:  '62d30f88375b7f4f1461aa0e19b47e6e52c6141409a8c5e6bcb2c45e8186a4a1'
-friend = User.create username:       'catchchat',
-                     password:       '123456',
-                     mobile:         '876543210',
-                     phone_code:     '86',
-                     node_password:  '62d30f88375b7f4f1461aa0e19b47e6e52c6141409a8c5e6bcb2c45e8186a4a1'
-friend_request = user.friend_requests.create!(friend_id: friend.id)
+friend_request1 = user.friend_requests.create!(friend_id: friend1.id)
 friend_request2 = user.friend_requests.create!(friend_id: friend2.id)
-friend_request.accept!
+friend_request1.accept!
 friend_request2.accept!
 
 group = user.groups.create!(name: 'group')
 group.friendships << user.friendships.last
 
-user.messages.create!(recipient: friend, text_content: 'This is a test!')
+user.messages.create!(recipient: friend2, text_content: 'This is a test!')
 user.messages.create!(recipient: group, text_content: 'This is a test!')
 user.messages.each(&:mark_as_unread!)
 
