@@ -14,8 +14,7 @@ describe SmsVerificationCode do
     sms_code = user.sms_verification_codes.last
     expect(user.mobile_verified).to be false
     expect(sms_code.active).to be true
-    user = SmsVerificationCode.verify_token(mobile: sms_code.mobile, phone_code: sms_code.phone_code, token: sms_code.token)
-    expect(user.mobile_verified).to be true
+    SmsVerificationCode.verify_token(mobile: sms_code.mobile, phone_code: sms_code.phone_code, token: sms_code.token)
     sms_code.reload
     expect(sms_code.active).to be false
   end

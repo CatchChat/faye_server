@@ -8,10 +8,10 @@ class SmsVerificationCode < ActiveRecord::Base
   def self.verify_token(sms_code_query)
     if (sms_code = find_by(sms_code_query)) && sms_code.active == true && (!sms_code.expired_at or sms_code.expired_at > Time.now)
       user = sms_code.user
-      user.mobile_verified = true
+      # only verify token, dont change user info
+      # user.mobile_verified = true
       sms_code.active = false
       sms_code.save
-      user.save
       user
     end
 

@@ -56,12 +56,9 @@ class Users::PasswordsController < Devise::PasswordsController
     return :not_acceptable unless phone_code = params[:phone_code]
     return :not_acceptable unless token = params[:token]
     return :not_acceptable unless mobile = params[:mobile]
-    sms_token = SmsVerificationCode.find_by mobile: mobile, token: token, phone_code: phone_code
-    return :not_found unless sms_token
-    user = User.find_by mobile: sms_token.mobile
-    return :not_found unless user
-    return :gone unless sms_token.active && sms_token.expired_at > Time.now
     return :conflict unless params[:new_password] == params[:new_password_confirm]
+    user = SmsVerificationCode.verify_token mobile: mobile, token: token, phone_code: phone_code
+    return :not_found unless user
 
     user.password = params[:new_password]
     return :not_acceptable unless user.valid?
