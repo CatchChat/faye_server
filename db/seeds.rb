@@ -34,10 +34,18 @@ friend2 = User.create username:       'catchchat',
                      mobile:         '876543210',
                      phone_code:     '86',
                      node_password:  '62d30f88375b7f4f1461aa0e19b47e6e52c6141409a8c5e6bcb2c45e8186a4a1'
+
+friend3 = User.create username:      'nick2',
+                     password:       '123456',
+                     mobile:         '87654321000',
+                     phone_code:     '86',
+                     node_password:  '62d30f88375b7f4f1461aa0e19b47e6e52c6141409a8c5e6bcb2c45e8186a4a1'
 friend_request1 = user.friend_requests.create!(friend_id: friend1.id)
 friend_request2 = user.friend_requests.create!(friend_id: friend2.id)
+friend_request3 = user.friend_requests.create!(friend_id: friend3.id)
 friend_request1.accept!
 friend_request2.accept!
+friend_request3.accept!
 
 group = user.groups.create!(name: 'group')
 group.friendships << user.friendships.last
