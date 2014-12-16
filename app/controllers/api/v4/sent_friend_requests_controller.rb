@@ -33,10 +33,22 @@ class Api::V4::SentFriendRequestsController < ApiController
 
     @friend_request = current_user.friend_requests.new(friend_id: friend.id)
     if @friend_request.save
-      PushNotificationToUserJob.perform_async(
-        friend.id,
-        content: t('notification.wants_to_be_friend', friend_name: current_user.name)
-      )
+      if friend.official_account?
+        if @friend_request.accept
+          PushNotificationToUserJob.perform_async(
+            friend.id,
+            content: t('notification.accepted_friend_request', friend_name: current_user.name)
+          )
+        else
+          @friend_request.reject
+          return render json: { error: t('.accept_error') }, status: :unprocessable_entity
+        end
+      else
+        PushNotificationToUserJob.perform_async(
+          friend.id,
+          content: t('notification.wants_to_be_friend', friend_name: current_user.name)
+        )
+      end
       render :show
     else
       render json: { error: @friend_request.errors.full_messages.join("\n") }, status: :unprocessable_entity

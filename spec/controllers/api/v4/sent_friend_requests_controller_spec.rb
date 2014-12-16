@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-RSpec.describe Api::V4::SentFriendRequestsController, :type => :controller do
+RSpec.describe Api::V4::SentFriendRequestsController, :type => :controller, sidekiq: :inline do
   let(:current_user) { subject.current_user }
   let(:user) { FactoryGirl.create(:user, username: 'user') }
   let(:friend) { FactoryGirl.create(:user, username: 'friend') }
@@ -80,6 +80,7 @@ RSpec.describe Api::V4::SentFriendRequestsController, :type => :controller do
   end
 
   describe 'POST create' do
+    let(:official_account) { create(:user, username: Settings.official_accounts.first) }
 
     it 'should return :not_found when friend is not found' do
       post :create, friend_id: 0, format: :json
@@ -113,12 +114,29 @@ RSpec.describe Api::V4::SentFriendRequestsController, :type => :controller do
     end
 
     it 'should return :success when success' do
-      allow(Pusher).to receive(:push_to_user)
+      expect(Pusher).to receive(:push_to_user).with(
+        friend.id,
+        'content' => subject.t('notification.wants_to_be_friend', friend_name: user.name)
+      )
       count = current_user.friend_requests.count
       post :create, friend_id: friend.id, format: :json
       expect(current_user.friend_requests.count).to eq(count + 1)
       expect(response).to be_success
       expect(response).to render_template(:show)
+    end
+
+    it 'request official account' do
+      expect(Pusher).to receive(:push_to_user).with(
+        official_account.id,
+        'content' => subject.t('notification.accepted_friend_request', friend_name: user.name)
+      )
+      expect(user.friends).to_not include official_account
+      count = current_user.friend_requests.count
+      post :create, friend_id: official_account.id, format: :json
+      expect(current_user.friend_requests.count).to eq(count + 1)
+      expect(response).to be_success
+      expect(response).to render_template(:show)
+      expect(user.friends.reload).to include official_account
     end
   end
 

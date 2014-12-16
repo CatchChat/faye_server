@@ -6,6 +6,7 @@ zh-CN:
           blocked: '%{friend_name} 已禁止您的好友请求'
           not_found: 该好友不存在
           already_friend: '您与 %{friend_name} 已经是好友关系'
+          accept_error: '%{friend_name} 已拒绝您的好友请求'
         show:
           not_found: 好友请求不存在
         destroy:
