@@ -7,13 +7,14 @@ class Api::V4::UserController < ApiController
     if friend_ids.blank?
       @users = User.none
     else
+      official_accounts = User.where(username: Settings.official_accounts).pluck(:id)
       @users = User.find_by_sql <<-SQL
 SELECT `users`.*, GROUP_CONCAT(IFNULL(`users_friendships`.`nickname`, `users_friendships`.`username`)) common_friend_names
 FROM `users`
 INNER JOIN `friendships` ON `friendships`.`friend_id` = `users`.`id`
 INNER JOIN `users` `users_friendships` ON `users_friendships`.`id` = `friendships`.`user_id`
 WHERE `users_friendships`.`id` IN (#{friend_ids.join(',')})
-AND `users`.id NOT IN (#{(friend_ids << current_user.id).join(',')})
+AND `users`.id NOT IN (#{(friend_ids + [current_user.id] + official_accounts).join(',')})
 GROUP BY `users`.id
 HAVING COUNT(`users`.id) > 1
 ORDER BY COUNT(`users`.id) DESC

@@ -10,6 +10,7 @@ RSpec.describe Api::V4::UserController, :type => :controller do
 
   it 'GET may_know_friends' do
     current_binding = binding
+    official_account = create(:user, username: Settings.official_accounts.first)
 
     1.upto(8) do |index|
       current_binding.local_variable_set("friend#{index}", create(:user, username: "friend#{index}"))
@@ -21,14 +22,17 @@ RSpec.describe Api::V4::UserController, :type => :controller do
 
     2.upto(5) do |index|
       Friendship.create_friendships(current_binding.local_variable_get(:friend6), current_binding.local_variable_get("friend#{index}"))
+      Friendship.create_friendships(official_account, current_binding.local_variable_get(:friend6))
     end
 
     3.upto(5) do |index|
       Friendship.create_friendships(current_binding.local_variable_get(:friend7), current_binding.local_variable_get("friend#{index}"))
+      Friendship.create_friendships(official_account, current_binding.local_variable_get(:friend7))
     end
 
     4.upto(5) do |index|
       Friendship.create_friendships(current_binding.local_variable_get(:friend8), current_binding.local_variable_get("friend#{index}"))
+      Friendship.create_friendships(official_account, current_binding.local_variable_get("friend#{index}"))
     end
 
     get :may_know_friends, format: :json
