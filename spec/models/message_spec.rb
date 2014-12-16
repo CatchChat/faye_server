@@ -35,7 +35,7 @@ RSpec.describe Message, :type => :model do
     it 'user message' do
       message = user.messages.create!(recipient: friend, text_content: 'This is a test!')
       message.mark_as_unread!
-      allow(Pusher).to receive(:push_to_user).once
+      expect(Pusher).to receive(:push_to_user).once
       message.push_notification
     end
 
@@ -49,7 +49,7 @@ RSpec.describe Message, :type => :model do
 
       message = user.messages.create!(recipient: group, text_content: 'This is a test!')
       message.mark_as_unread!
-      allow(Pusher).to receive(:push_to_user).twice
+      expect(Pusher).to receive(:push_to_user).twice
       message.push_notification
     end
   end
