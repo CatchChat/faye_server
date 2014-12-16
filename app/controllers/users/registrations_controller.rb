@@ -29,7 +29,8 @@ class Users::RegistrationsController < Devise::RegistrationsController
     end
     @user.unblock
     @user.save
-    add_official_as_friend_receive_welcome_message
+    # handle by client
+    # add_official_as_friend_receive_welcome_message
 
   rescue ActiveRecord::RecordNotFound => e
     render json: {status: 'record not found', error: e.message}, status: :not_found
