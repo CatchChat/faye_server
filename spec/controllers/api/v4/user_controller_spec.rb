@@ -16,23 +16,24 @@ RSpec.describe Api::V4::UserController, :type => :controller do
       current_binding.local_variable_set("friend#{index}", create(:user, username: "friend#{index}"))
     end
 
+    Friendship.create_friendships(official_account, user)
     1.upto(5) do |index|
       Friendship.create_friendships(user, current_binding.local_variable_get("friend#{index}"))
     end
 
+    Friendship.create_friendships(official_account, current_binding.local_variable_get(:friend6))
     2.upto(5) do |index|
       Friendship.create_friendships(current_binding.local_variable_get(:friend6), current_binding.local_variable_get("friend#{index}"))
-      Friendship.create_friendships(official_account, current_binding.local_variable_get(:friend6))
     end
 
+    Friendship.create_friendships(official_account, current_binding.local_variable_get(:friend7))
     3.upto(5) do |index|
       Friendship.create_friendships(current_binding.local_variable_get(:friend7), current_binding.local_variable_get("friend#{index}"))
-      Friendship.create_friendships(official_account, current_binding.local_variable_get(:friend7))
     end
 
+    Friendship.create_friendships(official_account, current_binding.local_variable_get(:friend8))
     4.upto(5) do |index|
       Friendship.create_friendships(current_binding.local_variable_get(:friend8), current_binding.local_variable_get("friend#{index}"))
-      Friendship.create_friendships(official_account, current_binding.local_variable_get("friend#{index}"))
     end
 
     get :may_know_friends, format: :json
