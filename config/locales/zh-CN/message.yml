@@ -12,5 +12,5 @@ zh-CN:
         longitude: 经度
         latitude: 纬度
         text: 一段文字
-        photo: 一张照片
+        image: 一张图片
         video: 一段视频

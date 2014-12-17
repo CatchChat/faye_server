@@ -12,5 +12,5 @@ zh-CN:
         longitude: longitude
         latitude: latitude
         text: a text
-        photo: a photo
+        image: a image
         video: a video

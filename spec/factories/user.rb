@@ -43,7 +43,7 @@ FactoryGirl.define do
   end
   factory :message do
     recipient_type  'User'
-    media_type  Message.media_types['photo']
+    media_type  Message.media_types['image']
     state Message::STATES[:draft]
   end
 end

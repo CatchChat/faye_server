@@ -7,7 +7,7 @@ class Message < ActiveRecord::Base
 
   scope :draft, -> { where(table_name => { state: STATES[:draft] }) }
 
-  enum media_type: %i(text photo video)
+  enum media_type: %i(text image video)
 
   validates :sender_id, :recipient_id, :recipient_type, :media_type, presence: true
   validates :recipient_type, inclusion: { in: %w(User Group), allow_blank: true }
@@ -47,7 +47,7 @@ class Message < ActiveRecord::Base
     if Settings.attachment_formats.video.include?(extname)
       media_types[:video]
     elsif Settings.attachment_formats.image.include?(extname)
-      media_types[:photo]
+      media_types[:image]
     else
       media_types[:text]
     end

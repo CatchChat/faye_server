@@ -36,7 +36,7 @@ RSpec.describe User, :type => :model do
     message = user.messages.create!(
       recipient: friend,
       text_content: 'This is a test!',
-      media_type: Message.media_types[:photo],
+      media_type: Message.media_types[:image],
       attachments: [attachment]
     )
     message.mark_as_unread!

@@ -97,12 +97,12 @@ RSpec.describe Api::V4::MessagesController, :type => :controller, sidekiq: :inli
           expect(message).to be_unread
         end
 
-        it 'photo message' do
+        it 'image message' do
           expect(user.friends).to include friend
-          post :create, format: :json, recipient_id: friend.id, recipient_type: friend.class.name, text_content: 'This is a test!', media_type: Message.media_types[:photo]
+          post :create, format: :json, recipient_id: friend.id, recipient_type: friend.class.name, text_content: 'This is a test!', media_type: Message.media_types[:image]
           expect(response).to be_success
           message = user.messages.last
-          expect(message).to be_photo
+          expect(message).to be_image
           expect(message).to be_draft
         end
 
@@ -146,12 +146,12 @@ RSpec.describe Api::V4::MessagesController, :type => :controller, sidekiq: :inli
           expect(message).to be_unread
         end
 
-        it 'photo message' do
+        it 'image message' do
           expect(@group.friends).to include friend
-          post :create, format: :json, recipient_id: friend.id, recipient_type: friend.class.name, text_content: 'This is a test!', media_type: Message.media_types[:photo]
+          post :create, format: :json, recipient_id: friend.id, recipient_type: friend.class.name, text_content: 'This is a test!', media_type: Message.media_types[:image]
           expect(response).to be_success
           message = user.messages.last
-          expect(message).to be_photo
+          expect(message).to be_image
           expect(message).to be_draft
         end
 
