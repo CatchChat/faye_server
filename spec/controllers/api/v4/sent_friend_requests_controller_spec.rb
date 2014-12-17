@@ -115,7 +115,7 @@ RSpec.describe Api::V4::SentFriendRequestsController, :type => :controller, side
 
     it 'should return :success when success' do
       expect(Pusher).to receive(:push_to_user).with(
-        friend.id,
+        friend,
         'content' => subject.t('notification.wants_to_be_friend', friend_name: user.name),
         'extras' => { 'type' => 'friend_request', 'subtype' => 'pending' }
       )
@@ -128,7 +128,7 @@ RSpec.describe Api::V4::SentFriendRequestsController, :type => :controller, side
 
     it 'request official account' do
       expect(Pusher).to receive(:push_to_user).with(
-        official_account.id,
+        official_account,
         'content' => subject.t('notification.accepted_friend_request', friend_name: user.name),
         'extras' => { 'type' => 'friend_request', 'subtype' => 'accepted' }
       )

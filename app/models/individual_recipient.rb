@@ -28,7 +28,7 @@ class IndividualRecipient < ActiveRecord::Base
   def update_message_state
     return if skip_update_message_state
 
-    unless self.class.unread.exists?(message_id: message_id)
+    if self.class.unread.where(message_id: message_id).count == 0
       message.mark_as_read
     end
 

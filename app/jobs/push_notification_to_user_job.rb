@@ -3,6 +3,6 @@ class PushNotificationToUserJob
   sidekiq_options queue: :push_notification_to_user, :retry => 3
 
   def perform(user_id, options)
-    Pusher.push_to_user(user_id, options)
+    Pusher.push_to_user(User.find(user_id), options)
   end
 end

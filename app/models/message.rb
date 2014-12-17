@@ -32,9 +32,9 @@ class Message < ActiveRecord::Base
   end
 
   def push_notification
-    individual_recipients.each do |individual_recipient|
+    individual_recipients.includes(:user).each do |individual_recipient|
       Pusher.push_to_user(
-        individual_recipient.user_id,
+        individual_recipient.user,
         content: I18n.t(
           'notification.sent_message_to_you',
           friend_name: sender.name_by_friend(individual_recipient.user),

@@ -11,7 +11,8 @@ class Pusher
   end
 
   class << self
-    def push_to_users(user_ids, options = {})
+    def push_to_users(users, options = {})
+      pusher_ids = users.map(&:pusher_id)
       token = AccessToken.current
       options[:environment] = false if token && token.local?
       options[:title] = I18n.t('catch_chat') if options[:title].blank?
@@ -20,7 +21,7 @@ class Pusher
         new(XingePusher.new(Settings.xinge.to_hash.symbolize_keys)),
         new(JpushPusher.new(Settings.jpush.to_hash.symbolize_keys))
       ].each do |pusher|
-        pusher.push_to_accounts(options.merge(accounts: user_ids))
+        pusher.push_to_accounts(options.merge(accounts: pusher_ids))
       end
     end
 

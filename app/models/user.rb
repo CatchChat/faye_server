@@ -36,6 +36,8 @@ class User < ActiveRecord::Base
   scope :mobile_verified, -> { where(User.table_name => { mobile_verified: true }) }
   scope :active, -> { where(User.table_name => { state: STATES[:active] }) }
 
+  before_create :generate_pusher_id
+
   STATES = { active: 1, blocked: 2 }.freeze
 
   state_machine :state, initial: :active do
@@ -123,5 +125,12 @@ class User < ActiveRecord::Base
       report.attachments.update_all(reserved: true)
     end
     report
+  end
+
+  private
+
+  def generate_pusher_id
+    return if self.pusher_id
+    self.pusher_id = BSON::ObjectId.new.to_s
   end
 end

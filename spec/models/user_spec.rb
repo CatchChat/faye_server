@@ -57,4 +57,14 @@ RSpec.describe User, :type => :model do
     expect(report.attachments).to eq([attachment.reload])
     expect(attachment).to be_reserved
   end
+
+  it '#generate_pusher_id' do
+    new_user = User.new
+    new_user.send :generate_pusher_id
+    expect(new_user.pusher_id).to be_present
+
+    new_user = User.new(pusher_id: 'pusher_id')
+    new_user.send :generate_pusher_id
+    expect(new_user.pusher_id).to eq 'pusher_id'
+  end
 end

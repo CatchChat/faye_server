@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20141212132833) do
+ActiveRecord::Schema.define(version: 20141217084549) do
 
   create_table "access_tokens", force: true do |t|
     t.integer  "user_id"
@@ -218,6 +218,21 @@ ActiveRecord::Schema.define(version: 20141212132833) do
   add_index "unfriend_requests", ["friend_id"], name: "index_unfriend_requests_on_friend_id", using: :btree
   add_index "unfriend_requests", ["user_id"], name: "index_unfriend_requests_on_user_id", using: :btree
 
+  create_table "user_change_logs", force: true do |t|
+    t.integer "user_id"
+    t.string  "action"
+    t.string  "old_value"
+    t.string  "new_value"
+    t.string  "mobile"
+  end
+
+  add_index "user_change_logs", ["user_id"], name: "index_user_change_logs_on_user_id", using: :btree
+
+  create_table "user_delete_logs", force: true do |t|
+    t.string "node_id"
+    t.string "reason"
+  end
+
   create_table "users", force: true do |t|
     t.string   "username",               default: "",        null: false
     t.string   "encrypted_password",     default: "",        null: false
@@ -239,7 +254,7 @@ ActiveRecord::Schema.define(version: 20141212132833) do
     t.integer  "state"
     t.string   "time_zone",              default: "Beijing", null: false
     t.string   "avatar_url"
-    t.string   "node_id"
+    t.string   "pusher_id"
     t.string   "node_token"
     t.string   "node_password"
     t.datetime "created_at"
@@ -248,9 +263,9 @@ ActiveRecord::Schema.define(version: 20141212132833) do
 
   add_index "users", ["email"], name: "index_users_on_email", unique: true, length: {"email"=>191}, using: :btree
   add_index "users", ["mobile", "phone_code"], name: "index_users_on_mobile_and_phone_code", unique: true, length: {"mobile"=>191, "phone_code"=>191}, using: :btree
-  add_index "users", ["node_id"], name: "index_users_on_node_id", length: {"node_id"=>191}, using: :btree
   add_index "users", ["node_password"], name: "index_users_on_node_password", length: {"node_password"=>191}, using: :btree
   add_index "users", ["node_token"], name: "index_users_on_node_token", length: {"node_token"=>191}, using: :btree
+  add_index "users", ["pusher_id"], name: "index_users_on_pusher_id", unique: true, length: {"pusher_id"=>191}, using: :btree
   add_index "users", ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true, length: {"reset_password_token"=>191}, using: :btree
   add_index "users", ["username"], name: "index_users_on_username", unique: true, length: {"username"=>191}, using: :btree
 
