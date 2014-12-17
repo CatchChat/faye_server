@@ -101,7 +101,8 @@ RSpec.describe Api::V4::ReceivedFriendRequestsController, :type => :controller, 
       expect(friend.friends).to_not include user
       expect(Pusher).to receive(:push_to_user).with(
         user.id,
-        'content' => subject.t('notification.accepted_friend_request', friend_name: friend.name_by_friend(user))
+        'content' => subject.t('notification.accepted_friend_request', friend_name: friend.name_by_friend(user)),
+        'extras' => { 'type' => 'friend_request', 'subtype' => 'accepted' }
       )
       patch :accept, id: friend_request.id, format: :json
       expect(friend_request.reload).to be_accepted
@@ -133,7 +134,8 @@ RSpec.describe Api::V4::ReceivedFriendRequestsController, :type => :controller, 
       expect(friend_request).to_not be_rejected
       expect(Pusher).to receive(:push_to_user).with(
         user.id,
-        'content' => subject.t('notification.rejected_friend_request', friend_name: friend.name_by_friend(user))
+        'content' => subject.t('notification.rejected_friend_request', friend_name: friend.name_by_friend(user)),
+        'extras' => { 'type' => 'friend_request', 'subtype' => 'rejected' }
       )
       patch :reject, id: friend_request.id, format: :json
       expect(friend_request.reload).to be_rejected
@@ -165,7 +167,8 @@ RSpec.describe Api::V4::ReceivedFriendRequestsController, :type => :controller, 
       expect(friend_request).to_not be_blocked
       expect(Pusher).to receive(:push_to_user).with(
         user.id,
-        'content' => subject.t('notification.blocked_friend_request', friend_name: friend.name_by_friend(user))
+        'content' => subject.t('notification.blocked_friend_request', friend_name: friend.name_by_friend(user)),
+        'extras' => { 'type' => 'friend_request', 'subtype' => 'blocked' }
       )
       patch :block, id: friend_request.id, format: :json
       expect(friend_request.reload).to be_blocked

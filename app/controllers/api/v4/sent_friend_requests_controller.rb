@@ -37,7 +37,8 @@ class Api::V4::SentFriendRequestsController < ApiController
         if @friend_request.accept
           PushNotificationToUserJob.perform_async(
             friend.id,
-            content: t('notification.accepted_friend_request', friend_name: current_user.name)
+            content: t('notification.accepted_friend_request', friend_name: current_user.name),
+            extras: { type: 'friend_request', subtype: @friend_request.state_name }
           )
         else
           @friend_request.reject
@@ -46,7 +47,8 @@ class Api::V4::SentFriendRequestsController < ApiController
       else
         PushNotificationToUserJob.perform_async(
           friend.id,
-          content: t('notification.wants_to_be_friend', friend_name: current_user.name)
+          content: t('notification.wants_to_be_friend', friend_name: current_user.name),
+          extras: { type: 'friend_request', subtype: @friend_request.state_name }
         )
       end
       render :show

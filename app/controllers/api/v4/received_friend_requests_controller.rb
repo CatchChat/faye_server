@@ -21,7 +21,11 @@ class Api::V4::ReceivedFriendRequestsController < ApiController
     if @friend_request.accept
       PushNotificationToUserJob.perform_async(
         @friend_request.user_id,
-        content: t('notification.accepted_friend_request', friend_name: current_user.name_by_friend(@friend_request.user))
+        content: t(
+          'notification.accepted_friend_request',
+          friend_name: current_user.name_by_friend(@friend_request.user)
+        ),
+        extras: { type: 'friend_request', subtype: @friend_request.state_name }
       )
       render :show
     else
@@ -34,7 +38,11 @@ class Api::V4::ReceivedFriendRequestsController < ApiController
     if @friend_request.reject
       PushNotificationToUserJob.perform_async(
         @friend_request.user_id,
-        content: t('notification.rejected_friend_request', friend_name: current_user.name_by_friend(@friend_request.user))
+        content: t(
+          'notification.rejected_friend_request',
+          friend_name: current_user.name_by_friend(@friend_request.user)
+        ),
+        extras: { type: 'friend_request', subtype: @friend_request.state_name }
       )
       render :show
     else
@@ -47,7 +55,11 @@ class Api::V4::ReceivedFriendRequestsController < ApiController
     if @friend_request.block
       PushNotificationToUserJob.perform_async(
         @friend_request.user_id,
-        content: t('notification.blocked_friend_request', friend_name: current_user.name_by_friend(@friend_request.user))
+        content: t(
+          'notification.blocked_friend_request',
+          friend_name: current_user.name_by_friend(@friend_request.user)
+        ),
+        extras: { type: 'friend_request', subtype: @friend_request.state_name }
       )
       render :show
     else
