@@ -16,13 +16,13 @@ end
 json.attachments do
   json.array! message.attachments do |attachment|
     json.file do
-      expires_in, url = attachment.download_url
+      url, expires_in = attachment.download_url_with_timer
       json.storage attachment.storage
       json.expires_in expires_in
       json.url url
     end
     json.fallback_file do
-      expires_in, url = attachment.fallback_url
+      url, expires_in = attachment.fallback_url_with_timer
       json.storage attachment.fallback_storage
       json.expires_in expires_in
       json.url url
