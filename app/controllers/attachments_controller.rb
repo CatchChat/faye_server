@@ -80,8 +80,5 @@ class AttachmentsController < ApiController
     end
       render json: {provider: 'qiniu', file: key, attachment_id: attachment.id}
   end
-  def download_url
-    puts params
-  end
 
 end
