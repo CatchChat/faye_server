@@ -71,10 +71,8 @@ RSpec.describe User, :type => :model, sidekiq: :inline do
   it '#push_joined_notification' do
     user1 = create(:user, username: 'user1', mobile_verified: true, mobile: '15158113320')
     user1.contacts.create!(name: 'user a', number: user.normalized_mobile)
-    user2 = create(:user, username: 'user2', mobile_verified: true, mobile: '15158113321')
+    user2 = create(:user, username: 'user2', mobile_verified: false, mobile: '15158113321')
     user2.contacts.create!(name: 'user b', number: user.normalized_mobile)
-    user3 = create(:user, username: 'user3', mobile_verified: false, mobile: '15158113322')
-    user3.contacts.create!(name: 'user c', number: user.normalized_mobile)
 
     expect(Pusher).to receive(:push_to_user).with(
       user1,

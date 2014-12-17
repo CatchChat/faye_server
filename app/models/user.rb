@@ -131,7 +131,7 @@ class User < ActiveRecord::Base
     return if !mobile_verified || mobile.blank?
 
     Contact.by_number(normalized_mobile).includes(:user).distinct(:user_id).
-      where.not(user_id: self.id).where(users: { mobile_verified: true }).each do |contact|
+      where.not(user_id: self.id).each do |contact|
       Pusher.push_to_user(
         contact.user,
         content: I18n.t(
