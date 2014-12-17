@@ -7,7 +7,6 @@ class Contact < ActiveRecord::Base
 
   attr_accessor :number
 
-  scope :by_number, ->(number) { where(self.table_name => { encrypted_number: encrypt_number(number) }) }
   scope :by_user, -> (user) { where(self.table_name => { user_id: user.is_a?(User) ? user.id : user }) }
 
   # From NodeJS
@@ -31,5 +30,13 @@ class Contact < ActiveRecord::Base
 
   def encrypt_number
     self.encrypted_number = self.class.encrypt_number(number) if number.present?
+  end
+
+  def self.by_number(number)
+    if encrypted_number = encrypt_number(number)
+      where(self.table_name => { encrypted_number: encrypted_number })
+    else
+      none
+    end
   end
 end

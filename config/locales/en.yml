@@ -40,6 +40,8 @@ en:
     blocked_friend_request: '%{friend_name} blocked your friend request'
     accepted_friend_request: '%{friend_name} accepted your friend request'
     rejected_friend_request: '%{friend_name} rejected your friend request'
+    screenshot: 'Your friend %{friend_name} took a screenshot on your message'
+    contact_registered: 'Your friend %{contact_name} is joined the catchchat, his user name is %{username}, hastened to add him as a friend!'
   errors:
     messages:
       invalid_transition: cannot transition

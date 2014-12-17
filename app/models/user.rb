@@ -127,6 +127,23 @@ class User < ActiveRecord::Base
     report
   end
 
+  def push_joined_notification
+    return if !mobile_verified || mobile.blank?
+
+    Contact.by_number(normalized_mobile).includes(:user).distinct(:user_id).
+      where.not(user_id: self.id).where(users: { mobile_verified: true }).each do |contact|
+      Pusher.push_to_user(
+        contact.user,
+        content: I18n.t(
+          'notification.contact_registered',
+          contact_name: contact.name,
+          username: self.username
+        ),
+        extras: { type: 'contact_join' }
+      )
+    end
+  end
+
   private
 
   def generate_pusher_id

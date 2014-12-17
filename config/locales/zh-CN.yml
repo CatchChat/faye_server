@@ -20,6 +20,8 @@ zh-CN:
     blocked_friend_request: '%{friend_name} 禁止了您的好友请求'
     accepted_friend_request: '%{friend_name} 接受了您的好友请求'
     rejected_friend_request: '%{friend_name} 拒绝了您的好友请求'
+    screenshot: '您发给好友 %{friend_name} 的消息已被截图保存'
+    contact_registered: '您的好友 %{contact_name} 加入秒视了，他的用户名是 %{username}，赶紧加他为好友吧！'
   errors:
     messages:
       invalid_transition: 不能切换

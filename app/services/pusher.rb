@@ -12,7 +12,7 @@ class Pusher
 
   class << self
     def push_to_users(users, options = {})
-      pusher_ids = users.map(&:pusher_id)
+      pusher_ids = Array(users).map(&:pusher_id)
       token = AccessToken.current
       options[:environment] = false if token && token.local?
       options[:title] = I18n.t('catch_chat') if options[:title].blank?
