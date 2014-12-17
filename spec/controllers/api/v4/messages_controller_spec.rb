@@ -352,4 +352,25 @@ RSpec.describe Api::V4::MessagesController, :type => :controller, sidekiq: :inli
       it_behaves_like 'show examples'
     end
   end
+
+  context 'POST notify_screenshot' do
+
+    it 'message is not found' do
+      post :notify_screenshot, format: :json, id: 0
+      expect(response).to be_not_found
+      expect(json_response).to eq({ "error" => subject.t('.not_found') })
+    end
+
+    it 'should call pusher' do
+      message = friend.messages.create!(recipient: user, text_content: 'This is a test!')
+      message.mark_as_unread!
+      expect(Pusher).to receive(:push_to_user).with(
+        friend,
+        'content' => subject.t('notification.screenshot', friend_name: user.name_by_friend(friend)),
+        'extras' => { 'type' => 'screenshot' }
+      )
+      post :notify_screenshot, format: :json, id: message.id
+      expect(response).to be_success
+    end
+  end
 end

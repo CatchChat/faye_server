@@ -63,6 +63,8 @@ zh-CN:
           deliver_error: 出错，请稍后再试
         show:
           not_found: 该消息不存在
+        notify_screenshot:
+          not_found: 该消息不存在
       contacts:
         upload:
           contacts_error: 上传失败，请重试

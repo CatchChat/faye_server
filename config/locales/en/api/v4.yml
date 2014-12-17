@@ -63,6 +63,8 @@ en:
           deliver_error: An error occurred, please try again later
         show:
           not_found: The message is not found
+        notify_screenshot:
+          not_found: The message is not found
       contacts:
         upload:
           contacts_error: Upload failed, please try again

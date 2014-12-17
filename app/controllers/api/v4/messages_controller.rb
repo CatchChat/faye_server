@@ -86,6 +86,20 @@ class Api::V4::MessagesController < ApiController
     fresh_when(@message, public: true)
   end
 
+  ### POST /api/v4/messages/:id/notify_screenshot
+  def notify_screenshot
+    @message = current_user.received_messages.find_by(id: params[:id])
+    return render json: { error: t('.not_found') }, status: :not_found unless @message
+
+    PushNotificationToUserJob.perform_async(
+      @message.sender_id,
+      content: t('notification.screenshot', friend_name: current_user.name_by_friend(@message.sender)),
+      extras: { type: 'screenshot' }
+    )
+
+    render json: {}
+  end
+
   private
 
   def find_recipient

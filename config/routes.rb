@@ -170,6 +170,7 @@ Rails.application.routes.draw do
         member do
           patch :mark_as_read
           patch :deliver
+          post :notify_screenshot
         end
       end
 
