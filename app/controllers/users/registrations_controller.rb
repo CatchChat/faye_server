@@ -29,6 +29,8 @@ class Users::RegistrationsController < Devise::RegistrationsController
     end
     @user.unblock
     @user.save
+
+    @user.push_joined_notification
     # handle by client
     # add_official_as_friend_receive_welcome_message
 

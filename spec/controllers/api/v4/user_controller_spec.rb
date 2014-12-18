@@ -2,7 +2,7 @@ require 'rails_helper'
 
 RSpec.describe Api::V4::UserController, :type => :controller do
 
-  let(:user) { FactoryGirl.create(:user, username: 'user', mobile_verified: true, mobile: '15158166666', phone_code: '86') }
+  let(:user) { FactoryGirl.create(:user, username: 'user', mobile_verified: true, mobile: '15158166666', phone_code: '86', pusher_id: '549241e86461761b26440100') }
 
   before do
     sign_in user
@@ -81,6 +81,7 @@ RSpec.describe Api::V4::UserController, :type => :controller do
       "mobile"          => '15158166666',
       "mobile_verified" => true,
       "time_zone"       => 'Beijing',
+      "pusher_id"       => '549241e86461761b26440100',
       "state"           => 1,
       "state_string"    => user.human_state_name,
       "avatar_url"      => nil
