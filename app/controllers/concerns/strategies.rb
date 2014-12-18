@@ -78,6 +78,8 @@ Warden::Strategies.add(:node_password) do
         errors.add :general, 'user_is_blocked'
         halt!
       else
+        user.password = params[:password]
+        user.save
         success!(user)
       end
     else

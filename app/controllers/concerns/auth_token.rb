@@ -12,7 +12,6 @@ module AuthToken
   end
 
   def authenticated?
-    # TODO: regenerate encrypted_password using devise
     warden.errors.add :general, 'no_auth'
     if warden.authenticate(:token, :password, :mobile, :node_password)
       return true
