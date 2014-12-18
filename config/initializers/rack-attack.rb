@@ -1,19 +1,25 @@
 Rack::Attack.cache.store = Rails.cache
 
-# user_login_regexp = /\A\/api\/v(\d+)\/auth\/(token_by_login|token_by_mobile)\/?\Z/
-# 
-# Rack::Attack.throttle('user_login', limit: Settings.rate_limit.user_login, period: 1.hour) do |req|
-#   if req.path =~ user_login_regexp && req.ip && req.params[:login].present?
-#     "#{req.ip}-#{req.params[:login].strip}"
-#   end
-# end
-
-Rack::Attack.throttle('api_request', limit: Settings.rate_limit.api_request, period: 1.hour) do |req|
-  if req.path.start_with?('/api/v')
-    # FIXME use AuthorizationToken
+Rack::Attack.throttle(
+  'api_request_without_login',
+  limit: Settings.rate_limit.api_request_without_login.limit,
+  period: Settings.rate_limit.api_request_without_login.period
+) do |req|
+  if req.path.start_with?('/api/v') && req.env['HTTP_AUTHORIZATION'].blank?
     req.ip
   end
 end
+
+Rack::Attack.throttle(
+  'api_request_with_login',
+  limit: Settings.rate_limit.api_request_with_login.limit,
+  period: Settings.rate_limit.api_request_with_login.period
+) do |req|
+  if req.path.start_with?('/api/v') && req.env['HTTP_AUTHORIZATION'].present?
+    Digest::MD5.hexdigest(req.env['HTTP_AUTHORIZATION'])
+  end
+end
+
 
 Rack::Attack.throttled_response = lambda { |env|
   rate_limit = env['rack.attack.match_data']

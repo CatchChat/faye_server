@@ -18,6 +18,10 @@ redis:
     port: 6379
     driver: hiredis
 rate_limit:
-  user_login: 5000
-  api_request: 5000
+  api_request_without_login:
+    limit: 5000
+    period: 3600
+  api_request_with_login:
+    limit: 5000
+    period: 3600
 ssl_configured: false
