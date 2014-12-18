@@ -40,7 +40,8 @@ class Message < ActiveRecord::Base
           friend_name: sender.name_by_friend(individual_recipient.user),
           media_type: Message.human_attribute_name(media_type)
         ),
-        extras: { type: 'message', subtype: self.media_type }
+        extras: { type: 'message', subtype: self.media_type },
+        content_available: 1
       )
     end
   end

@@ -25,6 +25,6 @@ describe Xinge::IOSMessage do
   end
 
   it '#format' do
-    expect(subject.format).to eq "{\"catch\":\"catch\",\"accept_time\":[{\"start\":{\"hour\":\"00\",\"min\":\"00\"},\"end\":{\"hour\":\"12\",\"min\":\"00\"}},{\"start\":{\"hour\":\"13\",\"min\":\"00\"},\"end\":{\"hour\":\"18\",\"min\":\"00\"}}],\"aps\":{\"alert\":\"alert\",\"badge\":5,\"sound\":\"sound\"}}"
+    expect(subject.format).to eq "{\"catch\":\"catch\",\"accept_time\":[{\"start\":{\"hour\":\"00\",\"min\":\"00\"},\"end\":{\"hour\":\"12\",\"min\":\"00\"}},{\"start\":{\"hour\":\"13\",\"min\":\"00\"},\"end\":{\"hour\":\"18\",\"min\":\"00\"}}],\"aps\":{\"alert\":\"alert\",\"badge\":5,\"sound\":\"sound\",\"content-available\":0}}"
   end
 end

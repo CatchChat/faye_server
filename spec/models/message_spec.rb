@@ -35,7 +35,16 @@ RSpec.describe Message, :type => :model do
     it 'user message' do
       message = user.messages.create!(recipient: friend, text_content: 'This is a test!')
       message.mark_as_unread!
-      expect(Pusher).to receive(:push_to_user).once
+      expect(Pusher).to receive(:push_to_user).with(
+        friend,
+        content: I18n.t(
+          'notification.sent_message_to_you',
+          friend_name: user.name_by_friend(friend),
+          media_type: Message.human_attribute_name('text')
+        ),
+        extras: { type: 'message', subtype: 'text' },
+        content_available: 1
+      )
       message.push_notification
     end
 
@@ -49,7 +58,29 @@ RSpec.describe Message, :type => :model do
 
       message = user.messages.create!(recipient: group, text_content: 'This is a test!')
       message.mark_as_unread!
-      expect(Pusher).to receive(:push_to_user).twice
+
+      expect(Pusher).to receive(:push_to_user).with(
+        friend,
+        content: I18n.t(
+          'notification.sent_message_to_you',
+          friend_name: user.name_by_friend(friend),
+          media_type: Message.human_attribute_name('text')
+        ),
+        extras: { type: 'message', subtype: 'text' },
+        content_available: 1
+      )
+
+      expect(Pusher).to receive(:push_to_user).with(
+        friend1,
+        content: I18n.t(
+          'notification.sent_message_to_you',
+          friend_name: user.name_by_friend(friend1),
+          media_type: Message.human_attribute_name('text')
+        ),
+        extras: { type: 'message', subtype: 'text' },
+        content_available: 1
+      )
+
       message.push_notification
     end
   end

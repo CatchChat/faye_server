@@ -44,8 +44,9 @@ class Api::V4::MessagesController < ApiController
     if result
       if recipient.is_a?(User) && recipient.official_account?
         SendOfficialMessageJob.perform_async(recipient.id, current_user.id, @message.id)
+      else
+        MessageNotificationJob.perform_async(@message.id) if @message.unread?
       end
-      MessageNotificationJob.perform_async(@message.id) if @message.unread?
     else
       render json: { error: @message.errors.full_messages.join("\n") }, status: :unprocessable_entity
     end

@@ -20,6 +20,7 @@ class JpushPusher
   #   sound: String
   #   environment: Boolean true: Production, false: Development
   #   accounts: String or Array
+  #   content_available: 0 or 1
   def push_to_accounts(options)
     if options[:environment].nil? || options[:environment]
       environment = true
@@ -52,12 +53,13 @@ class JpushPusher
     )
   end
 
+  # content_available: 0 or 1
   def generate_ios_notification(options)
     params = {
       alert: options[:content],
       badge: options[:badge],
       extras: options[:extras],
-      'content-available' => 1
+      content_available: options[:content_available] || 0
     }
     params[:sound] = 'bub3.caf' if options[:sound].blank?
 

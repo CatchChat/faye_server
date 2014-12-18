@@ -20,9 +20,11 @@ module Xinge
       # 重复推送的次数
       :loop_times,
       # 重复推送的时间间隔，单位为天
-      :loop_interval
+      :loop_interval,
+      # 如果为 1 表示要静默推送。
+      :content_available
     ]
-    DEFAULT_OPTIONS = { expire_time: 0, send_time: 0, custom_content: {}, accept_time: [] }
+    DEFAULT_OPTIONS = { expire_time: 0, send_time: 0, content_available: 0, custom_content: {}, accept_time: [] }
     attr_accessor :options
 
     def initialize(options = {})
@@ -39,6 +41,7 @@ module Xinge
       aps = { alert: alert }
       aps[:badge] = badge if badge.present?
       aps[:sound] = sound if sound.present?
+      aps['content-available'] = content_available.present? ? content_available : DEFAULT_OPTIONS[:content_available]
 
       mess = custom_content || {}
       mess[:accept_time] = Array(accept_time).map(&:format) if accept_time.present?

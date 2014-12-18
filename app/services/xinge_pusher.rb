@@ -19,6 +19,7 @@ class XingePusher
   #   sound: String
   #   environment: Boolean true: Production, false: Development
   #   accounts: String or Array
+  #   content_available: 0 or 1
   def push_to_accounts(options)
     if options[:environment].nil? || options[:environment]
       environment = Xinge::Pusher::IOS_ENV_PRO
@@ -65,11 +66,13 @@ class XingePusher
   #   extras: Hash
   #   badge: Integer
   #   sound: String
+  #   content_available: 0 or 1
   def generate_ios_notification(options)
     message_params = {
       alert: options[:content],
       custom_content: options[:extras],
-      badge: options[:badge]
+      badge: options[:badge],
+      content_available: options[:content_available] || 0
     }
     message_params[:sound] = 'bub3.caf' if options[:sound].blank?
 
