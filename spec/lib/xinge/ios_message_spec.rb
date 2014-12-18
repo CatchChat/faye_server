@@ -21,7 +21,7 @@ describe Xinge::IOSMessage do
   end
 
   it '#format_send_time' do
-    expect(subject.format_send_time).to eq Time.now.strftime('%Y-%m-%d %H:%M:%S')
+    expect(subject.format_send_time).to eq Time.find_zone('Beijing').now.strftime('%Y-%m-%d %H:%M:%S')
   end
 
   it '#format' do

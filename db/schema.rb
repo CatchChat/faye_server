@@ -252,7 +252,6 @@ ActiveRecord::Schema.define(version: 20141217084549) do
     t.string   "phone_code",             default: "86",      null: false
     t.boolean  "admin",                  default: false,     null: false
     t.integer  "state"
-    t.string   "time_zone",              default: "Beijing", null: false
     t.string   "avatar_url"
     t.string   "pusher_id"
     t.string   "node_token"

@@ -54,23 +54,6 @@ RSpec.describe TestsController, :type => :controller do
     end
   end
 
-  context 'ApiController#set_time_zone' do
-
-    it 'The time_zone is wrong' do
-      allow(user).to receive(:time_zone) { 'xxx' }
-      sign_in user
-      get :index
-      expect(Time.zone.name).to eq 'Beijing'
-    end
-
-    it 'The time_zone is correct' do
-      user.update!(time_zone: 'UTC')
-      sign_in user
-      get :index
-      expect(Time.zone.name).to eq 'UTC'
-    end
-  end
-
   context 'ApiController#set_rate_limit' do
 
     it 'the response should have rate limit data' do

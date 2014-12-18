@@ -80,7 +80,6 @@ RSpec.describe Api::V4::UserController, :type => :controller do
       "phone_code"      => '86',
       "mobile"          => '15158166666',
       "mobile_verified" => true,
-      "time_zone"       => 'Beijing',
       "pusher_id"       => '549241e86461761b26440100',
       "state"           => 1,
       "state_string"    => user.human_state_name,
@@ -92,14 +91,12 @@ RSpec.describe Api::V4::UserController, :type => :controller do
     patch :update, {
       format: :json,
       nickname: 'tumayun',
-      time_zone: 'Beijing',
       avatar_url: 'http://catch-avatars.qiniudn.com/sJAUYG6nc84glXkq.jpg'
     }
 
     expect(response).to be_success
     expect(response).to render_template(:show)
     expect(json_response[:nickname]).to eq 'tumayun'
-    expect(json_response[:time_zone]).to eq 'Beijing'
     expect(json_response[:avatar_url]).to eq 'http://catch-avatars.qiniudn.com/sJAUYG6nc84glXkq.jpg'
   end
 

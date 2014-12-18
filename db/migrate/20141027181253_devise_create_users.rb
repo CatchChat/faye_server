@@ -39,7 +39,6 @@ class DeviseCreateUsers < ActiveRecord::Migration
       t.boolean :admin, null: false, default: false
 
       t.integer :state
-      t.string :time_zone, null: false, default: 'Beijing'
       t.string :avatar_url
 
       t.string :node_id

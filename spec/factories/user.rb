@@ -24,7 +24,7 @@ FactoryGirl.define do
   factory :access_token do
     token 'test-token'
     active true
-    expired_at Time.now + 1000
+    expired_at Time.zone.now + 1000
   end
 
   factory :sms_verification_code do
@@ -32,7 +32,7 @@ FactoryGirl.define do
     phone_code '86'
     token 'test-token'
     active true
-    expired_at Time.now + 1000
+    expired_at Time.zone.now + 1000
   end
 
   factory :group do

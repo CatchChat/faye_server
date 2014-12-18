@@ -32,7 +32,6 @@ LIMIT 50
   ### PATCH /api/v4/user
   # Optional params
   #   nickname
-  #   time_zone
   #   avatar_url
   def update
     if current_user.update(update_params)
@@ -70,6 +69,6 @@ LIMIT 50
   private
 
   def update_params
-    params.permit(:nickname, :time_zone, :avatar_url)
+    params.permit(:nickname, :avatar_url)
   end
 end

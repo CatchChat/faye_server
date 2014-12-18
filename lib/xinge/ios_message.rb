@@ -34,7 +34,7 @@ module Xinge
     end
 
     def format_send_time
-      Time.at(send_time.to_i).strftime('%Y-%m-%d %H:%M:%S')
+      Time.find_zone('Beijing').at(send_time.to_i).strftime('%Y-%m-%d %H:%M:%S')
     end
 
     def format
