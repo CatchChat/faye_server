@@ -31,4 +31,32 @@ RSpec.describe IndividualRecipient, :type => :model do
       expect(message.reload).to be_read
     end
   end
+
+  context '#update_counters' do
+
+    it 'increment counters if state is sent' do
+      count = friend.unread_messages_count.value
+      message = user.messages.create!(recipient: friend, text_content: 'This is a test!')
+      message.mark_as_unread
+      expect(friend.unread_messages_count.value).to eq count + 1
+    end
+
+    it 'do not update counters if state from sent to delivered' do
+      message = user.messages.create!(recipient: friend, text_content: 'This is a test!')
+      message.mark_as_unread
+      individual_recipient = message.individual_recipients.first
+      count = friend.unread_messages_count.value
+      individual_recipient.deliver!
+      expect(friend.unread_messages_count.value).to eq count
+    end
+
+    it 'decrement counters if state from sent to read' do
+      message = user.messages.create!(recipient: friend, text_content: 'This is a test!')
+      message.mark_as_unread
+      individual_recipient = message.individual_recipients.first
+      count = friend.unread_messages_count.value
+      individual_recipient.mark_as_read!
+      expect(friend.unread_messages_count.value).to eq count - 1
+    end
+  end
 end

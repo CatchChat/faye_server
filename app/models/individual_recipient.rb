@@ -6,6 +6,8 @@ class IndividualRecipient < ActiveRecord::Base
 
   attr_accessor :skip_update_message_state
 
+  after_create :update_counters
+
   STATES = { sent: 1, delivered: 2, read: 3 }.freeze
   state_machine :state, initial: :sent do
     STATES.each do |state_name, value|
@@ -20,7 +22,7 @@ class IndividualRecipient < ActiveRecord::Base
       transition [:sent, :delivered] => :read
     end
 
-    after_transition [:sent, :delivered] => :read, do: :update_message_state
+    after_transition [:sent, :delivered] => :read, do: [:update_message_state, :update_counters]
   end
 
   private
@@ -33,5 +35,13 @@ class IndividualRecipient < ActiveRecord::Base
     end
 
     true
+  end
+
+  def update_counters
+    if self.sent?
+      User.increment_counter(:unread_messages_count, self.user_id)
+    elsif self.read?
+      User.decrement_counter(:unread_messages_count, self.user_id)
+    end
   end
 end

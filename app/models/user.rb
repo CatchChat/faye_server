@@ -37,6 +37,9 @@ class User < ActiveRecord::Base
 
   before_create :generate_pusher_id
 
+  counter :pending_friend_requests_count
+  counter :unread_messages_count
+
   STATES = { active: 1, blocked: 2 }.freeze
 
   state_machine :state, initial: :active do
