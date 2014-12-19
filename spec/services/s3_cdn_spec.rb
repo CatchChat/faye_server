@@ -41,7 +41,7 @@ describe Cdn do
 
       expect(url).to eq "https://ruanwz-test.s3.cn-north-1.amazonaws.com.cn/"
       expect(policy["conditions"].length).to eq 6
-      expect(signature).to eq '04aa9aa8b7cb52ef09c7ca695b692f7e7c8cd005dfac4e336c7d595018052363'
+      expect(signature).to eq '1871200944f4d3327420012cfc2622a9025c84bd723f87cf00bf264c52bcbe54'
 
     end
 

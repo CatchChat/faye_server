@@ -20,13 +20,13 @@ describe Xinge::Pusher do
   it '#common_params' do
     expect(ios_pusher.common_params).to eq({
       access_id: Settings.xinge.ios.id,
-      timestamp: Time.now.to_i,
+      timestamp: Time.zone.now.to_i,
       valid_time: 600
     })
 
     expect(android_pusher.common_params).to eq({
       access_id: Settings.xinge.android.id,
-      timestamp: Time.now.to_i,
+      timestamp: Time.zone.now.to_i,
       valid_time: 600
     })
   end

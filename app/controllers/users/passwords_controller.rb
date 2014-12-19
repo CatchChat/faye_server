@@ -79,7 +79,7 @@ class Users::PasswordsController < Devise::PasswordsController
 
   def get_expired_at
     valid_period = 3600
-    Time.now + valid_period
+    Time.zone.now + valid_period
   end
 
   def remove_old_access_token(user)

@@ -50,9 +50,9 @@ class S3Cdn
     self.attributes = self.attributes.merge args
     raise Cdn::MissingParam, "missing params for upload fields" unless S3Validator::UPLOADVALIDATOR.call(self).valid?
 
-    date = Time.now.strftime("%Y%m%dT%H%M%SZ")
+    date = Time.zone.now.strftime("%Y%m%dT%H%M%SZ")
     #format for expire_date: 2013-08-06T12:00:00.000Z
-    expire_date = (Time.now + expires_in).strftime("%Y-%m-%dT%H:%M:%S.000Z")
+    expire_date = (Time.zone.now + expires_in).strftime("%Y-%m-%dT%H:%M:%S.000Z")
 
     if region.match 'cn'
       url = "https://#{bucket}.s3.#{region}.amazonaws.com.cn/"

@@ -41,7 +41,7 @@ class Users::SessionsController < Devise::SessionsController
       return render json:{status: 'not enough data'}, status: :not_acceptable
     end
     unless SmsVerificationCode.verify_token mobile: mobile, token: token, phone_code: phone_code
-      return render json: {status: 'token is not active or expired'}, status: :gone unless sms_token.active && sms_token.expired_at > Time.now
+      return render json: {status: 'token is not active or expired'}, status: :gone unless sms_token.active && sms_token.expired_at > Time.zone.now
     end
     render json: {status: 'mobile verified'}, status: :ok
   end
@@ -65,7 +65,7 @@ class Users::SessionsController < Devise::SessionsController
 
   def get_expired_at
     valid_period = params.fetch(:expiring, 7*24*3600).to_i
-    valid_period == 0 ? nil : Time.now + valid_period
+    valid_period == 0 ? nil : Time.zone.now + valid_period
   end
 
   # protected

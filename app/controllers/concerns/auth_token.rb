@@ -38,7 +38,7 @@ module AuthToken
     raise TokenInactive unless access_token.active
     # nil means never expire
     if access_token.expired_at
-      raise TokenExpired if  access_token.expired_at < Time.now
+      raise TokenExpired if  access_token.expired_at < Time.zone.now
     end
     AccessToken.current = access_token
     access_token.user

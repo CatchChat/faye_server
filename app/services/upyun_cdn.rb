@@ -100,7 +100,7 @@ class UpyunCdn
     hash = {
       :bucket       => bucket,
       :"save-key"   => file_path,
-      :expiration   => Time.now.to_i + 600,
+      :expiration   => Time.zone.now.to_i + 600,
       :"return-url" => nil,
       :"notify-url" => notify_url
     }
@@ -120,7 +120,7 @@ class UpyunCdn
   end
 
   def gmt_date
-    @date ||= Time.now.utc.strftime('%a, %d %b %Y %H:%M:%S GMT')
+    @date ||= Time.zone.now.utc.strftime('%a, %d %b %Y %H:%M:%S GMT')
   end
 
 end

@@ -54,7 +54,7 @@ class User < ActiveRecord::Base
   end
 
   def generate_token
-    "#{Devise.friendly_token}#{Time.now.to_f}"
+    "#{Devise.friendly_token}#{Time.zone.now.to_f}"
   end
 
   def email_required?

@@ -6,7 +6,7 @@ describe Xinge::IOSMessage do
   let(:custom_content) { { catch: 'catch' } }
   subject {
     Xinge::IOSMessage.new(
-      alert: 'alert', expire_time: 3 * 24 * 60 * 60, send_time: Time.now.to_i,
+      alert: 'alert', expire_time: 3 * 24 * 60 * 60, send_time: Time.zone.now.to_i,
       custom_content: custom_content, accept_time: accept_time, badge: 5,
       sound: 'sound', loop_times: 10, loop_interval: 1
     )
