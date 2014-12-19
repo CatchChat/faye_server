@@ -53,6 +53,7 @@ class Users::SessionsController < Devise::SessionsController
     token = AccessToken.create user_id:     @user.id,
                                active:      true,
                                token:       @user.generate_token,
+                               creator_ip:  request.ip,
                                client:      get_client,
                                expired_at:  get_expired_at
     @access_token = token

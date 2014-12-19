@@ -11,6 +11,7 @@ describe Users::SessionsController do
     post :create,login: 'ruanwztest', password: 'ruanwztest', expiring: 0, :format => 'json'
     expect(@user.access_tokens.last.active).to be true
     expect(@user.access_tokens.last.expired_at).to be nil
+    expect(@user.access_tokens.last.creator_ip).not_to be nil
     expect(@user.access_tokens.last.client).to eq "official"
     expect(response.body).to include 'ruanwztest'
     expect(response.body).to include 'access_token'

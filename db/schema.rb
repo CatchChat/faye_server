@@ -218,29 +218,14 @@ ActiveRecord::Schema.define(version: 20141217084549) do
   add_index "unfriend_requests", ["friend_id"], name: "index_unfriend_requests_on_friend_id", using: :btree
   add_index "unfriend_requests", ["user_id"], name: "index_unfriend_requests_on_user_id", using: :btree
 
-  create_table "user_change_logs", force: true do |t|
-    t.integer "user_id"
-    t.string  "action"
-    t.string  "old_value"
-    t.string  "new_value"
-    t.string  "mobile"
-  end
-
-  add_index "user_change_logs", ["user_id"], name: "index_user_change_logs_on_user_id", using: :btree
-
-  create_table "user_delete_logs", force: true do |t|
-    t.string "node_id"
-    t.string "reason"
-  end
-
   create_table "users", force: true do |t|
-    t.string   "username",               default: "",        null: false
-    t.string   "encrypted_password",     default: "",        null: false
+    t.string   "username",               default: "",    null: false
+    t.string   "encrypted_password",     default: "",    null: false
     t.string   "password_salt"
     t.string   "reset_password_token"
     t.datetime "reset_password_sent_at"
     t.datetime "remember_created_at"
-    t.integer  "sign_in_count",          default: 0,         null: false
+    t.integer  "sign_in_count",          default: 0,     null: false
     t.datetime "current_sign_in_at"
     t.datetime "last_sign_in_at"
     t.string   "current_sign_in_ip"
@@ -248,9 +233,9 @@ ActiveRecord::Schema.define(version: 20141217084549) do
     t.string   "nickname"
     t.string   "email"
     t.string   "mobile"
-    t.boolean  "mobile_verified",        default: false,     null: false
-    t.string   "phone_code",             default: "86",      null: false
-    t.boolean  "admin",                  default: false,     null: false
+    t.boolean  "mobile_verified",        default: false, null: false
+    t.string   "phone_code",             default: "86",  null: false
+    t.boolean  "admin",                  default: false, null: false
     t.integer  "state"
     t.string   "avatar_url"
     t.string   "pusher_id"
