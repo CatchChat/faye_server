@@ -21,6 +21,7 @@ class XingePusher
   #   accounts: String or Array
   #   content_available: 0 or 1
   def push_to_accounts(options)
+    options = options.deep_dup
     if options[:environment].nil? || options[:environment]
       environment = Xinge::Pusher::IOS_ENV_PRO
     else
@@ -32,6 +33,7 @@ class XingePusher
       method = :push_to_account_list
     else
       method = :push_to_single_account
+      accounts = accounts[0] if accounts.is_a?(Array)
     end
 
     responses = []

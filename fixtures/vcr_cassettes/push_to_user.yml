@@ -1,0 +1,169 @@
+---
+http_interactions:
+- request:
+    method: post
+    uri: http://openapi.xg.qq.com/v2/push/single_account
+    body:
+      encoding: UTF-8
+      string: access_id=2100039866&account=539e970456240be7bf02e1cb&device_type=3&expire_time=0&message=%7B%22content%22%3A%22xxx%22%2C%22title%22%3A%22%E7%A7%92%E8%A7%86%22%2C%22builder_id%22%3A1%2C%22ring%22%3A1%2C%22vibrate%22%3A1%2C%22clearable%22%3A1%2C%22n_id%22%3A0%7D&message_type=1&multi_pkg=0&send_time=1970-01-01+08%3A00%3A00&sign=80cf3a7b609021607c6b9cf3f38b2ae0&timestamp=1418997418&valid_time=600
+    headers:
+      User-Agent:
+      - Faraday v0.9.0
+      Content-Type:
+      - application/x-www-form-urlencoded; charset=utf-8
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+      Accept:
+      - "*/*"
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Server:
+      - nginx
+      Date:
+      - Fri, 19 Dec 2014 13:56:59 GMT
+      Content-Type:
+      - text/html; charset=utf-8
+      Transfer-Encoding:
+      - chunked
+      Connection:
+      - close
+      Vary:
+      - Accept-Encoding
+    body:
+      encoding: UTF-8
+      string: "\r\n{\"ret_code\":48,\"err_msg\":\"account not found, check registration\"}"
+    http_version: 
+  recorded_at: Fri, 19 Dec 2014 13:56:58 GMT
+- request:
+    method: post
+    uri: http://openapi.xg.qq.com/v2/push/single_account
+    body:
+      encoding: UTF-8
+      string: access_id=2200035654&account=539e970456240be7bf02e1cb&device_type=4&environment=1&expire_time=0&message=%7B%22aps%22%3A%7B%22alert%22%3A%22xxx%22%2C%22badge%22%3A0%2C%22sound%22%3A%22bub3.caf%22%2C%22content-available%22%3A0%7D%7D&message_type=0&send_time=1970-01-01+08%3A00%3A00&sign=a620b5d210bb8078461087d1faeee812&timestamp=1418997418&valid_time=600
+    headers:
+      User-Agent:
+      - Faraday v0.9.0
+      Content-Type:
+      - application/x-www-form-urlencoded; charset=utf-8
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+      Accept:
+      - "*/*"
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Server:
+      - nginx
+      Date:
+      - Fri, 19 Dec 2014 13:56:59 GMT
+      Content-Type:
+      - text/html; charset=utf-8
+      Transfer-Encoding:
+      - chunked
+      Connection:
+      - close
+      Vary:
+      - Accept-Encoding
+    body:
+      encoding: UTF-8
+      string: "\r\n{\"ret_code\":48,\"err_msg\":\"account not found, check registration\"}"
+    http_version: 
+  recorded_at: Fri, 19 Dec 2014 13:56:58 GMT
+- request:
+    method: post
+    uri: https://5fb4273b3db57779e3a0ace2:f3250ed165265a411fc870fb@api.jpush.cn/v3/push
+    body:
+      encoding: UTF-8
+      string: '{"platform":["android","ios"],"audience":{"alias":["539e970456240be7bf02e1cb"]},"message":{"title":"秒视","msg_content":"xxx"},"options":{"time_to_live":86400,"apns_production":true},"notification":{"alert":"xxx","android":{"alert":"xxx","title":"秒视","builder_id":1},"ios":{"alert":"xxx","sound":"bub3.caf","badge":0,"content-available":0}}}'
+    headers:
+      User-Agent:
+      - JPush-API-Ruby-Client
+      Connection:
+      - Keep-Alive
+      Charset:
+      - UTF-8
+      Content-Type:
+      - application/json
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+      Accept:
+      - "*/*"
+  response:
+    status:
+      code: 400
+      message: BAD REQUEST
+    headers:
+      Server:
+      - nginx
+      Date:
+      - Fri, 19 Dec 2014 13:56:59 GMT
+      Content-Type:
+      - application/json
+      Transfer-Encoding:
+      - chunked
+      Connection:
+      - keep-alive
+      X-Rate-Limit-Limit:
+      - '1200'
+      X-Rate-Limit-Remaining:
+      - '1196'
+      X-Rate-Limit-Reset:
+      - '20'
+    body:
+      encoding: UTF-8
+      string: '{"msg_id": 147252391, "error": {"message": "cannot find user by this
+        audience", "code": 1011}}'
+    http_version: 
+  recorded_at: Fri, 19 Dec 2014 13:56:59 GMT
+- request:
+    method: post
+    uri: https://5fb4273b3db57779e3a0ace2:f3250ed165265a411fc870fb@api.jpush.cn/v3/push
+    body:
+      encoding: UTF-8
+      string: '{"platform":["android","ios"],"audience":{"alias":["539e970456240be7bf02e1cb"]},"message":{"title":"秒视","msg_content":"xxx"},"options":{"time_to_live":86400,"apns_production":true},"notification":{"alert":"xxx","android":{"alert":"xxx","title":"秒视","builder_id":1},"ios":{"alert":"xxx","sound":"bub3.caf","badge":0,"content-available":0}}}'
+    headers:
+      User-Agent:
+      - JPush-API-Ruby-Client
+      Connection:
+      - Keep-Alive
+      Charset:
+      - UTF-8
+      Content-Type:
+      - application/json
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+      Accept:
+      - "*/*"
+  response:
+    status:
+      code: 400
+      message: BAD REQUEST
+    headers:
+      Server:
+      - nginx
+      Date:
+      - Fri, 19 Dec 2014 13:57:03 GMT
+      Content-Type:
+      - application/json
+      Transfer-Encoding:
+      - chunked
+      Connection:
+      - keep-alive
+      X-Rate-Limit-Limit:
+      - '1200'
+      X-Rate-Limit-Remaining:
+      - '1195'
+      X-Rate-Limit-Reset:
+      - '20'
+    body:
+      encoding: UTF-8
+      string: '{"msg_id": 147252423, "error": {"message": "cannot find user by this
+        audience", "code": 1011}}'
+    http_version: 
+  recorded_at: Fri, 19 Dec 2014 13:57:03 GMT
+recorded_with: VCR 2.9.3
