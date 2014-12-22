@@ -21,4 +21,8 @@ class ApiController < ApplicationController
   def format_time_to_iso8601(time)
     I18n.l(time, format: :iso8601)
   end
+
+  def error_404
+    render status: 404
+  end
 end

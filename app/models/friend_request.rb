@@ -5,8 +5,6 @@ class FriendRequest < ActiveRecord::Base
   validates :user_id, :friend_id, presence: true
   validates :friend_id, uniqueness: { scope: [:user_id, :state], allow_blank: true, if: ->(friend_request) { friend_request.pending? } }
 
-  scope :pending, -> { where(state: STATES[:pending]) }
-
   after_create :update_counters
 
   STATES = { pending: 1, accepted: 2, rejected: 3, blocked: 4 }.freeze
