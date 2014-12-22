@@ -42,7 +42,7 @@ RSpec.describe Api::V4::ContactsController, :type => :controller do
       friend.update!(mobile: '15158166372', mobile_verified: true, phone_code: '86', avatar_url: 'http://a.b.c/d.png', nickname: 'mynick')
       post :upload, format: :json, contacts: [{ name: 'tumayun', number: '15158166372' }].to_json
       expect(response).to be_success
-      expect(json_response[:registered_contacts]).to eq [{ 'name' => 'tumayun', 'user' => {'id' => friend.id, 'username' => friend.username, 'avatar_url' => friend.avatar_url, 'nickname' => friend.nickname }}]
+      expect(json_response[:registered_contacts]).to eq [{ 'name' => 'tumayun', 'user' => {'id' => friend.id, 'username' => friend.username, 'avatar_url' => friend.avatar_url, 'nickname' => friend.nickname, 'normalized_mobile' => friend.normalized_mobile }}]
     end
   end
 end
