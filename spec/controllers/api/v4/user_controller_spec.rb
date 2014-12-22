@@ -36,8 +36,10 @@ RSpec.describe Api::V4::UserController, :type => :controller do
       Friendship.create_friendships(current_binding.local_variable_get(:friend8), current_binding.local_variable_get("friend#{index}"))
     end
 
+    expect(Rails.cache.read("may_know_friends_for_user:#{user.id}")).to eq nil
     get :may_know_friends, format: :json
     expect(response).to be_success
+    expect(assigns(:users)).to eq(Rails.cache.read("may_know_friends_for_user:#{user.id}"))
     expect(json_response).to eq({
       "friends"=> [
         {
