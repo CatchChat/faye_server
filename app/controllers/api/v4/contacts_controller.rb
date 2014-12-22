@@ -42,7 +42,9 @@ class Api::V4::ContactsController < ApiController
 
     contacts = current_user.contacts.where(encrypted_number: encrypted_numbers_hash.keys)
     contacts.inject([]) do |result, contact|
-      result << { name: contact.name, user_id: encrypted_numbers_hash[contact.encrypted_number] }
+      user_id = encrypted_numbers_hash[contact.encrypted_number]
+      user = User.find(user_id)
+      result << { name: contact.name, user: {id: user_id, username: user.username, avatar_url:user.avatar_url, nickname: user.nickname }}
     end
   end
 end
