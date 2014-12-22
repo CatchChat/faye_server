@@ -18,7 +18,7 @@ class Api::V4::ContactsController < ApiController
     current_user.contacts = contacts
     current_user.save!
 
-    render json: { registered_contacas: calculate_registered_contacas(country_code_and_numbers) }
+    render json: { registered_contacts: calculate_registered_contacts(country_code_and_numbers) }
   rescue => ex
     logger.debug "===> #{ex}\n#{ex.backtrace.join("\n")}"
     return render json: { error: t('.contacts_error') }, status: :unprocessable_entity
@@ -26,7 +26,7 @@ class Api::V4::ContactsController < ApiController
 
   private
 
-  def calculate_registered_contacas(country_code_and_numbers)
+  def calculate_registered_contacts(country_code_and_numbers)
     encrypted_numbers_hash = {}
 
     conditions = [[]]
