@@ -8,9 +8,11 @@ class Api::V4::ContactsController < ApiController
   #   contacts: "[{\"name\":\"abc\",\"number\":\"15158166372\"},{\"name\":\"bac\",\"number\":\"15158166723\"}]"
   def upload
     contacts, country_code_and_numbers = [], []
+    numbers_hash = {}
     JSON.parse(params[:contacts]).each do |contact|
       next unless GlobalPhone.validate(contact['number'])
       number = GlobalPhone.parse(contact['number'])
+      numbers_hash[normalized_mobile(number.country_code, number.national_string)]=contact['number']
       country_code_and_numbers << [number.country_code, number.national_string]
       contacts << Contact.new(contact.merge(user_id: current_user.id))
     end
@@ -18,7 +20,7 @@ class Api::V4::ContactsController < ApiController
     current_user.contacts = contacts
     current_user.save!
 
-    render json: { registered_contacts: calculate_registered_contacts(country_code_and_numbers) }
+    render json: { registered_contacts: calculate_registered_contacts(country_code_and_numbers, numbers_hash) }
   rescue => ex
     logger.debug "===> #{ex}\n#{ex.backtrace.join("\n")}"
     return render json: { error: t('.contacts_error') }, status: :unprocessable_entity
@@ -26,7 +28,7 @@ class Api::V4::ContactsController < ApiController
 
   private
 
-  def calculate_registered_contacts(country_code_and_numbers)
+  def calculate_registered_contacts(country_code_and_numbers, numbers_hash)
     encrypted_numbers_hash = {}
 
     conditions = [[]]
@@ -44,7 +46,12 @@ class Api::V4::ContactsController < ApiController
     contacts.inject([]) do |result, contact|
       user_id = encrypted_numbers_hash[contact.encrypted_number]
       user = User.find(user_id)
-      result << { name: contact.name, user: {id: user_id, username: user.username, avatar_url:user.avatar_url, nickname: user.nickname, normalized_mobile: user.normalized_mobile}}
+      result << { name: contact.name, user: {id: user_id, username: user.username, avatar_url:user.avatar_url, nickname: user.nickname, number: numbers_hash[user.normalized_mobile]}}
     end
+  end
+
+  # same as User#normalized_mobile
+  def normalized_mobile(phone_code, mobile)
+    "+#{phone_code}#{mobile}"
   end
 end
