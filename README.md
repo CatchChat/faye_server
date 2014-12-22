@@ -168,5 +168,9 @@ To download attachment:
 1. client use the download token to download file from storage provider
 
 
-
+### qiniu production env
+export qiniu_access_key="BBHE3ccYQ8VQhEIvZbJARrte1U3ic2Om6CW7mxvN"
+export qiniu_secret_key="pQ5v3Bpg6AIx5hIXo9fXJgCLjgObH-DjKWOWU8dy"
+export qiniu_attachment_bucket="catch"
+export qiniu_attachment_public_bucket="catch-avatars"
 
