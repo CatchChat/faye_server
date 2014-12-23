@@ -1,7 +1,6 @@
 class CreateOfficialMessages < ActiveRecord::Migration
   def change
     create_table :official_messages do |t|
-      t.references :attachment, index: true
       t.integer :media_type
       t.string :text_content
       t.float :longitude
