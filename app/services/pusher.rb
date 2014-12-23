@@ -20,7 +20,7 @@ class Pusher
       options[:title] = I18n.t('catch_chat') if options[:title].blank?
 
       if users.size == 1
-        options[:badge] = users[0].unread_messages_count.value + users[0].pending_friend_requests_count.value
+        options[:badge] = users[0].unread_messages_count.value # + users[0].pending_friend_requests_count.value
       end
 
       results = []
