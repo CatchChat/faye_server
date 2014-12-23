@@ -1,5 +1,6 @@
 namespace :init_data do
 
+  desc "init counter data"
   task user_counters: :environment do
     count = User.count
     User.find_each.with_index do |user, index|
