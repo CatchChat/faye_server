@@ -13,6 +13,7 @@ class Pusher
   class << self
     def push_to_users(users, options = {})
       options = options.deep_dup
+      options.symbolize_keys
       users = Array(users)
       pusher_ids = users.map(&:pusher_id)
       token = AccessToken.current
