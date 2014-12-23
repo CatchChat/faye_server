@@ -2,14 +2,14 @@ class Api::V4::UserController < ApiController
 
   ### GET /api/v4/user/may_know_friends
   def may_know_friends
-    Rails.cache.fetch("may_know_friends_for_user:#{current_user.id}", expires_in: 2.hour) do
+    @users = Rails.cache.fetch("may_know_friends_for_user:#{current_user.id}", expires_in: 2.hour) do
       friend_ids = current_user.friendships.pluck(:friend_id)
 
       if friend_ids.blank?
-        @users = []
+        []
       else
         official_accounts_ids = User.where(username: Settings.official_accounts).pluck(:id)
-        @users = User.find_by_sql <<-SQL
+        User.find_by_sql <<-SQL
 SELECT `users`.*, GROUP_CONCAT(IFNULL(`users_friendships`.`nickname`, `users_friendships`.`username`)) common_friend_names
 FROM `users`
 INNER JOIN `friendships` ON `friendships`.`friend_id` = `users`.`id`
