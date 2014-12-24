@@ -28,7 +28,7 @@ describe Pusher do
       user.pending_friend_requests_count.value = 10
 
       options = {
-        content: "xxx", extras: { key1: "value1", key2: "value2" }, title: I18n.t('catch_chat'), badge: 20, accounts: ["53a7e7535637cabb5041171d"]
+        content: "xxx", extras: { key1: "value1", key2: "value2" }, title: I18n.t('catch_chat'), badge: 10, accounts: ["53a7e7535637cabb5041171d"]
       }
 
       expect_any_instance_of(XingePusher).to receive(:push_to_accounts).with(options)
