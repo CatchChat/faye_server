@@ -29,7 +29,7 @@ class Attachment < ActiveRecord::Base
     bucket = host.split('.').first
     path = uri.path
     key = path[1..-1]
-    raise AttachmentParsingError, "must set to the same bucket before parsing" unless bucket == ENV["qiniu_attachment_bucket"]
+    raise AttachmentParsingError, "#{bucket} must set to the same bucket as #{ENV['qiniu_attachment_bucket']} before parsing" unless bucket == ENV["qiniu_attachment_bucket"]
 
     self.create! storage: 'qiniu', file: key
   end

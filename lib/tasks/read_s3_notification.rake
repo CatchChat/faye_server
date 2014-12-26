@@ -1,5 +1,5 @@
 require 'aws-sdk-v1'
-require_relative '../../spec/services_helper'
+#require_relative '../../spec/services_helper'
 #Rails.application.eager_load!
 
 desc "Read S3 Notification"
