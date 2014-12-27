@@ -42,7 +42,6 @@ describe Cdn do
 
     it "provide download url for qiniu" do
       qiniu_download_url = subject.get_download_url url: "http://ruanwz-public.qiniudn.com/test-key", download_expires_in: 3600*2
-      puts qiniu_download_url
       expect(qiniu_download_url).to include "token="
     end
 
