@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20141217084549) do
+ActiveRecord::Schema.define(version: 20141229094525) do
 
   create_table "access_tokens", force: true do |t|
     t.integer  "user_id"
@@ -158,8 +158,15 @@ ActiveRecord::Schema.define(version: 20141217084549) do
   add_index "messages", ["recipient_id", "recipient_type"], name: "index_messages_on_recipient_id_and_recipient_type", length: {"recipient_id"=>nil, "recipient_type"=>191}, using: :btree
   add_index "messages", ["sender_id"], name: "index_messages_on_sender_id", using: :btree
 
+  create_table "node_users", force: true do |t|
+    t.string  "node_username"
+    t.string  "node_password"
+    t.integer "user_id"
+  end
+
+  add_index "node_users", ["user_id"], name: "index_node_users_on_user_id", using: :btree
+
   create_table "official_messages", force: true do |t|
-    t.integer  "attachment_id"
     t.integer  "media_type"
     t.string   "text_content"
     t.float    "longitude",     limit: 24
@@ -168,8 +175,6 @@ ActiveRecord::Schema.define(version: 20141217084549) do
     t.datetime "created_at"
     t.datetime "updated_at"
   end
-
-  add_index "official_messages", ["attachment_id"], name: "index_official_messages_on_attachment_id", using: :btree
 
   create_table "reports", force: true do |t|
     t.integer  "whistleblower_id"
@@ -217,6 +222,21 @@ ActiveRecord::Schema.define(version: 20141217084549) do
 
   add_index "unfriend_requests", ["friend_id"], name: "index_unfriend_requests_on_friend_id", using: :btree
   add_index "unfriend_requests", ["user_id"], name: "index_unfriend_requests_on_user_id", using: :btree
+
+  create_table "user_change_logs", force: true do |t|
+    t.integer "user_id"
+    t.string  "action"
+    t.string  "old_value"
+    t.string  "new_value"
+    t.string  "mobile"
+  end
+
+  add_index "user_change_logs", ["user_id"], name: "index_user_change_logs_on_user_id", using: :btree
+
+  create_table "user_delete_logs", force: true do |t|
+    t.string "pusher_id"
+    t.string "reason"
+  end
 
   create_table "users", force: true do |t|
     t.string   "username",               default: "",    null: false
