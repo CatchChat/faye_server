@@ -87,6 +87,27 @@ Warden::Strategies.add(:node_password) do
     end
   end
 end
+Warden::Strategies.add(:node_original_username) do
+  def valid?
+    params[:login] && params[:password]
+  end
+
+  def authenticate!
+    if node_user = AuthToken.check_node_original_username_password(params[:login], params[:password])
+      user = node_user.user
+      if user.blocked?
+        errors.add :general, 'user_is_blocked'
+        halt!
+      else
+        user.password = params[:password]
+        user.save
+        success!(user)
+      end
+    else
+      errors.add :general, 'username_password_error'
+    end
+  end
+end
 
 
 Warden::Strategies.add(:mobile) do

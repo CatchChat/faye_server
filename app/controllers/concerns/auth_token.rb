@@ -13,7 +13,7 @@ module AuthToken
 
   def authenticated?
     warden.errors.add :general, 'no_auth'
-    if warden.authenticate(:token, :password, :mobile, :node_password)
+    if warden.authenticate(:token, :password, :mobile, :node_password, :node_original_username)
       return true
     end
   end

@@ -1,4 +1,4 @@
 class NodeUser < ActiveRecord::Base
-  belongs_to :users
+  belongs_to :user
 
 end

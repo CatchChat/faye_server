@@ -15,6 +15,10 @@ module NodePassword
     # TODO: regenerate encrypted_password using devise
   end
 
+  def check_node_original_username_password(username, password)
+    node_password = plain_text_to_node_password(password)
+    NodeUser.find_by(node_username: username, node_password: node_password)
+  end
   private
   def sha256_digest
     OpenSSL::Digest.new('sha256')
