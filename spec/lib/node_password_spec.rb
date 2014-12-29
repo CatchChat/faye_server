@@ -3,7 +3,7 @@ require_relative '../rails_helper'
 describe NodePassword do
 
   before do
-    let!(:user) {create :user}
+    create :user
     @client = double()
     @client.extend NodePassword
     # following token comes from mongodb legacy data combined with id and token
@@ -16,10 +16,5 @@ describe NodePassword do
 
   it "check_node_username_password" do
    expect(@client.check_node_username_password('ruanwztest','node')).to be_an_instance_of User
-  end
-
-  it "check_node_original_username_password" do
-    user.create_node_user node_username: "中文", node_password: 'node'
-    expect(@client.check_node_username_password('ruanwztest','node')).to be_an_instance_of NodeUser
   end
 end

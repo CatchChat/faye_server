@@ -31,7 +31,6 @@ class User < ActiveRecord::Base
   }, through: :individual_recipients, source: :message
   has_many :contacts, dependent: :destroy
   has_many :reports, foreign_key: :whistleblower_id
-  has_one :node_user, dependent: :destroy
 
   scope :mobile_verified, -> { where(User.table_name => { mobile_verified: true }) }
   scope :active, -> { where(User.table_name => { state: STATES[:active] }) }
