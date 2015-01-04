@@ -1,0 +1,85 @@
+---
+http_interactions:
+- request:
+    method: post
+    uri: https://sqs.cn-north-1.amazonaws.com.cn/
+    body:
+      encoding: UTF-8
+      string: Action=GetQueueUrl&QueueName=s3-ruanwz-test-post&Timestamp=2015-01-04T06%3A53%3A00Z&Version=2012-11-05
+    headers:
+      Content-Type:
+      - application/x-www-form-urlencoded; charset=utf-8
+      Accept-Encoding:
+      - ''
+      Content-Length:
+      - '102'
+      User-Agent:
+      - aws-sdk-ruby/1.59.0 ruby/2.1.1 x86_64-linux
+      X-Amz-Date:
+      - 20150104T065300Z
+      X-Amz-Content-Sha256:
+      - 8966a894300cdca82c3338917060ab09a7d78bf8634f776175b9bfc5c7bcc7ef
+      Authorization:
+      - AWS4-HMAC-SHA256 Credential=AKIAOGBVMZAU5EZPGPIQ/20150104/cn-north-1/sqs/aws4_request,
+        SignedHeaders=content-length;content-type;host;user-agent;x-amz-content-sha256;x-amz-date,
+        Signature=4ed24155df0bb0c224f0367f0bdcf6531c543d3627ee8bdbf17f09a9233f99b6
+      Accept:
+      - "*/*"
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      X-Amzn-Requestid:
+      - 384053aa-a3fe-59b1-846f-1e88462f98e8
+      Content-Type:
+      - text/xml
+      Content-Length:
+      - '343'
+    body:
+      encoding: UTF-8
+      string: <?xml version="1.0"?><GetQueueUrlResponse xmlns="http://queue.amazonaws.com/doc/2012-11-05/"><GetQueueUrlResult><QueueUrl>https://sqs.cn-north-1.amazonaws.com.cn/032210275643/s3-ruanwz-test-post</QueueUrl></GetQueueUrlResult><ResponseMetadata><RequestId>384053aa-a3fe-59b1-846f-1e88462f98e8</RequestId></ResponseMetadata></GetQueueUrlResponse>
+    http_version: 
+  recorded_at: Sun, 04 Jan 2015 06:53:00 GMT
+- request:
+    method: post
+    uri: https://sqs.cn-north-1.amazonaws.com.cn/032210275643/s3-ruanwz-test-post
+    body:
+      encoding: UTF-8
+      string: Action=ReceiveMessage&QueueUrl=https%3A%2F%2Fsqs.cn-north-1.amazonaws.com.cn%2F032210275643%2Fs3-ruanwz-test-post&Timestamp=2015-01-04T06%3A53%3A00Z&Version=2012-11-05&WaitTimeSeconds=20
+    headers:
+      Content-Type:
+      - application/x-www-form-urlencoded; charset=utf-8
+      Accept-Encoding:
+      - ''
+      Content-Length:
+      - '186'
+      User-Agent:
+      - aws-sdk-ruby/1.59.0 ruby/2.1.1 x86_64-linux
+      X-Amz-Date:
+      - 20150104T065300Z
+      X-Amz-Content-Sha256:
+      - e3751927c54bc658e739b85fc84a74602468489265a205d63327fbc4c395ea40
+      Authorization:
+      - AWS4-HMAC-SHA256 Credential=AKIAOGBVMZAU5EZPGPIQ/20150104/cn-north-1/sqs/aws4_request,
+        SignedHeaders=content-length;content-type;host;user-agent;x-amz-content-sha256;x-amz-date,
+        Signature=2f9b6124c34a66de69296f4ad43f1c83d41d9017087866d8a419cfe4565401b7
+      Accept:
+      - "*/*"
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      X-Amzn-Requestid:
+      - 39eb631c-fca4-597c-9d22-2e3e19750044
+      Content-Type:
+      - text/xml
+      Content-Length:
+      - '1898'
+    body:
+      encoding: UTF-8
+      string: <?xml version="1.0"?><ReceiveMessageResponse xmlns="http://queue.amazonaws.com/doc/2012-11-05/"><ReceiveMessageResult><Message><Body>{&quot;Records&quot;:[{&quot;eventVersion&quot;:&quot;2.0&quot;,&quot;eventSource&quot;:&quot;aws:s3&quot;,&quot;awsRegion&quot;:&quot;cn-north-1&quot;,&quot;eventTime&quot;:&quot;2015-01-04T06:48:24.928Z&quot;,&quot;eventName&quot;:&quot;ObjectCreated:Post&quot;,&quot;userIdentity&quot;:{&quot;principalId&quot;:&quot;AWS:AIDAPSU5JOZU3RILYMTXY&quot;},&quot;requestParameters&quot;:{&quot;sourceIPAddress&quot;:&quot;14.18.55.161&quot;},&quot;responseElements&quot;:{&quot;x-amz-request-id&quot;:&quot;9528E3B1C2922FC1&quot;,&quot;x-amz-id-2&quot;:&quot;OgTi+i2K1H2cXII/nGDGo9jYosz9i+3DWBLEllnCszznnG5gUNLF05+bec1tNU9m&quot;},&quot;s3&quot;:{&quot;s3SchemaVersion&quot;:&quot;1.0&quot;,&quot;configurationId&quot;:&quot;send_to_sqs_when_post&quot;,&quot;bucket&quot;:{&quot;name&quot;:&quot;ruanwz-test&quot;,&quot;ownerIdentity&quot;:{&quot;principalId&quot;:&quot;AWS:032210275643&quot;},&quot;arn&quot;:&quot;arn:aws:s3:::ruanwz-test&quot;},&quot;object&quot;:{&quot;key&quot;:&quot;test-key.jpg&quot;,&quot;size&quot;:3,&quot;eTag&quot;:&quot;900150983cd24fb0d6963f7d28e17f72&quot;}}}]}</Body><MD5OfBody>fe2d76ae916b3d6ab46b6cbf0c0bce73</MD5OfBody><ReceiptHandle>AQEBnFkXuxKaUtTX9LMfGP6fj6kvirtkRkWWstv1zioDZhDOw5tyZzQvYAUwt5QXq+U3sFzYHEgnoG8olXYh1LygZ4O0l0kDEQqyl1oTZZg864A4M7HbHvF4Z488VcHnhWaj6MQ2FwZrqACobz6Vmi8fQZTviUTbW0reKpTjkA/h0UmvWE+De5Vr3MLThWV0q5VohNbXHhFqam9fLXxorMxTt/a19Ux7w9disu13Uy6dxgW4Frf0hlGg9RGFYofdHmDHcNABKJyjE78gce/clQtI87OuLzWCGvcVKeyYbnigIzETMn+n/rHWomoXcQ6+ZOEGpftr8inuzVfmbpnnlyOh0h8GTFy2RNM5x7enjn/OUtw=</ReceiptHandle><MessageId>445d57b9-5a0a-41bc-8091-175db1586da7</MessageId></Message></ReceiveMessageResult><ResponseMetadata><RequestId>39eb631c-fca4-597c-9d22-2e3e19750044</RequestId></ResponseMetadata></ReceiveMessageResponse>
+    http_version: 
+  recorded_at: Sun, 04 Jan 2015 06:53:00 GMT
+recorded_with: VCR 2.9.3

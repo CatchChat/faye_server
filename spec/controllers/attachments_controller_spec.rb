@@ -8,6 +8,19 @@ describe AttachmentsController, sidekiq: :inline do
     sign_in user
   end
 
+  context "s3" do
+    it 'returns upload form fields' do
+      get :s3_upload_form_fields, :id=> user.messages.first.id, :format => 'json'
+      expect(response.status).to eq 200
+      expect(json_response[:provider]).to eq "s3"
+      expect(json_response[:options][:key].length).to be > 10
+      expect(json_response[:options][:bucket]).to eq ENV['AWS_BUCKET']
+      expect(json_response[:options][:policy][:conditions].length).to eq 6
+      expect(json_response[:options][:encoded_policy].length).to be > 10
+      expect(json_response[:options][:signature].length).to be > 10
+    end
+  end
+
   context "qiniu" do
     it 'check param' do
       get :upload_token, :id => 'not exist', :format => 'json'

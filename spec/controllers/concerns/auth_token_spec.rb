@@ -26,7 +26,7 @@ describe AuthToken do
   end
 
   it "check_access_token and raise exception if expired" do
-    Timecop.freeze(Time.local(2015))
+    Timecop.freeze(Time.local(2016))
     expect {AuthToken.check_access_token(request)}.to raise_error AuthToken::Exceptions::TokenExpired
     Timecop.return
   end

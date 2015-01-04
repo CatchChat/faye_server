@@ -18,6 +18,13 @@ task :read_s3_notification => :environment do
 
   s3_client = S3Cdn.new client_init_hash
   cdn       = Cdn.new(s3_client, cdn_init_hash)
-  cdn.sqs_poll
+  cdn.sqs_poll do |key|
+    attachment = Attachment.find_by storage: 's3', file: key
+    message = attachment.message
+    return unless message
+    message.mark_as_unread
+    MessageNotificationJob.perform_async(message.id)
+
+  end
 end
 

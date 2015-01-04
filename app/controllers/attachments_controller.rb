@@ -1,13 +1,17 @@
 class AttachmentsController < ApiController
   skip_before_action :authenticate_user, only: [:callback, :public_callback]
 
-  # GET /api/attachments/upload_token/:provider
-  # params for qiniu: bucket, key
-  # example:
-  # http://localhost:3000/api/v4/attachments/upload_token/qiniu.json?bucket=mybucket&key=myobject.txt
-  # params for upyun: bucket, file_path, file_length
-  # example:
-  # http://localhost:3000/api/v4/attachments/upload_token/upyun.json?bucket=mybucket&file_path=myobject.txt&file_length=23
+  def s3_upload_form_fields
+    raise Cdn::MissingParam, "missing params for upload token" unless @message = Message.find_by(id: params[:id].to_i)
+    @provider = 's3'
+    @cdn = S3Helper.client
+    key = SecureRandom.uuid
+    @url, @policy, @encoded_policy, @signature = @cdn.get_upload_form_url_fields key: key
+    # create attachment record here because S3 event can't add info about the
+    # message, need to set message's state when s3 notify the file is uploaded
+    attachment = Attachment.find_or_create_by! storage: @provider, file: key
+  end
+
   def upload_token
     raise Cdn::MissingParam, "missing params for upload token" unless @message = Message.find_by(id: params[:id].to_i)
     @provider = 'qiniu'

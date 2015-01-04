@@ -120,11 +120,11 @@ class S3Cdn
 
     queue.poll(wait_time_seconds: 10) do |poll_message|
       message = JSON.parse(poll_message.body)
+      next unless message["Records"]
       _keys = message.fetch("Records").map do |record|
-        _post_obj_key = record.fetch("s3").fetch("object").fetch("key")
+        post_obj_key = record.fetch("s3").fetch("object").fetch("key")
+        yield post_obj_key
       end
-      puts _keys
-
     end
 
   end
@@ -134,6 +134,7 @@ class S3Cdn
     queue = sqs.queues.named(sqs_queue_name)
     received_message = queue.receive_message(wait_time_seconds: 20)
     message = JSON.parse(received_message.body)
+    return unless message["Records"]
     message.fetch("Records").map do |record|
       _post_obj_key = record.fetch("s3").fetch("object").fetch("key")
     end

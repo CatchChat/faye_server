@@ -47,6 +47,7 @@ Rails.application.routes.draw do
     end
     scope path: 'messages' do
       get ':id/upload_token' => 'attachments#upload_token'
+      get ':id/s3_upload_form_fields' => 'attachments#s3_upload_form_fields'
     end
   end
 

@@ -97,19 +97,18 @@ describe Cdn do
     end
   end
 
-  context 'global s3' do
+  context 'cn s3' do
     before do
-      Timecop.freeze(Time.local(2014,11,20,17,00))
+      Timecop.freeze(Time.local(2015,1,4,14,53))
     end
 
     subject {@cdn}
     it "upload file and queue a message to sqs" do
-      skip "not ready in CN-region" if  ENV['AWS_REGION'] == 'cn-north-1'
 
       t = Tempfile.new ['test-key', '.jpeg']
       t.write 'abc'
       t.close
-      VCR.use_cassette('s3_global_upload_file') do
+      VCR.use_cassette('s3_cn_upload_file') do
        code = subject.upload_file file_location: t.path,
                                   key: 'test-key.jpg',
                                   message_id: '1234'
@@ -117,7 +116,7 @@ describe Cdn do
 
       end
 
-      VCR.use_cassette('s3_global_upload_file_notification') do
+      VCR.use_cassette('s3_cn_upload_file_notification') do
         complete_notification = subject.sqs_receive
         expect(complete_notification).to include("test-key.jpg")
       end

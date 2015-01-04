@@ -8,12 +8,16 @@ class Attachment < ActiveRecord::Base
   before_destroy :queue_to_delete_storage
 
   def download_url_with_timer(expires_in=3600*24)
-    return [expires_in, nil] unless storage == 'qiniu'
-    bucket        = ENV["qiniu_attachment_bucket"]
-
-    cdn = QiniuHelper.client
-    url = "http://#{bucket}.qiniudn.com/#{file}"
-    [cdn.get_download_url(url: url, key: file, download_expires_in: expires_in), expires_in]
+    return [expires_in, nil] unless (storage == 'qiniu' or storage == 's3')
+    if storage == 'qiniu'
+      bucket        = ENV["qiniu_attachment_bucket"]
+      cdn = QiniuHelper.client
+      url = "http://#{bucket}.qiniudn.com/#{file}"
+      [cdn.get_download_url(url: url, key: file, download_expires_in: expires_in), expires_in]
+    elsif storage == 's3'
+      cdn = S3Helper.client
+      [cdn.get_download_url(key: file, download_expires_in: expires_in), expires_in]
+    end
   end
 
   def fallback_url_with_timer(expires_in=3600*24)
