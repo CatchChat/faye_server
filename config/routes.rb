@@ -202,5 +202,5 @@ Rails.application.routes.draw do
   root to: "home#index"
 
   # don't raise ActionController::RoutingError
-  match '*path', via: :all, to: 'api_controller#error_404'
+  match '*path', via: :all, to: 'api#error_404'
 end
