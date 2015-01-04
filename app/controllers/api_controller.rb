@@ -3,12 +3,14 @@ class ApiController < ApplicationController
 
   before_action :set_locale
   before_action :authenticate_user
-  skip_before_action :verify_authenticity_token, :error_404
+  skip_before_action :verify_authenticity_token
+  skip_before_action :authenticate_user, only: [:error_404]
+
 
   helper_method :format_time, :format_time_to_iso8601
 
   def error_404
-    render status: 404
+    render json: {}, status: 404
   end
   private
 
