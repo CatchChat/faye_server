@@ -1,19 +1,19 @@
 redis:
   store:
     namespace: catchchat_server_staging:store
-    host: 127.0.0.1
+    host: rails-redis-001.qpdo9q.0001.cnn1.cache.amazonaws.com.cn
     db: 0
     port: 6379
     driver: hiredis
   cache:
     namespace: catchchat_server_staging:cache
-    host: 127.0.0.1
+    host: rails-redis-001.qpdo9q.0001.cnn1.cache.amazonaws.com.cn
     db: 0
     port: 6379
     driver: hiredis
   sidekiq:
     namespace: catchchat_server_staging:sidekiq
-    host: 127.0.0.1
+    host: rails-redis-001.qpdo9q.0001.cnn1.cache.amazonaws.com.cn
     db: 0
     port: 6379
     driver: hiredis
