@@ -22,7 +22,7 @@ class Api::V4::UsersController < ApiController
   #   username
   def username_validate
     username = params[:username].to_s
-    if username.length < 4 || username.length > 16 || username !~ /\A[a-zA-Z0-9]+\z/
+    if username.length < 4 || username.length > 16 || username !~ /\A[a-zA-Z0-9_]+\z/
       return render json: { available: false, message: t('.username_invalid') }
     end
 
