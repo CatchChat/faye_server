@@ -24,6 +24,10 @@ set :ssh_options, {
 # Default value for :pty is false
 # set :pty, true
 
+set :linked_files, %w{config/database.yml .rbenv-vars .ruby-version config/secrets.yml config/settings.local.yml config/settings/production.yml config/unicorn.rb config/sidekiq.yml}
+set :linked_dirs, %w{bin log tmp/pids tmp/cache tmp/sockets vendor/bundle public/system public/javascripts public/stylesheets public/assets}
+
+set :default_env, { path: "/opt/rbenv/shims:$PATH" }
 # Default value for :linked_files is []
 # set :linked_files, %w{config/database.yml}
 
