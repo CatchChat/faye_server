@@ -1,77 +1,58 @@
-require 'capistrano/sidekiq'
-require 'capistrano/sidekiq/monit'
-require 'capistrano/slackify'
-
-# config valid only for Capistrano 3.2.1
+# config valid only for Capistrano 3.1
 lock '3.2.1'
 
-set :application, 'catchchat_server'
-set :repo_url, 'git@github.com:CatchChat/catchchat_server.git'
+set :application, 'my_app_name'
+set :repo_url, 'git@example.com:me/my_repo.git'
 
 # Default branch is :master
-# Uncomment the following line to have Capistrano ask which branch to deploy.
-ask :branch, proc { `git rev-parse --abbrev-ref HEAD`.chomp }
+# ask :branch, proc { `git rev-parse --abbrev-ref HEAD`.chomp }.call
 
-# Replace the sample value with the name of your application here:
-set :deploy_to, '/u/apps/catchchat_server_staging'
+# Default deploy_to directory is /var/www/my_app
+# set :deploy_to, '/var/www/my_app'
 
-# Use agent forwarding for SSH so you can deploy with the SSH key on your workstation.
-set :ssh_options, {
-  forward_agent: true
-}
+# Default value for :scm is :git
+# set :scm, :git
+
+# Default value for :format is :pretty
+# set :format, :pretty
+
+# Default value for :log_level is :debug
+# set :log_level, :debug
 
 # Default value for :pty is false
-set :pty, false
-set :unicorn_config_path, "#{current_path}/config/unicorn.rb"
-set :unicorn_rack_env, 'staging'
-set :bundle_bins, fetch(:bundle_bins, []).push("unicorn")
+# set :pty, true
 
-set :linked_files, %w{config/database.yml .rbenv-vars .ruby-version config/secrets.yml config/settings.local.yml config/settings/production.yml config/unicorn.rb config/sidekiq.yml}
-set :linked_dirs, %w{bin log tmp/pids tmp/cache tmp/sockets vendor/bundle public/system public/javascripts public/stylesheets public/assets}
+# Default value for :linked_files is []
+# set :linked_files, %w{config/database.yml}
 
-set :default_env, { path: "/opt/rbenv/shims:$PATH" }
+# Default value for linked_dirs is []
+# set :linked_dirs, %w{bin log tmp/pids tmp/cache tmp/sockets vendor/bundle public/system}
 
-set :keep_releases, 5
+# Default value for default_env is {}
+# set :default_env, { path: "/opt/ruby/bin:$PATH" }
 
-### Sidekiq
-set :sidekiq_config, -> { File.join(shared_path, 'config', 'sidekiq.yml') }
-set :sidekiq_default_hooks, -> { true }
-set :sidekiq_pid, -> { File.join(shared_path, 'tmp', 'pids', 'sidekiq.pid') }
-set :sidekiq_env, -> { fetch(:rack_env, fetch(:rails_env, fetch(:stage))) }
-set :sidekiq_log, -> { File.join(shared_path, 'log', 'sidekiq.log') }
-set :sidekiq_timeout, -> { 10 }
-set :sidekiq_role, -> { :app }
-set :sidekiq_processes, -> { 1 }
-# Rbenv and RVM integration
-set :rbenv_map_bins, fetch(:rbenv_map_bins).to_a.concat(%w(sidekiq sidekiqctl))
-set :rvm_map_bins, fetch(:rvm_map_bins).to_a.concat(%w(sidekiq sidekiqctl))
-set :sidekiq_monit_conf_dir, -> { '/etc/monit/conf.d' }
-set :monit_bin, -> { '/usr/bin/monit' }
-set :sidekiq_monit_default_hooks, -> { true }
+# Default value for keep_releases is 5
+# set :keep_releases, 5
 
-### slack
-set :slack_url, 'https://hooks.slack.com/services/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'
-set :slack_channel, '#server-side'
-set :slack_username, 'Deploybot'
-set :slack_emoji, ':trollface:'
-set :slack_user, 'Capistrano'
-set :slack_text, -> {
-  elapsed = Integer(fetch(:time_finished) - fetch(:time_started))
-  "Revision #{fetch(:current_revision, fetch(:branch))} of " \
-  "#{fetch(:application)} deployed to #{fetch(:stage)} by #{fetch(:slack_user)} " \
-  "in #{elapsed} seconds."
-}
-set :slack_deploy_starting_text, -> {
-  "#{fetch(:stage)} deploy starting with revision/branch #{fetch(:current_revision, fetch(:branch))} for #{fetch(:application)}"
-}
-set :slack_deploy_failed_text, -> {
-  "#{fetch(:stage)} deploy of #{fetch(:application)} with revision/branch #{fetch(:current_revision, fetch(:branch))} failed"
-}
 namespace :deploy do
+
+  desc 'Restart application'
   task :restart do
-    invoke 'unicorn:restart'
+    on roles(:app), in: :sequence, wait: 5 do
+      # Your restart mechanism here, for example:
+      # execute :touch, release_path.join('tmp/restart.txt')
+    end
   end
 
-  after 'deploy:publishing', 'restart'
-end
+  after :publishing, :restart
 
+  after :restart, :clear_cache do
+    on roles(:web), in: :groups, limit: 3, wait: 10 do
+      # Here we can do anything such as:
+      # within release_path do
+      #   execute :rake, 'cache:clear'
+      # end
+    end
+  end
+
+end
