@@ -4,10 +4,10 @@ pid: tmp/pids/thin.pid
 timeout: 30
 wait: 30
 log: log/thin.log
-max_conns: 1024
+max_conns: 4096
 require: []
 environment: production
-max_persistent_conns: 2048
+max_persistent_conns: 4096
 servers: 1
 threaded: true
 no-epoll: true
