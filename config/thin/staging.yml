@@ -8,7 +8,7 @@ max_conns: 4096
 require: []
 environment: production
 max_persistent_conns: 4096
-servers: 1
+servers: 3
 threaded: true
 no-epoll: true
 daemonize: true
