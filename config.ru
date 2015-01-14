@@ -2,6 +2,11 @@
 require 'faye'
 require 'faye/redis'
 require 'faye/websocket'
+require 'active_record'
+require 'mysql2'
+require_relative 'db_connection'
+require_relative 'user'
+require_relative 'access_token'
 require_relative 'server_auth'
 bayeux = Faye::RackAdapter.new(:mount => '/faye', :timeout => 25,
            :engine  => {
