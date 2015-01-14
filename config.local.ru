@@ -6,7 +6,7 @@ require_relative 'server_auth'
 bayeux = Faye::RackAdapter.new(:mount => '/faye', :timeout => 25,
            :engine  => {
              :type  => Faye::Redis,
-             :host  => 'shared-redis.qpdo9q.0001.cnn1.cache.amazonaws.com.cn',
+             :host  => 'localhost',
              :port  => 6379
          })
 Faye::WebSocket.load_adapter('thin')
