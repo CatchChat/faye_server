@@ -2,7 +2,7 @@
 lock '3.2.1'
 
 set :application, 'faye_server'
-set :repo_url, 'git@github.com:CatchChat/catchchat_server.git'
+set :repo_url, 'git@github.com:CatchChat/faye_server.git'
 
 # Default branch is :master
 ask :branch, proc { `git rev-parse --abbrev-ref HEAD`.chomp }
