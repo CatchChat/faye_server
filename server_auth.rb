@@ -10,6 +10,9 @@ class ServerAuth
     if message['channel'] == '/meta/handshake'
       check_username_access_token(message)
     end
+    if message['channel'] == '/meta/publish'
+      check_publish_permission(message)
+    end
     callback.call(message)
   end
 
@@ -36,6 +39,14 @@ class ServerAuth
       # count the user
     else
       return message['error'] = 'Unable to authenticate'
+    end
+  end
+
+  def check_publish_permission(message)
+    token = (message['ext']['publish_token'] rescue nil)
+    publish_token = 'my_hardcode_token'
+    unless (token == publish_token)
+      return message['error'] = 'Unable to publish'
     end
   end
 end
