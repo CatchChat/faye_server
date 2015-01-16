@@ -98,12 +98,12 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
-  activerecord
+  activerecord (~> 4.1.8)
   capistrano (~> 3.2.1)
   capistrano-rails (~> 1.1)
   capistrano-thin (~> 1.1.0)
   faye (~> 1.0.3)
   faye-redis (~> 0.2.0)
-  mysql2
+  mysql2 (~> 0.3.17)
   pry
   thin (~> 1.6.3)
