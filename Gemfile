@@ -7,5 +7,4 @@ gem 'capistrano-rails', '~> 1.1'
 gem 'capistrano-thin', '~> 1.1.0'
 gem 'activerecord'
 gem 'mysql2'
-
 gem 'pry'

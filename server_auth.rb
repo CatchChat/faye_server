@@ -7,10 +7,11 @@ class ServerAuth
   end
 
   def incoming(message, callback)
+    puts message
     if message['channel'] == '/meta/handshake'
       check_username_access_token(message)
     end
-    if message['channel'] == '/meta/publish'
+    unless message['channel'].include? '/meta/'
       check_publish_permission(message)
     end
     callback.call(message)
