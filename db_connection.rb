@@ -3,5 +3,5 @@ ActiveRecord::Base.establish_connection(
   host:     'rails-staging.cvl5jg6jbzld.rds.cn-north-1.amazonaws.com.cn',
   username: 'catch_dbuser',
   password: 'catch_dbpassword',
-  database: 'catchchat_server_staging'
+  database: 'park_server_staging'
 )
