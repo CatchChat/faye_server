@@ -1,5 +1,6 @@
 require_relative 'user'
 require_relative 'access_token'
+require_relative 'circles_user'
 
 class ServerAuth
   def initialize
@@ -10,6 +11,9 @@ class ServerAuth
     puts message
     if message['channel'] == '/meta/handshake'
       check_username_access_token(message)
+    end
+    if message['channel'] == '/meta/subscribe'
+      check_subscribe_permission(message)
     end
     unless message['channel'].include? '/meta/'
       check_publish_permission(message)
@@ -32,14 +36,17 @@ class ServerAuth
     token = (message['ext']['access_token'] rescue nil)
     username = (message['ext']['username'] rescue nil)
     unless token && username
-      return message['error'] = 'Unable to authenticate'
+      message['error'] = 'Unable to authenticate'
+      return nil
     end
     user = User.find_by username: username
     access_token = AccessToken.find_by user_id: user.try(:id), token: token, active: true
-    if access_token && access_token.expired_at > Time.now
+    if access_token && (access_token.expired_at.nil? or access_token.expired_at > Time.now )
+      return user
       # count the user
     else
-      return message['error'] = 'Unable to authenticate'
+      message['error'] = 'Unable to authenticate'
+      return nil
     end
   end
 
@@ -48,6 +55,16 @@ class ServerAuth
     publish_token = 'my_hardcode_token'
     unless (token == publish_token)
       return message['error'] = 'Unable to publish'
+    end
+  end
+
+  def check_subscribe_permission(message)
+    return unless user = check_username_access_token(message)
+    channel = message['subscription']
+    # channel is like  /circles/:id/messages
+    circle_id = channel.try {|c| c.split('/')[-2] }
+    unless CirclesUser.find_by(user_id: user.id, circle_id: circle_id)
+      message['error'] = 'Unable to subscribe'
     end
   end
 end
