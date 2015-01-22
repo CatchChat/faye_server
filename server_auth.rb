@@ -10,7 +10,7 @@ class ServerAuth
   def incoming(message, callback)
     puts message
     if message['channel'] == '/meta/handshake'
-      check_username_access_token(message)
+      check_mobile_access_token(message)
     end
     if message['channel'] == '/meta/subscribe'
       check_subscribe_permission(message)
@@ -32,14 +32,15 @@ class ServerAuth
   end
 
   private
-  def check_username_access_token(message)
+  def check_mobile_access_token(message)
     token = (message['ext']['access_token'] rescue nil)
-    username = (message['ext']['username'] rescue nil)
-    unless token && username
+    mobile = (message['ext']['mobile'] rescue nil)
+    phone_code = (message['ext']['phone_code'] rescue nil)
+    unless token && mobile && phone_code
       message['error'] = 'Unable to authenticate'
       return nil
     end
-    user = User.find_by username: username
+    user = User.find_by phone_code: phone_code, mobile: mobile
     access_token = AccessToken.find_by user_id: user.try(:id), token: token, active: true
     if access_token && (access_token.expired_at.nil? or access_token.expired_at > Time.now )
       return user
@@ -59,7 +60,7 @@ class ServerAuth
   end
 
   def check_subscribe_permission(message)
-    return unless user = check_username_access_token(message)
+    return unless user = check_mobile_access_token(message)
     channel = message['subscription']
     # channel is like  /circles/:id/messages
     circle_id = channel.try {|c| c.split('/')[-2] }
