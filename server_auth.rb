@@ -65,13 +65,15 @@ class ServerAuth
     # circle channel is like  /circles/:id/messages
     # person channel is like  /users/:id/messages
     path_list = channel.split('/')
-    unless type = path_list[1] && id = path_list[2]
+    type = path_list[1]
+    type_id = path_list[2]
+    unless type && type_id
       return message['error'] = 'Unable to subscribe'
     end
 
-    return if type == 'circles' && CirclesUser.find_by(user_id: user.id, circle_id: id)
+    return if type == 'circles' && CirclesUser.find_by(user_id: user.id, circle_id: type_id)
 
-    return if type == 'users' && user.id == id
+    return if type == 'users' && user.id == type_id.to_i
 
     return message['error'] = 'Unable to subscribe'
   end
