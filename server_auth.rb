@@ -62,10 +62,17 @@ class ServerAuth
   def check_subscribe_permission(message)
     return unless user = check_mobile_access_token(message)
     channel = message['subscription']
-    # channel is like  /circles/:id/messages
-    circle_id = channel.try {|c| c.split('/')[-2] }
-    unless CirclesUser.find_by(user_id: user.id, circle_id: circle_id)
-      message['error'] = 'Unable to subscribe'
+    # circle channel is like  /circles/:id/messages
+    # person channel is like  /users/:id/messages
+    path_list = channel.split('/')
+    unless type = path_list[1] && id = path_list[2]
+      return message['error'] = 'Unable to subscribe'
     end
+
+    return if type == 'circles' && CirclesUser.find_by(user_id: user.id, circle_id: id)
+
+    return if type == 'users' && user.id == id
+
+    return message['error'] = 'Unable to subscribe'
   end
 end
