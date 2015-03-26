@@ -51,6 +51,7 @@ class ServerAuth
 
   def check_publish_permission(message)
     token = (message['ext']['publish_token'] rescue nil)
+    # FIXME
     publish_token = 'my_hardcode_token'
     unless (token == publish_token)
       return message['error'] = 'Unable to publish'
@@ -58,22 +59,24 @@ class ServerAuth
   end
 
   def check_subscribe_permission(message)
-    return unless user = check_mobile_access_token(message)
-    channel = message['subscription']
+    unless user = check_mobile_access_token(message)
+      return message['error'] = 'Unable to subscribe'
+    end
+
     # circle channel is like  /circles/:id/messages
     # person channel is like  /users/:id/messages
+    channel = message['subscription']
     path_list = channel.split('/')
-    type = path_list[1]
-    type_id = path_list[2]
+    type      = path_list[1]
+    type_id   = path_list[2]
+
     unless type && type_id
       return message['error'] = 'Unable to subscribe'
     end
 
-    # FIXME
-    return
-    #type_id = CirclesUser.decrypt_id(type_id)
-    #return if type == 'circles' && CirclesUser.find_by(user_id: user.id, circle_id: type_id)
-    #return if type == 'users' && user.id == type_id.to_i
+    type_id = CirclesUser.decrypt_id(type_id)
+    return if type == 'circles' && CirclesUser.find_by(user_id: user.id, circle_id: type_id)
+    return if type == 'users' && user.id == type_id.to_i
 
     return message['error'] = 'Unable to subscribe'
   end
