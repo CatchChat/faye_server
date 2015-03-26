@@ -40,10 +40,9 @@ class ServerAuth
       message['error'] = 'Unable to authenticate'
       return nil
     end
-    user = User.find_by phone_code: phone_code, mobile: mobile
-    access_token = AccessToken.find_by user_id: user.try(:id), token: token, active: true
+    access_token = AccessToken.find_by token: token, active: true
     if access_token && (access_token.expired_at.nil? or access_token.expired_at > Time.now )
-      return user
+      return access_token.user
       # count the user
     else
       message['error'] = 'Unable to authenticate'
