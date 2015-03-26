@@ -70,6 +70,8 @@ class ServerAuth
       return message['error'] = 'Unable to subscribe'
     end
 
+    type_id = CirclesUser.decrypt_id(type_id)
+
     return if type == 'circles' && CirclesUser.find_by(user_id: user.id, circle_id: type_id)
 
     return if type == 'users' && user.id == type_id.to_i
