@@ -10,7 +10,8 @@ class ServerAuth
   def incoming(message, callback)
     puts message
     if message['channel'] == '/meta/handshake'
-      check_mobile_access_token(message)
+      # TODO: Interim measures
+      #check_mobile_access_token(message)
     end
     if message['channel'] == '/meta/subscribe'
       check_subscribe_permission(message)
