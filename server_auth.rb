@@ -34,20 +34,18 @@ class ServerAuth
 
   private
   def check_mobile_access_token(message)
-    token = (message['ext']['access_token'] rescue nil)
-    mobile = (message['ext']['mobile'] rescue nil)
-    phone_code = (message['ext']['phone_code'] rescue nil)
-    unless token && mobile && phone_code
+    unless token = (message['ext']['access_token'] rescue nil)
       message['error'] = 'Unable to authenticate'
-      return nil
+      return
     end
+
     access_token = AccessToken.find_by token: token, active: true
     if access_token && (access_token.expired_at.nil? or access_token.expired_at > Time.now )
       return access_token.user
       # count the user
     else
       message['error'] = 'Unable to authenticate'
-      return nil
+      return
     end
   end
 
@@ -71,11 +69,11 @@ class ServerAuth
       return message['error'] = 'Unable to subscribe'
     end
 
-    type_id = CirclesUser.decrypt_id(type_id)
-
-    return if type == 'circles' && CirclesUser.find_by(user_id: user.id, circle_id: type_id)
-
-    return if type == 'users' && user.id == type_id.to_i
+    # FIXME
+    return
+    #type_id = CirclesUser.decrypt_id(type_id)
+    #return if type == 'circles' && CirclesUser.find_by(user_id: user.id, circle_id: type_id)
+    #return if type == 'users' && user.id == type_id.to_i
 
     return message['error'] = 'Unable to subscribe'
   end
