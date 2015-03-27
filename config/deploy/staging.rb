@@ -11,7 +11,7 @@
 # server list. The second argument is a, or duck-types, Hash and is
 # used to set extended properties on the server.
 
-server 'faye.catchchat-server.me', user: 'deploy', roles: %w{web app db}
+server '54.223.165.53', user: 'deploy', roles: %w{web app db}
 
 
 # Custom SSH Options

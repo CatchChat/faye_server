@@ -1,3 +1,4 @@
+require_relative 'lib/encrypted_id'
 require_relative 'user'
 require_relative 'access_token'
 require_relative 'circles_user'
@@ -35,7 +36,7 @@ class ServerAuth
   private
   def check_mobile_access_token(message)
     unless token = (message['ext']['access_token'] rescue nil)
-      message['error'] = 'Unable to authenticate'
+      message['error'] = 'AuthenticateError: No token.'
       return
     end
 
@@ -44,24 +45,19 @@ class ServerAuth
       return access_token.user
       # count the user
     else
-      message['error'] = 'Unable to authenticate'
+      message['error'] = 'AuthenticateError: Your access token is invalid.'
       return
     end
   end
 
   def check_publish_permission(message)
-    token = (message['ext']['publish_token'] rescue nil)
-    # FIXME
-    publish_token = 'my_hardcode_token'
-    unless (token == publish_token)
-      return message['error'] = 'Unable to publish'
+    if (message['ext']['publish_token'] rescue nil) != ENV['PUBLISH_TOKEN']
+      return message['error'] = 'PublishError: Your publish token is invalid.'
     end
   end
 
   def check_subscribe_permission(message)
-    unless user = check_mobile_access_token(message)
-      return message['error'] = 'Unable to subscribe'
-    end
+    return unless user = check_mobile_access_token(message)
 
     # circle channel is like  /circles/:id/messages
     # person channel is like  /users/:id/messages
@@ -71,13 +67,13 @@ class ServerAuth
     type_id   = path_list[2]
 
     unless type && type_id
-      return message['error'] = 'Unable to subscribe'
+      return message['error'] = 'SubscribeError: Channel is not found.'
     end
 
     type_id = CirclesUser.decrypt_id(type_id)
     return if type == 'circles' && CirclesUser.find_by(user_id: user.id, circle_id: type_id)
     return if type == 'users' && user.id == type_id.to_i
 
-    return message['error'] = 'Unable to subscribe'
+    return message['error'] = 'SubscribeError: You do not have permission to subscribe this channel.'
   end
 end

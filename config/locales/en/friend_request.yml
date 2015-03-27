@@ -1,7 +1,0 @@
-en:
-  activerecord:
-    models:
-      friend_request: friend request
-    attributes:
-      friend_request:
-        state: state

@@ -15,18 +15,8 @@
 /log/*.log
 /tmp
 
-# Ignore database configuration
-/config/database.yml
-
-# Ignore secret key
-/config/secrets.yml
 *.swp
 .ruby-version
 .ruby-gemset
 
-config/settings.local.yml
-config/settings/*.local.yml
-config/environments/*.local.yml
-
-config/sidekiq.yml
-config/mongoid.yml
+.env
