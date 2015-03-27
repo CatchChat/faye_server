@@ -24,7 +24,7 @@ set :ssh_options, {
 # Default value for :pty is false
 # set :pty, true
 
-set :linked_files, %w{.env}
+set :linked_files, %w{.env .ruby-version}
 set :linked_dirs, %w{bin log tmp/pids tmp/cache tmp/sockets vendor/bundle public/system public/javascripts public/stylesheets public/assets}
 
 set :default_env, { path: "/opt/rbenv/shims:$PATH" }
