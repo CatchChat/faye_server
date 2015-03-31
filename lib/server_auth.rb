@@ -1,49 +1,42 @@
-require_relative 'lib/encrypted_id'
-require_relative 'user'
-require_relative 'access_token'
-require_relative 'circles_user'
+require_relative 'encrypted_id'
+require_relative '../models/user'
+require_relative '../models/access_token'
+require_relative '../models/circles_user'
 
 class ServerAuth
-  def initialize
-    @users = {}
-  end
 
   def incoming(message, callback)
     puts message
-    if message['channel'] == '/meta/handshake'
-      # TODO: Interim measures
-      #check_mobile_access_token(message)
-    end
-    if message['channel'] == '/meta/subscribe'
-      check_subscribe_permission(message)
-    end
-    unless message['channel'].include? '/meta/'
+    if !message['channel'].include? '/meta/'
       check_publish_permission(message)
+    elsif message['channel'] == '/meta/subscribe'
+      check_subscribe_permission(message)
+    elsif message['channel'] == '/meta/handshake'
+      # TODO: Interim measures
+      #verify_access_token(message)
     end
     callback.call(message)
   end
 
   def outgoing(message, callback)
-    if message['channel'] == '/meta/handshake'
-      if message['error']
-        message['advice'] ||= {}
-        message['advice']['reconnect'] = 'none'
-      end
+    if message['error'] && message['channel'] == '/meta/handshake'
+      message['advice'] ||= {}
+      message['advice']['reconnect'] = 'none'
     end
     callback.call(message)
   end
 
   private
-  def check_mobile_access_token(message)
+
+  def verify_access_token(message)
     unless token = (message['ext']['access_token'] rescue nil)
-      message['error'] = 'AuthenticateError: No token.'
+      message['error'] = 'AuthenticateError: No access token.'
       return
     end
 
     access_token = AccessToken.find_by token: token, active: true
     if access_token && (access_token.expired_at.nil? or access_token.expired_at > Time.now )
       return access_token.user
-      # count the user
     else
       message['error'] = 'AuthenticateError: Your access token is invalid.'
       return
@@ -51,13 +44,17 @@ class ServerAuth
   end
 
   def check_publish_permission(message)
-    if (message['ext']['publish_token'] rescue nil) != ENV['PUBLISH_TOKEN']
-      return message['error'] = 'PublishError: Your publish token is invalid.'
+    if (message['ext']['access_token'] rescue nil) && (message['data']['message_type'] rescue nil) == 'status'
+      return unless user = verify_access_token(message)
+      data = message.delete 'data'
+      message['data'] = { 'message_type' => 'status', 'status' => data['status'], username: user.username, nickname: user.nickname }
+    elsif (message['ext']['publish_token'] rescue nil) != ENV['PUBLISH_TOKEN']
+      message['error'] = 'PublishError: Your publish token is invalid.'
     end
   end
 
   def check_subscribe_permission(message)
-    return unless user = check_mobile_access_token(message)
+    return unless user = verify_access_token(message)
 
     # circle channel is like  /circles/:id/messages
     # person channel is like  /users/:id/messages

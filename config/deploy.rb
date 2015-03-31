@@ -1,5 +1,5 @@
 # config valid only for Capistrano 3.1
-lock '3.2.1'
+lock '3.4.0'
 
 set :application, 'faye_server'
 set :repo_url, 'git@github.com:CatchChat/faye_server.git'
@@ -25,7 +25,7 @@ set :ssh_options, {
 # set :pty, true
 
 set :linked_files, %w{.env .ruby-version}
-set :linked_dirs, %w{bin log tmp/pids tmp/cache tmp/sockets vendor/bundle public/system public/javascripts public/stylesheets public/assets}
+set :linked_dirs, %w{bin log tmp/pids tmp/cache tmp/sockets vendor/bundle}
 
 set :default_env, { path: "/opt/rbenv/shims:$PATH" }
 # Default value for :linked_files is []
