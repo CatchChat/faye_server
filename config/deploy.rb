@@ -24,7 +24,7 @@ set :ssh_options, {
 # Default value for :pty is false
 # set :pty, true
 
-set :linked_files, %w{.env .ruby-version}
+set :linked_files, %w{.env .ruby-version} << "config/thin/#{fetch(:stage)}.yml"
 set :linked_dirs, %w{bin log tmp/pids tmp/cache tmp/sockets vendor/bundle}
 
 set :default_env, { path: "/opt/rbenv/shims:$PATH" }
@@ -41,26 +41,6 @@ set :default_env, { path: "/opt/rbenv/shims:$PATH" }
 set :keep_releases, 5
 
 namespace :deploy do
-
-  desc 'Restart application'
-  task :restart do
-    on roles(:app), in: :sequence, wait: 5 do
-      # Your restart mechanism here, for example:
-      # execute :touch, release_path.join('tmp/restart.txt')
-    end
-  end
-
-  after :publishing, :restart
-
-  after :restart, :clear_cache do
-    on roles(:web), in: :groups, limit: 3, wait: 10 do
-      # Here we can do anything such as:
-      # within release_path do
-      #   execute :rake, 'cache:clear'
-      # end
-    end
-  end
-
   desc 'Upload env file'
   task :upload_env_file do
     on roles(:app) do
