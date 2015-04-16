@@ -9,6 +9,6 @@ bayeux = Faye::RackAdapter.new(:mount => '/faye', :timeout => 25,
 bayeux.add_websocket_extension(PermessageDeflate)
 Faye::WebSocket.load_adapter('thin')
 
-bayeux.add_extension(ServerAuth.new)
+bayeux.add_extension(FayeServer.new)
 
 run bayeux

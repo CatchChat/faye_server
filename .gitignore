@@ -20,3 +20,4 @@
 .ruby-gemset
 
 .env
+.env.*

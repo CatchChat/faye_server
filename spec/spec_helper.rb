@@ -16,6 +16,12 @@
 # users commonly want.
 #
 # See http://rubydoc.info/gems/rspec-core/RSpec/Core/Configuration
+
+ENV['RACK_ENV'] = 'test'
+require 'database_cleaner'
+require 'factory_girl'
+require 'webmock/rspec'
+require_relative '../config/application'
 RSpec.configure do |config|
   # rspec-expectations config goes here. You can use an alternate
   # assertion/expectation library such as wrong or the stdlib/minitest
@@ -88,6 +94,19 @@ RSpec.configure do |config|
   # as the one that triggered the failure.
   Kernel.srand config.seed
 =end
-end
 
-require_relative '../config/application'
+  FactoryGirl.definition_file_paths = [File.expand_path("#{__dir__}/factories")]
+  FactoryGirl.find_definitions
+  config.include FactoryGirl::Syntax::Methods
+
+  config.before(:suite) do
+    DatabaseCleaner.strategy = :transaction
+    DatabaseCleaner.clean_with(:truncation)
+  end
+
+  config.around(:each) do |example|
+    DatabaseCleaner.cleaning do
+      example.run
+    end
+  end
+end

@@ -1,4 +1,4 @@
-require_relative 'aes256'
+require 'aes256'
 module EncryptedID
 
   def self.included(base)
