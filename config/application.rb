@@ -8,7 +8,6 @@ require 'active_record'
 require 'mysql2'
 require 'permessage_deflate'
 require 'dotenv'
-require 'pry-byebug'
 Dotenv.load ".env.#{ENV['RACK_ENV']}", '.env'
 
 require 'logger'
