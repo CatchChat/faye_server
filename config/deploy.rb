@@ -64,7 +64,7 @@ namespace :deploy do
   desc 'Upload env file'
   task :upload_env_file do
     on roles(:app) do
-      upload! '.env', "#{shared_path}/.env"
+      upload! ".env.#{fetch(:stage)}", "#{shared_path}/.env"
     end
   end
 end
