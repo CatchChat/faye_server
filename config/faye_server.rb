@@ -10,6 +10,7 @@ class FayeServer
       server_logic_class(version).incoming(faye_message)
     end
   rescue => e
+    notice_error(e, faye_message)
     $logger.error("Incoming: message: #{faye_message.inspect}\nerror: #{e.message}\n#{e.backtrace}")
     faye_message['error'] = "Internal error"
   ensure
@@ -19,8 +20,9 @@ class FayeServer
   def outgoing(faye_message, callback)
     server_logic_class(get_version(faye_message)).try(:outgoing, faye_message)
   rescue => e
-    $logger.error(e)
+    notice_error(e, faye_message)
     $logger.error("Outgoing: message: #{faye_message.inspect}\nerror: #{e.message}\n#{e.backtrace}")
+    faye_message['error'] = "Internal error"
   ensure
     not_reconnect_if_handshake_error(faye_message)
     content = "Outgoing: #{faye_message.inspect}"
@@ -54,6 +56,16 @@ class FayeServer
     if faye_message['channel'] == '/meta/handshake' && faye_message['error']
       faye_message['advice'] ||= {}
       faye_message['advice']['reconnect'] = 'none'
+    end
+  end
+
+  def notice_error(error, faye_message)
+    if access_token = faye_message['ext']['access_token'] rescue nil
+      faye_message['ext']['access_token'] = User.encrypt_id(access_token)
+      NewRelic::Agent.notice_error(error, custom_params: faye_message)
+      faye_message['ext']['access_token'] = access_token
+    else
+      NewRelic::Agent.notice_error(error, custom_params: faye_message)
     end
   end
 end

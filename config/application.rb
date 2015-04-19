@@ -18,6 +18,8 @@ $logger.level = ENV['LOG_LEVEL'].to_i || Logger::DEBUG
   $LOAD_PATH.unshift path
 end
 
+require 'newrelic_rpm'
+NewRelic::Agent.manual_start
 require 'db_connection'
 require 'encrypted_id'
 require 'access_token'

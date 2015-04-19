@@ -5,8 +5,7 @@ module V1
 
     class << self
       def incoming(faye_message)
-        # TODO: need authenticate user
-        # return unless authenticate_user(faye_message)
+        return unless user = authenticate_user(faye_message)
       end
 
       def outgoing(faye_message)

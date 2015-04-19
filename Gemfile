@@ -11,6 +11,7 @@ gem 'activesupport', '~> 4.2.1'
 gem 'mysql2', '~> 0.3.18'
 gem 'dotenv', '~> 2.0.0'
 gem 'rest-client', '~> 1.8.0'
+gem 'newrelic_rpm', '~> 3.11.2.286', require: false
 
 group :development, :test do
   gem 'pry-byebug', '~> 3.1.0'
