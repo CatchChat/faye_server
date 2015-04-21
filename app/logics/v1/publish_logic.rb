@@ -53,9 +53,9 @@ module V1
 
         api_version = faye_message['data']['api_version'] || ENV['API_SERVER_DEFAULT_VERSION']
         api_url = "#{ENV['API_SERVER_URL']}/#{api_version}/messages"
-        headers = { Authorization: "Token token=\"#{faye_message['ext']['access_token']}\"" }
+        headers = { Authorization: "Token token=\"#{faye_message['ext']['access_token']}\"", content_type: :json, accept: :json }
 
-        RestClient.post(api_url, faye_message['data']['message'], headers) do |response|
+        RestClient.post(api_url, faye_message['data']['message'].to_json, headers) do |response|
           json_response = Hash(JSON.load(response.body)) rescue {}
           if response.code >= 200 && response.code < 300
             faye_message['data'] = {
@@ -132,9 +132,9 @@ module V1
 
         api_version = faye_message['data']['api_version'] || ENV['API_SERVER_DEFAULT_VERSION']
         api_url = "#{ENV['API_SERVER_URL']}/#{api_version}/messages/#{message_id}/mark_as_read"
-        headers = { Authorization: "Token token=\"#{faye_message['ext']['access_token']}\"" }
+        headers = { Authorization: "Token token=\"#{faye_message['ext']['access_token']}\"", content_type: :json, accept: :json }
 
-        RestClient.patch(api_url, {}, headers) do |response|
+        RestClient.patch(api_url, {}.to_json, headers) do |response|
           json_response = Hash(JSON.load(response.body)) rescue {}
           if response.code >= 200 && response.code < 300
             faye_message['data'] = {
