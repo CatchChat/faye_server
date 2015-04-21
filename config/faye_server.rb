@@ -26,7 +26,7 @@ class FayeServer
   ensure
     not_reconnect_if_handshake_error(faye_message)
     content = "Outgoing: #{faye_message.inspect}"
-    faye_message['error'] ? $logger.error(content) : $logger.debug(content)
+    faye_message['error'] ? $logger.error(content) : $logger.info(content)
     callback.call(faye_message)
   end
 
