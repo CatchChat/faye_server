@@ -4,12 +4,37 @@ RSpec.describe V1::PublishLogic do
   let(:user) { create(:user) }
 
   describe '.incoming' do
+    it 'Publish token is invalid' do
+      faye_message = {
+        "channel" => "/users/ea8fb465c9fe1f7cab2b53fcf12b9b53/messages",
+        "ext"     => {"publish_token"=>"invalid publish_token"},
+        "data"    => {
+          "message_type" => "message",
+          "message"      => {},
+        }
+      }
+      subject.class.incoming(faye_message)
+      expect(faye_message['error']).to eq 'PublishError: Publish token is invalid.'
+    end
+
+    it 'From api server' do
+      faye_message = {
+        "channel" => "/users/ea8fb465c9fe1f7cab2b53fcf12b9b53/messages",
+        "ext"     => {"publish_token"=>ENV['PUBLISH_TOKEN']},
+        "data"    => {
+          "message_type" => "message",
+          "message"      => {},
+        }
+      }
+      subject.class.incoming(faye_message)
+      expect(faye_message).to eq faye_message
+    end
+
     it 'Access token is invalid' do
       faye_message = {
         "channel" => "/users/ea8fb465c9fe1f7cab2b53fcf12b9b53/messages",
         "ext"     => {"access_token"=>"invalid access_token"},
         "data"    => {
-          "api_version"  => "v1",
           "message_type" => "message",
           "message"      => {},
         }
@@ -24,7 +49,6 @@ RSpec.describe V1::PublishLogic do
         "channel" => "/users/ea8fb465c9fe1f7cab2b53fcf12b9b53/messages",
         "ext"     => {"access_token"=>user.access_tokens.first.token},
         "data"    => {
-          "api_version"  => "v1",
           "message_type" => "message",
           "message"      => {},
         }
@@ -38,7 +62,6 @@ RSpec.describe V1::PublishLogic do
         "channel" => "/users/ea8fb465c9fe1f7cab2b53fcf12b9b53/messages",
         "ext"     => {"access_token"=>user.access_tokens.first.token},
         "data"    => {
-          "api_version"  => "v1",
           "message_type" => "invalid message_type",
           "message"      => {}
         }
@@ -52,7 +75,6 @@ RSpec.describe V1::PublishLogic do
         "channel" => "/users/ea8fb465c9fe1f7cab2b53fcf12b9b53/messages",
         "ext"     => {"access_token"=>user.access_tokens.first.token},
         "data"    => {
-          "api_version"  => "v1",
           "message_type" => "message",
           "message"      => ""
         }
@@ -66,7 +88,6 @@ RSpec.describe V1::PublishLogic do
         "channel" => "/users/ea8fb465c9fe1f7cab2b53fcf12b9b53/messages",
         "ext"     => {"access_token"=>user.access_tokens.first.token},
         "data"    => {
-          "api_version"  => "v1",
           "message_type" => "message",
           "message"      => {}
         }
@@ -86,7 +107,6 @@ RSpec.describe V1::PublishLogic do
         "channel" => "/xxxx/ea8fb465c9fe1f7cab2b53fcf12b9b53/messages",
         "ext"     => {"access_token"=>user.access_tokens.first.token},
         "data"    => {
-          "api_version"  => "v1",
           "message_type" => "message",
           "message"      => {}
         }
@@ -100,7 +120,6 @@ RSpec.describe V1::PublishLogic do
         "channel" => "/users/ea8fb465c9fe1f7cab2b53fcf12b9b53/messages",
         "ext"     => {"access_token"=>user.access_tokens.first.token},
         "data"    => {
-          "api_version"  => "v1",
           "message_type" => "message",
           "message"      => { "recipient_type" => "users", "recipient_id" => 'xxxx' }
         }
@@ -115,23 +134,22 @@ RSpec.describe V1::PublishLogic do
           "channel" => "/users/ea8fb465c9fe1f7cab2b53fcf12b9b53/messages",
           "ext"     => {"access_token"=>user.access_tokens.first.token},
           "data"    => {
-            "api_version"  => "v1",
             "message_type" => "message",
             "message"      => { "recipient_type" => "User", "recipient_id" => 'ea8fb465c9fe1f7cab2b53fcf12b9b53' }
           }
         }
 
         stub_request(:post, "#{ENV['API_SERVER_URL']}/v1/messages").
-         with(:body => {"recipient_id"=>"ea8fb465c9fe1f7cab2b53fcf12b9b53", "recipient_type"=>"User"},
-              :headers => {'Accept'=>'*/*; q=0.5, application/xml', 'Accept-Encoding'=>'gzip, deflate', 'Authorization'=>"Token token=\"#{user.access_tokens.first.token}\"", 'Content-Length'=>'65', 'Content-Type'=>'application/x-www-form-urlencoded', 'User-Agent'=>'Ruby'}).
+         with(:body => "{\"recipient_type\":\"User\",\"recipient_id\":\"ea8fb465c9fe1f7cab2b53fcf12b9b53\"}",
+              :headers => {'Accept'=>'application/json', 'Accept-Encoding'=>'gzip, deflate', 'Authorization'=>"Token token=\"#{user.access_tokens.first.token}\"", 'Content-Length'=>'75', 'Content-Type'=>'application/json', 'User-Agent'=>'Ruby'}).
          to_return(:status => 422, :body => "{\"error\":\"error\"}", :headers => {})
 
         subject.class.send :process_message, user, faye_message
         expect(faye_message['error']).to eq 'error'
 
         stub_request(:post, "#{ENV['API_SERVER_URL']}/v1/messages").
-         with(:body => {"recipient_id"=>"ea8fb465c9fe1f7cab2b53fcf12b9b53", "recipient_type"=>"User"},
-              :headers => {'Accept'=>'*/*; q=0.5, application/xml', 'Accept-Encoding'=>'gzip, deflate', 'Authorization'=>"Token token=\"#{user.access_tokens.first.token}\"", 'Content-Length'=>'65', 'Content-Type'=>'application/x-www-form-urlencoded', 'User-Agent'=>'Ruby'}).
+         with(:body => "{\"recipient_type\":\"User\",\"recipient_id\":\"ea8fb465c9fe1f7cab2b53fcf12b9b53\"}",
+              :headers => {'Accept'=>'application/json', 'Accept-Encoding'=>'gzip, deflate', 'Authorization'=>"Token token=\"#{user.access_tokens.first.token}\"", 'Content-Length'=>'75', 'Content-Type'=>'application/json', 'User-Agent'=>'Ruby'}).
          to_return(:status => 422, :body => "", :headers => {})
 
         subject.class.send :process_message, user, faye_message
@@ -143,15 +161,14 @@ RSpec.describe V1::PublishLogic do
           "channel" => "/users/ea8fb465c9fe1f7cab2b53fcf12b9b53/messages",
           "ext"     => {"access_token"=>user.access_tokens.first.token},
           "data"    => {
-            "api_version"  => "v1",
             "message_type" => "message",
             "message"      => { "recipient_type" => "User", "recipient_id" => 'ea8fb465c9fe1f7cab2b53fcf12b9b53' }
           }
         }
 
         stub_request(:post, "#{ENV['API_SERVER_URL']}/v1/messages").
-         with(:body => {"recipient_id"=>"ea8fb465c9fe1f7cab2b53fcf12b9b53", "recipient_type"=>"User"},
-              :headers => {'Accept'=>'*/*; q=0.5, application/xml', 'Accept-Encoding'=>'gzip, deflate', 'Authorization'=>"Token token=\"#{user.access_tokens.first.token}\"", 'Content-Length'=>'65', 'Content-Type'=>'application/x-www-form-urlencoded', 'User-Agent'=>'Ruby'}).
+         with(:body => "{\"recipient_type\":\"User\",\"recipient_id\":\"ea8fb465c9fe1f7cab2b53fcf12b9b53\"}",
+              :headers => {'Accept'=>'application/json', 'Accept-Encoding'=>'gzip, deflate', 'Authorization'=>"Token token=\"#{user.access_tokens.first.token}\"", 'Content-Length'=>'75', 'Content-Type'=>'application/json', 'User-Agent'=>'Ruby'}).
          to_return(:status => 200, :body => "{\"id\":\"asdasdsadasdsad\"}", :headers => {})
 
         subject.class.send :process_message, user, faye_message
@@ -167,7 +184,6 @@ RSpec.describe V1::PublishLogic do
         "channel" => "/xxxx/ea8fb465c9fe1f7cab2b53fcf12b9b53/messages",
         "ext"     => {"access_token"=>user.access_tokens.first.token},
         "data"    => {
-          "api_version"  => "v1",
           "message_type" => "instant_state",
           "message"      => { "state" => "typing" }
         }
@@ -181,7 +197,6 @@ RSpec.describe V1::PublishLogic do
         "channel" => "/users/ea8fb465c9fe1f7cab2b53fcf12b9b53/messages",
         "ext"     => {"access_token"=>user.access_tokens.first.token},
         "data"    => {
-          "api_version"  => "v1",
           "message_type" => "instant_state",
           "message"      => { "state" => "typing" }
         }
@@ -222,7 +237,6 @@ RSpec.describe V1::PublishLogic do
         "channel" => "/users/ea8fb465c9fe1f7cab2b53fcf12b9b53/messages",
         "ext"     => {"access_token"=>user.access_tokens.first.token},
         "data"    => {
-          "api_version"  => "v1",
           "message_type" => "mark_as_read",
           "message"      => { "id" => "" }
         }
@@ -238,21 +252,22 @@ RSpec.describe V1::PublishLogic do
           "channel" => "/users/ea8fb465c9fe1f7cab2b53fcf12b9b53/messages",
           "ext"     => {"access_token"=>user.access_tokens.first.token},
           "data"    => {
-            "api_version"  => "v1",
             "message_type" => "mark_as_read",
             "message"      => { "id" => "xxxx" }
           }
         }
 
         stub_request(:patch, "#{ENV['API_SERVER_URL']}/v1/messages/xxxx/mark_as_read").
-         with(:headers => {'Accept'=>'*/*; q=0.5, application/xml', 'Accept-Encoding'=>'gzip, deflate', 'Authorization'=>"Token token=\"#{user.access_tokens.first.token}\"", 'Content-Length'=>'0', 'Content-Type'=>'application/x-www-form-urlencoded', 'User-Agent'=>'Ruby'}).
+         with(:body => "{}",
+              :headers => {'Accept'=>'application/json', 'Accept-Encoding'=>'gzip, deflate', 'Authorization'=>"Token token=\"#{user.access_tokens.first.token}\"", 'Content-Length'=>'2', 'Content-Type'=>'application/json', 'User-Agent'=>'Ruby'}).
          to_return(:status => 404, :body => "{\"error\":\"Message is not found\"}", :headers => {})
 
         subject.class.send :process_mark_as_read, user, faye_message
         expect(faye_message['error']).to eq 'Message is not found'
 
         stub_request(:patch, "#{ENV['API_SERVER_URL']}/v1/messages/xxxx/mark_as_read").
-         with(:headers => {'Accept'=>'*/*; q=0.5, application/xml', 'Accept-Encoding'=>'gzip, deflate', 'Authorization'=>"Token token=\"#{user.access_tokens.first.token}\"", 'Content-Length'=>'0', 'Content-Type'=>'application/x-www-form-urlencoded', 'User-Agent'=>'Ruby'}).
+         with(:body => "{}",
+              :headers => {'Accept'=>'application/json', 'Accept-Encoding'=>'gzip, deflate', 'Authorization'=>"Token token=\"#{user.access_tokens.first.token}\"", 'Content-Length'=>'2', 'Content-Type'=>'application/json', 'User-Agent'=>'Ruby'}).
          to_return(:status => 404, :body => "", :headers => {})
 
         subject.class.send :process_mark_as_read, user, faye_message
@@ -264,14 +279,14 @@ RSpec.describe V1::PublishLogic do
           "channel" => "/users/ea8fb465c9fe1f7cab2b53fcf12b9b53/messages",
           "ext"     => {"access_token"=>user.access_tokens.first.token},
           "data"    => {
-            "api_version"  => "v1",
             "message_type" => "mark_as_read",
             "message"      => { "id" => "xxxx" }
           }
         }
 
         stub_request(:patch, "#{ENV['API_SERVER_URL']}/v1/messages/xxxx/mark_as_read").
-          with(:headers => {'Accept'=>'*/*; q=0.5, application/xml', 'Accept-Encoding'=>'gzip, deflate', 'Authorization'=>"Token token=\"#{user.access_tokens.first.token}\"", 'Content-Length'=>'0', 'Content-Type'=>'application/x-www-form-urlencoded', 'User-Agent'=>'Ruby'}).
+          with(:body => "{}",
+              :headers => {'Accept'=>'application/json', 'Accept-Encoding'=>'gzip, deflate', 'Authorization'=>"Token token=\"#{user.access_tokens.first.token}\"", 'Content-Length'=>'2', 'Content-Type'=>'application/json', 'User-Agent'=>'Ruby'}).
           to_return(:status => 200, :body => "{\"recipient_type\":\"user\",\"recipient_id\":\"aaaa\"}", :headers => {})
 
         subject.class.send :process_mark_as_read, user, faye_message

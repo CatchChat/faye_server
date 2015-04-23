@@ -8,6 +8,13 @@ module V1
 
     class << self
       def incoming(faye_message)
+        if faye_message['ext'] && faye_message['ext']['publish_token']
+          if faye_message['ext']['publish_token'] != ENV['PUBLISH_TOKEN']
+            faye_message['error'] = "PublishError: Publish token is invalid."
+          end
+          return
+        end
+
         return unless user = authenticate_user(faye_message)
 
         data = faye_message['data']
@@ -31,7 +38,6 @@ module V1
       # In faye_message:
       #   ext
       #   data
-      #     api_version
       #     message_type    mark_as_read
       #     message
       # Out faye_message:
@@ -51,8 +57,7 @@ module V1
           return faye_message['error'] = 'PublishError: Message can not be sent to this channel.'
         end
 
-        api_version = faye_message['data']['api_version'] || ENV['API_SERVER_DEFAULT_VERSION']
-        api_url = "#{ENV['API_SERVER_URL']}/#{api_version}/messages"
+        api_url = "#{ENV['API_SERVER_URL']}/v1/messages"
         headers = { Authorization: "Token token=\"#{faye_message['ext']['access_token']}\"", content_type: :json, accept: :json }
 
         RestClient.post(api_url, faye_message['data']['message'].to_json, headers) do |response|
@@ -112,7 +117,6 @@ module V1
       # In faye_message:
       #   ext
       #   data
-      #     api_version
       #     message_type    mark_as_read
       #     message
       #       id
@@ -122,6 +126,8 @@ module V1
       #     message_type    mark_as_read
       #     message
       #       id
+      #       recipient_type
+      #       recipient_id
       def process_mark_as_read(user, faye_message)
         unless /\A\/users\/\S+\/messages\z/ =~ faye_message['channel']
           return faye_message['error'] = 'PublishError: Channel is invalid.'
@@ -130,8 +136,7 @@ module V1
         message_id = faye_message['data']['message']['id'].to_s
         return faye_message['error'] = 'PublishError: Message id is invalid.' if message_id == ''
 
-        api_version = faye_message['data']['api_version'] || ENV['API_SERVER_DEFAULT_VERSION']
-        api_url = "#{ENV['API_SERVER_URL']}/#{api_version}/messages/#{message_id}/mark_as_read"
+        api_url = "#{ENV['API_SERVER_URL']}/v1/messages/#{message_id}/mark_as_read"
         headers = { Authorization: "Token token=\"#{faye_message['ext']['access_token']}\"", content_type: :json, accept: :json }
 
         RestClient.patch(api_url, {}.to_json, headers) do |response|

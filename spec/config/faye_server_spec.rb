@@ -71,7 +71,7 @@ describe FayeServer do
   it '#notice_error' do
     error = Exception.new
     faye_message = { 'ext' => { 'access_token' => 'access_token' } }
-    expect(NewRelic::Agent).to receive(:notice_error).with(error, request_params: { 'ext' => { 'access_token' => User.encrypt_id('access_token') } })
+    expect(NewRelic::Agent).to receive(:notice_error).with(error, custom_params: { 'ext' => { 'access_token' => User.encrypt_id('access_token') } })
     subject.send :notice_error, error, faye_message
     expect(faye_message).to eq({ 'ext' => { 'access_token' => 'access_token' } })
   end
