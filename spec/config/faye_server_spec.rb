@@ -3,12 +3,11 @@ describe FayeServer do
   describe '#incoming' do
 
     it 'error' do
-      count = 0
-      block = -> { count + 1 }
+      block = ->(_) {}
       faye_message = { 'ext' => {} }
       expect(subject).to receive(:check_version).and_return(nil)
       expect(subject).to_not receive(:server_logic_class)
-      expect(block).to receive(:call)
+      expect(block).to receive(:call).with(faye_message)
       subject.incoming(faye_message, block)
     end
 
@@ -18,7 +17,7 @@ describe FayeServer do
       expect(subject).to receive(:check_version).and_return('v1')
       expect(subject).to receive(:server_logic_class).and_return(V1::ServerLogic)
       expect(V1::ServerLogic).to receive(:incoming).with(faye_message)
-      expect(block).to receive(:call)
+      expect(block).to receive(:call).with(faye_message)
       subject.incoming(faye_message, block)
     end
   end
@@ -28,7 +27,7 @@ describe FayeServer do
     faye_message = {}
     expect(subject).to receive(:server_logic_class).and_return(V1::ServerLogic)
     expect(V1::ServerLogic).to receive(:outgoing).with(faye_message)
-    expect(block).to receive(:call)
+    expect(block).to receive(:call).with(faye_message)
     subject.outgoing(faye_message, block)
   end
 

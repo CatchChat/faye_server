@@ -2,7 +2,7 @@
 require_relative 'config/application'
 bayeux = Faye::RackAdapter.new(
   mount: '/faye',
-  timeout: 10,
+  timeout: 30,
   engine: {
     type: Faye::Redis,
     host: ENV['REDIS_HOST'],

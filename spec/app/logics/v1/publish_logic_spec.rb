@@ -140,16 +140,16 @@ RSpec.describe V1::PublishLogic do
         }
 
         stub_request(:post, "#{ENV['API_SERVER_URL']}/v1/messages").
-         with(:body => "{\"recipient_type\":\"User\",\"recipient_id\":\"ea8fb465c9fe1f7cab2b53fcf12b9b53\"}",
-              :headers => {'Accept'=>'application/json', 'Accept-Encoding'=>'gzip, deflate', 'Authorization'=>"Token token=\"#{user.access_tokens.first.token}\"", 'Content-Length'=>'75', 'Content-Type'=>'application/json', 'User-Agent'=>'Ruby'}).
+         with(:body => "{\"recipient_type\":\"User\",\"recipient_id\":\"ea8fb465c9fe1f7cab2b53fcf12b9b53\",\"send_to_faye_server\":false}",
+              :headers => {'Accept'=>'application/json', 'Accept-Encoding'=>'gzip, deflate', 'Authorization'=>"Token token=\"#{user.access_tokens.first.token}\"", 'Content-Length'=>'103', 'Content-Type'=>'application/json', 'User-Agent'=>'Ruby'}).
          to_return(:status => 422, :body => "{\"error\":\"error\"}", :headers => {})
 
         subject.class.send :process_message, user, faye_message
         expect(faye_message['error']).to eq 'error'
 
         stub_request(:post, "#{ENV['API_SERVER_URL']}/v1/messages").
-         with(:body => "{\"recipient_type\":\"User\",\"recipient_id\":\"ea8fb465c9fe1f7cab2b53fcf12b9b53\"}",
-              :headers => {'Accept'=>'application/json', 'Accept-Encoding'=>'gzip, deflate', 'Authorization'=>"Token token=\"#{user.access_tokens.first.token}\"", 'Content-Length'=>'75', 'Content-Type'=>'application/json', 'User-Agent'=>'Ruby'}).
+         with(:body => "{\"recipient_type\":\"User\",\"recipient_id\":\"ea8fb465c9fe1f7cab2b53fcf12b9b53\",\"send_to_faye_server\":false}",
+              :headers => {'Accept'=>'application/json', 'Accept-Encoding'=>'gzip, deflate', 'Authorization'=>"Token token=\"#{user.access_tokens.first.token}\"", 'Content-Length'=>'103', 'Content-Type'=>'application/json', 'User-Agent'=>'Ruby'}).
          to_return(:status => 422, :body => "", :headers => {})
 
         subject.class.send :process_message, user, faye_message
@@ -167,8 +167,8 @@ RSpec.describe V1::PublishLogic do
         }
 
         stub_request(:post, "#{ENV['API_SERVER_URL']}/v1/messages").
-         with(:body => "{\"recipient_type\":\"User\",\"recipient_id\":\"ea8fb465c9fe1f7cab2b53fcf12b9b53\"}",
-              :headers => {'Accept'=>'application/json', 'Accept-Encoding'=>'gzip, deflate', 'Authorization'=>"Token token=\"#{user.access_tokens.first.token}\"", 'Content-Length'=>'75', 'Content-Type'=>'application/json', 'User-Agent'=>'Ruby'}).
+         with(:body => "{\"recipient_type\":\"User\",\"recipient_id\":\"ea8fb465c9fe1f7cab2b53fcf12b9b53\",\"send_to_faye_server\":false}",
+              :headers => {'Accept'=>'application/json', 'Accept-Encoding'=>'gzip, deflate', 'Authorization'=>"Token token=\"#{user.access_tokens.first.token}\"", 'Content-Length'=>'103', 'Content-Type'=>'application/json', 'User-Agent'=>'Ruby'}).
          to_return(:status => 200, :body => "{\"id\":\"asdasdsadasdsad\"}", :headers => {})
 
         subject.class.send :process_message, user, faye_message
@@ -258,16 +258,16 @@ RSpec.describe V1::PublishLogic do
         }
 
         stub_request(:patch, "#{ENV['API_SERVER_URL']}/v1/messages/xxxx/mark_as_read").
-         with(:body => "{}",
-              :headers => {'Accept'=>'application/json', 'Accept-Encoding'=>'gzip, deflate', 'Authorization'=>"Token token=\"#{user.access_tokens.first.token}\"", 'Content-Length'=>'2', 'Content-Type'=>'application/json', 'User-Agent'=>'Ruby'}).
+         with(:body => "{\"send_to_faye_server\":false}",
+              :headers => {'Accept'=>'application/json', 'Accept-Encoding'=>'gzip, deflate', 'Authorization'=>"Token token=\"#{user.access_tokens.first.token}\"", 'Content-Length'=>'29', 'Content-Type'=>'application/json', 'User-Agent'=>'Ruby'}).
          to_return(:status => 404, :body => "{\"error\":\"Message is not found\"}", :headers => {})
 
         subject.class.send :process_mark_as_read, user, faye_message
         expect(faye_message['error']).to eq 'Message is not found'
 
         stub_request(:patch, "#{ENV['API_SERVER_URL']}/v1/messages/xxxx/mark_as_read").
-         with(:body => "{}",
-              :headers => {'Accept'=>'application/json', 'Accept-Encoding'=>'gzip, deflate', 'Authorization'=>"Token token=\"#{user.access_tokens.first.token}\"", 'Content-Length'=>'2', 'Content-Type'=>'application/json', 'User-Agent'=>'Ruby'}).
+         with(:body => "{\"send_to_faye_server\":false}",
+              :headers => {'Accept'=>'application/json', 'Accept-Encoding'=>'gzip, deflate', 'Authorization'=>"Token token=\"#{user.access_tokens.first.token}\"", 'Content-Length'=>'29', 'Content-Type'=>'application/json', 'User-Agent'=>'Ruby'}).
          to_return(:status => 404, :body => "", :headers => {})
 
         subject.class.send :process_mark_as_read, user, faye_message
@@ -285,14 +285,14 @@ RSpec.describe V1::PublishLogic do
         }
 
         stub_request(:patch, "#{ENV['API_SERVER_URL']}/v1/messages/xxxx/mark_as_read").
-          with(:body => "{}",
-              :headers => {'Accept'=>'application/json', 'Accept-Encoding'=>'gzip, deflate', 'Authorization'=>"Token token=\"#{user.access_tokens.first.token}\"", 'Content-Length'=>'2', 'Content-Type'=>'application/json', 'User-Agent'=>'Ruby'}).
-          to_return(:status => 200, :body => "{\"recipient_type\":\"user\",\"recipient_id\":\"aaaa\"}", :headers => {})
+          with(:body => "{\"send_to_faye_server\":false}",
+              :headers => {'Accept'=>'application/json', 'Accept-Encoding'=>'gzip, deflate', 'Authorization'=>"Token token=\"#{user.access_tokens.first.token}\"", 'Content-Length'=>'29', 'Content-Type'=>'application/json', 'User-Agent'=>'Ruby'}).
+          to_return(:status => 200, :body => "{\"recipient_type\":\"user\",\"recipient_id\":\"aaaa\",\"first_read\":true}", :headers => {})
 
         subject.class.send :process_mark_as_read, user, faye_message
         expect(faye_message['data']).to eq({
           'message_type' => 'mark_as_read',
-          'message' => { 'id' => 'xxxx', 'recipient_type' => 'user', 'recipient_id' => 'aaaa' }
+          'message' => { 'id' => 'xxxx', 'recipient_type' => 'user', 'recipient_id' => 'aaaa', 'first_read' => true }
         })
       end
     end

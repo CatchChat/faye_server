@@ -60,7 +60,7 @@ module V1
         api_url = "#{ENV['API_SERVER_URL']}/v1/messages"
         headers = { Authorization: "Token token=\"#{faye_message['ext']['access_token']}\"", content_type: :json, accept: :json }
 
-        RestClient.post(api_url, faye_message['data']['message'].to_json, headers) do |response|
+        RestClient.post(api_url, faye_message['data']['message'].merge('send_to_faye_server' => false).to_json, headers) do |response|
           json_response = Hash(JSON.load(response.body)) rescue {}
           if response.code >= 200 && response.code < 300
             faye_message['data'] = {
@@ -139,15 +139,17 @@ module V1
         api_url = "#{ENV['API_SERVER_URL']}/v1/messages/#{message_id}/mark_as_read"
         headers = { Authorization: "Token token=\"#{faye_message['ext']['access_token']}\"", content_type: :json, accept: :json }
 
-        RestClient.patch(api_url, {}.to_json, headers) do |response|
+        RestClient.patch(api_url, { 'send_to_faye_server' => false }.to_json, headers) do |response|
           json_response = Hash(JSON.load(response.body)) rescue {}
           if response.code >= 200 && response.code < 300
+
             faye_message['data'] = {
               'message_type' => 'mark_as_read',
               'message' => {
                 'id' => message_id,
                 'recipient_type' => json_response['recipient_type'],
-                'recipient_id' => json_response['recipient_id']
+                'recipient_id' => json_response['recipient_id'],
+                'first_read' => json_response['first_read']
               }
             }
           elsif json_response['error']
