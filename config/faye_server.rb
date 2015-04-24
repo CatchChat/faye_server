@@ -14,20 +14,24 @@ class FayeServer
     $logger.error("Incoming: message: #{faye_message.inspect}\nerror: #{e.message}\n#{e.backtrace}")
     faye_message['error'] = "Internal error"
   ensure
-    callback.call(faye_message)
+    callback.call(faye_message.except('ext'))
   end
 
   def outgoing(faye_message, callback)
-    server_logic_class(get_version(faye_message)).try(:outgoing, faye_message)
-  rescue => e
-    notice_error(e, faye_message)
-    $logger.error("Outgoing: message: #{faye_message.inspect}\nerror: #{e.message}\n#{e.backtrace}")
-    faye_message['error'] = "Internal error"
-  ensure
     not_reconnect_if_handshake_error(faye_message)
     content = "Outgoing: #{faye_message.inspect}"
     faye_message['error'] ? $logger.error(content) : $logger.info(content)
     callback.call(faye_message)
+  # server_logic_class(get_version(faye_message)).try(:outgoing, faye_message)
+  # rescue => e
+  #   notice_error(e, faye_message)
+  #   $logger.error("Outgoing: message: #{faye_message.inspect}\nerror: #{e.message}\n#{e.backtrace}")
+  #   faye_message['error'] = "Internal error"
+  # ensure
+  #   not_reconnect_if_handshake_error(faye_message)
+  #   content = "Outgoing: #{faye_message.inspect}"
+  #   faye_message['error'] ? $logger.error(content) : $logger.info(content)
+  #   callback.call(faye_message)
   end
 
   private

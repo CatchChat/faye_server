@@ -7,7 +7,7 @@ describe FayeServer do
       faye_message = { 'ext' => {} }
       expect(subject).to receive(:check_version).and_return(nil)
       expect(subject).to_not receive(:server_logic_class)
-      expect(block).to receive(:call).with(faye_message)
+      expect(block).to receive(:call).with(faye_message.except('ext'))
       subject.incoming(faye_message, block)
     end
 
@@ -25,8 +25,9 @@ describe FayeServer do
   it '#outgoing' do
     block = ->(_) {}
     faye_message = {}
-    expect(subject).to receive(:server_logic_class).and_return(V1::ServerLogic)
-    expect(V1::ServerLogic).to receive(:outgoing).with(faye_message)
+    # expect(subject).to receive(:server_logic_class).and_return(V1::ServerLogic)
+    # expect(V1::ServerLogic).to receive(:outgoing).with(faye_message)
+    expect(subject).to receive(:not_reconnect_if_handshake_error).with(faye_message)
     expect(block).to receive(:call).with(faye_message)
     subject.outgoing(faye_message, block)
   end
