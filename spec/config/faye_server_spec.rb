@@ -6,7 +6,7 @@ describe FayeServer do
       block = ->(_) {}
       faye_message = { 'ext' => {} }
       expect(subject).to receive(:check_version).and_return(nil)
-      expect(subject).to_not receive(:server_logic_class)
+      expect(subject).to_not receive(:server_logic_instance)
       expect(block).to receive(:call).with(faye_message.except('ext'))
       subject.incoming(faye_message, block)
     end
@@ -14,9 +14,10 @@ describe FayeServer do
     it 'success' do
       block = ->(_) {}
       faye_message = {}
+      server_logic_instance = V1::ServerLogic.new
       expect(subject).to receive(:check_version).and_return('v1')
-      expect(subject).to receive(:server_logic_class).and_return(V1::ServerLogic)
-      expect(V1::ServerLogic).to receive(:incoming).with(faye_message)
+      expect(subject).to receive(:server_logic_instance).and_return(server_logic_instance)
+      expect(server_logic_instance).to receive(:incoming).with(faye_message)
       expect(block).to receive(:call).with(faye_message)
       subject.incoming(faye_message, block)
     end
@@ -25,7 +26,7 @@ describe FayeServer do
   it '#outgoing' do
     block = ->(_) {}
     faye_message = {}
-    # expect(subject).to receive(:server_logic_class).and_return(V1::ServerLogic)
+    # expect(subject).to receive(:server_logic_instance).and_return(V1::ServerLogic.new)
     # expect(V1::ServerLogic).to receive(:outgoing).with(faye_message)
     expect(subject).to receive(:not_reconnect_if_handshake_error).with(faye_message)
     expect(block).to receive(:call).with(faye_message)
@@ -49,9 +50,9 @@ describe FayeServer do
     end
   end
 
-  it '#server_logic_class' do
-    expect(subject.send :server_logic_class, 'v1').to eq V1::ServerLogic
-    expect(subject.send :server_logic_class, 'invalid version').to eq nil
+  it '#server_logic_instance' do
+    expect(subject.send(:server_logic_instance, 'v1').is_a?(V1::ServerLogic)).to eq true
+    expect(subject.send(:server_logic_instance, 'invalid version').is_a?(V1::ServerLogic)).to eq false
   end
 
   it '#not_reconnect_if_handshake_error' do

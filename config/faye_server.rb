@@ -7,7 +7,7 @@ class FayeServer
     $logger.info "Incoming: #{faye_message.inspect}"
 
     if version = check_version(faye_message)
-      server_logic_class(version).incoming(faye_message)
+      server_logic_instance(version).incoming(faye_message)
     end
   rescue => e
     notice_error(e, faye_message)
@@ -22,7 +22,7 @@ class FayeServer
     content = "Outgoing: #{faye_message.inspect}"
     faye_message['error'] ? $logger.error(content) : $logger.info(content)
     callback.call(faye_message)
-  # server_logic_class(get_version(faye_message)).try(:outgoing, faye_message)
+  # server_logic_instance(get_version(faye_message)).try(:outgoing, faye_message)
   # rescue => e
   #   notice_error(e, faye_message)
   #   $logger.error("Outgoing: message: #{faye_message.inspect}\nerror: #{e.message}\n#{e.backtrace}")
@@ -46,9 +46,9 @@ class FayeServer
     end
   end
 
-  def server_logic_class(version)
+  def server_logic_instance(version)
     if version == 'v1'
-      V1::ServerLogic
+      V1::ServerLogic.new
     end
   end
 

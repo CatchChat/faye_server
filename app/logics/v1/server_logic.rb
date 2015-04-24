@@ -4,20 +4,17 @@ require 'v1/subscribe_logic'
 module V1
   class ServerLogic
 
-    class << self
-      def incoming(faye_message)
-        if !faye_message['channel'].include? '/meta/'
-          V1::PublishLogic.incoming(faye_message)
-        elsif faye_message['channel'] == '/meta/subscribe'
-          V1::SubscribeLogic.incoming(faye_message)
-        elsif faye_message['channel'] == '/meta/handshake'
-          V1::HandshakeLogic.incoming(faye_message)
-        end
+    def incoming(faye_message)
+      if !faye_message['channel'].include? '/meta/'
+        V1::PublishLogic.new.incoming(faye_message)
+      elsif faye_message['channel'] == '/meta/subscribe'
+        V1::SubscribeLogic.new.incoming(faye_message)
+      elsif faye_message['channel'] == '/meta/handshake'
+        V1::HandshakeLogic.new.incoming(faye_message)
       end
+    end
 
-      def outgoing(faye_message)
-        faye_message['ext'] = {}
-      end
+    def outgoing(faye_message)
     end
   end
 end
