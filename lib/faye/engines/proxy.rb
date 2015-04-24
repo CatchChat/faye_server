@@ -2,7 +2,7 @@ module Faye
   module Engine
     class Proxy
       def publish_with_faye_server_logic(message)
-        if (message['ext']['publish'] rescue true)
+        if (message['ext']['publish'] rescue true) != false
           publish_without_faye_server_logic(message.except('ext'))
         end
       end

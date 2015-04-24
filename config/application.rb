@@ -5,12 +5,13 @@ Bundler.require(:default, rack_env)
   $LOAD_PATH.unshift path
 end
 
+require 'active_record'
+require 'active_support'
 require 'faye'
 require 'faye/protocol/server' # Rewrite Faye::Server#make_response
 require 'faye/engines/proxy'   # Rewrite Faye::Engine::Proxy#publish
 require 'faye/redis'
 require 'faye/websocket'
-require 'active_record'
 require 'mysql2'
 require 'permessage_deflate'
 require 'dotenv'

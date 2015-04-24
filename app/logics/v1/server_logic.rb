@@ -6,11 +6,11 @@ module V1
 
     class << self
       def incoming(faye_message)
-        logic_class(faye_message['channel']).incoming(faye_message)
+        logic_class(faye_message['channel']).try(:incoming, faye_message)
       end
 
       def outgoing(faye_message)
-        logic_class(faye_message['channel']).outgoing(faye_message)
+        logic_class(faye_message['channel']).try(:outgoing, faye_message)
       end
 
       private

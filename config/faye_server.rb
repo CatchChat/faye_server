@@ -21,7 +21,8 @@ class FayeServer
 
   def outgoing(faye_message, callback)
     not_reconnect_if_handshake_error(faye_message)
-    faye_message['ext'] = faye_message['ext']['response'] || {}
+    response = faye_message['ext']['response'] rescue nil
+    faye_message['ext'] = response || {}
     content = "Outgoing: #{faye_message.inspect}"
     faye_message['error'] ? $logger.error(content) : $logger.info(content)
     callback.call(faye_message)
