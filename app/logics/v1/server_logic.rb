@@ -6,17 +6,23 @@ module V1
 
     class << self
       def incoming(faye_message)
-        if !faye_message['channel'].include? '/meta/'
-          V1::PublishLogic.incoming(faye_message)
-        elsif faye_message['channel'] == '/meta/subscribe'
-          V1::SubscribeLogic.incoming(faye_message)
-        elsif faye_message['channel'] == '/meta/handshake'
-          V1::HandshakeLogic.incoming(faye_message)
-        end
+        logic_class(faye_message['channel']).incoming(faye_message)
       end
 
       def outgoing(faye_message)
-        faye_message['ext'] = {}
+        logic_class(faye_message['channel']).outgoing(faye_message)
+      end
+
+      private
+
+      def logic_class(channel)
+        if !channel.start_with? '/meta/'
+          V1::PublishLogic
+        elsif channel == '/meta/subscribe'
+          V1::SubscribeLogic
+        elsif channel == '/meta/handshake'
+          V1::HandshakeLogic
+        end
       end
     end
   end

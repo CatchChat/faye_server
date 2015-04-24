@@ -9,27 +9,31 @@ describe FayeServer do
       expect(subject).to_not receive(:server_logic_class)
       expect(block).to receive(:call).with(faye_message.except('ext'))
       subject.incoming(faye_message, block)
+      expect(faye_message['ext']).to eq({})
     end
 
     it 'success' do
       block = ->(_) {}
       faye_message = {}
+      custom_data = { 'version' => 'v1' }
       expect(subject).to receive(:check_version).and_return('v1')
       expect(subject).to receive(:server_logic_class).and_return(V1::ServerLogic)
-      expect(V1::ServerLogic).to receive(:incoming).with(faye_message)
-      expect(block).to receive(:call).with(faye_message)
+      expect(V1::ServerLogic).to receive(:incoming).with({ 'custom_data' => custom_data })
+      expect(block).to receive(:call).with({ 'ext' => custom_data })
       subject.incoming(faye_message, block)
+      expect(faye_message['ext']).to eq(custom_data)
     end
   end
 
   it '#outgoing' do
+    response = { 'xxxx' => 'xxxx' }
     block = ->(_) {}
-    faye_message = {}
-    # expect(subject).to receive(:server_logic_class).and_return(V1::ServerLogic)
-    # expect(V1::ServerLogic).to receive(:outgoing).with(faye_message)
-    expect(subject).to receive(:not_reconnect_if_handshake_error).with(faye_message)
-    expect(block).to receive(:call).with(faye_message)
+    faye_message = { 'ext' => { 'response' => response } }
+    expect(subject).to receive(:server_logic_class).and_return(V1::ServerLogic)
+    expect(V1::ServerLogic).to receive(:outgoing).with(faye_message)
+    expect(block).to receive(:call).with({ 'ext' => response })
     subject.outgoing(faye_message, block)
+    expect(faye_message).to eq({ 'ext' => response })
   end
 
   describe '#check_version' do

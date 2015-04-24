@@ -7,6 +7,7 @@ class FayeServer
     $logger.info "Incoming: #{faye_message.inspect}"
 
     if version = check_version(faye_message)
+      faye_message['custom_data'] = { 'version' => version }
       server_logic_class(version).incoming(faye_message)
     end
   rescue => e
@@ -14,11 +15,13 @@ class FayeServer
     $logger.error("Incoming: message: #{faye_message.inspect}\nerror: #{e.message}\n#{e.backtrace}")
     faye_message['error'] = "Internal error"
   ensure
-    callback.call(faye_message.except('ext'))
+    faye_message['ext'] = faye_message.delete('custom_data') || {}
+    callback.call(faye_message)
   end
 
   def outgoing(faye_message, callback)
     not_reconnect_if_handshake_error(faye_message)
+    faye_message['ext'] = faye_message['ext']['response'] || {}
     content = "Outgoing: #{faye_message.inspect}"
     faye_message['error'] ? $logger.error(content) : $logger.info(content)
     callback.call(faye_message)

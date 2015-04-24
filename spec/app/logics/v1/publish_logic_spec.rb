@@ -146,6 +146,7 @@ RSpec.describe V1::PublishLogic do
 
         subject.class.send :process_message, user, faye_message
         expect(faye_message['error']).to eq 'error'
+        expect(faye_message.has_key?('custom_data')).to eq false
 
         stub_request(:post, "#{ENV['API_SERVER_URL']}/v1/messages").
          with(:body => "{\"recipient_type\":\"User\",\"recipient_id\":\"ea8fb465c9fe1f7cab2b53fcf12b9b53\",\"send_to_faye_server\":false}",
@@ -154,6 +155,7 @@ RSpec.describe V1::PublishLogic do
 
         subject.class.send :process_message, user, faye_message
         expect(faye_message['error']).to eq 'Internal error'
+        expect(faye_message.has_key?('custom_data')).to eq false
       end
 
       it 'success' do
@@ -173,6 +175,7 @@ RSpec.describe V1::PublishLogic do
 
         subject.class.send :process_message, user, faye_message
         expect(faye_message['data']['message']).to eq({ "id" => "asdasdsadasdsad" })
+        expect(faye_message['custom_data']['response']).to eq({ 'message' => { 'id' => 'asdasdsadasdsad' } })
       end
     end
   end
@@ -264,6 +267,7 @@ RSpec.describe V1::PublishLogic do
 
         subject.class.send :process_mark_as_read, user, faye_message
         expect(faye_message['error']).to eq 'Message is not found'
+        expect(faye_message.has_key?('custom_data')).to eq false
 
         stub_request(:patch, "#{ENV['API_SERVER_URL']}/v1/messages/xxxx/mark_as_read").
          with(:body => "{\"send_to_faye_server\":false}",
@@ -272,6 +276,7 @@ RSpec.describe V1::PublishLogic do
 
         subject.class.send :process_mark_as_read, user, faye_message
         expect(faye_message['error']).to eq 'Internal error'
+        expect(faye_message.has_key?('custom_data')).to eq false
       end
 
       it 'success' do
@@ -287,12 +292,13 @@ RSpec.describe V1::PublishLogic do
         stub_request(:patch, "#{ENV['API_SERVER_URL']}/v1/messages/xxxx/mark_as_read").
           with(:body => "{\"send_to_faye_server\":false}",
               :headers => {'Accept'=>'application/json', 'Accept-Encoding'=>'gzip, deflate', 'Authorization'=>"Token token=\"#{user.access_tokens.first.token}\"", 'Content-Length'=>'29', 'Content-Type'=>'application/json', 'User-Agent'=>'Ruby'}).
-          to_return(:status => 200, :body => "{\"recipient_type\":\"user\",\"recipient_id\":\"aaaa\",\"first_read\":true}", :headers => {})
+          to_return(:status => 200, :body => "{\"recipient_type\":\"user\",\"recipient_id\":\"aaaa\",\"first_read\":false}", :headers => {})
 
         subject.class.send :process_mark_as_read, user, faye_message
+        expect(faye_message['custom_data']).to eq({ 'publish' => false })
         expect(faye_message['data']).to eq({
           'message_type' => 'mark_as_read',
-          'message' => { 'id' => 'xxxx', 'recipient_type' => 'user', 'recipient_id' => 'aaaa', 'first_read' => true }
+          'message' => { 'id' => 'xxxx', 'recipient_type' => 'user', 'recipient_id' => 'aaaa' }
         })
       end
     end

@@ -63,6 +63,8 @@ module V1
         RestClient.post(api_url, faye_message['data']['message'].merge('send_to_faye_server' => false).to_json, headers) do |response|
           json_response = Hash(JSON.load(response.body)) rescue {}
           if response.code >= 200 && response.code < 300
+            faye_message['custom_data'] ||= {}
+            faye_message['custom_data']['response'] = { 'message' => { 'id' => json_response['id'] } }
             faye_message['data'] = {
               'message_type' => 'message',
               'message' => json_response
@@ -142,14 +144,14 @@ module V1
         RestClient.patch(api_url, { 'send_to_faye_server' => false }.to_json, headers) do |response|
           json_response = Hash(JSON.load(response.body)) rescue {}
           if response.code >= 200 && response.code < 300
-
+            faye_message['custom_data'] ||= {}
+            faye_message['custom_data']['publish'] = json_response['first_read']
             faye_message['data'] = {
               'message_type' => 'mark_as_read',
               'message' => {
                 'id' => message_id,
                 'recipient_type' => json_response['recipient_type'],
-                'recipient_id' => json_response['recipient_id'],
-                'first_read' => json_response['first_read']
+                'recipient_id' => json_response['recipient_id']
               }
             }
           elsif json_response['error']
