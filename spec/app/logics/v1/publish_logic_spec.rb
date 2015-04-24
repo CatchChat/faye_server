@@ -3,7 +3,7 @@ require 'v1/publish_logic'
 RSpec.describe V1::PublishLogic do
   let(:user) { create(:user) }
 
-  describe '#incoming' do
+  describe '.incoming' do
     it 'Publish token is invalid' do
       faye_message = {
         "channel" => "/users/ea8fb465c9fe1f7cab2b53fcf12b9b53/messages",
@@ -13,7 +13,7 @@ RSpec.describe V1::PublishLogic do
           "message"      => {},
         }
       }
-      subject.incoming(faye_message)
+      subject.class.incoming(faye_message)
       expect(faye_message['error']).to eq 'PublishError: Publish token is invalid.'
     end
 
@@ -26,7 +26,7 @@ RSpec.describe V1::PublishLogic do
           "message"      => {},
         }
       }
-      subject.incoming(faye_message)
+      subject.class.incoming(faye_message)
       expect(faye_message).to eq faye_message
     end
 
@@ -39,7 +39,7 @@ RSpec.describe V1::PublishLogic do
           "message"      => {},
         }
       }
-      subject.incoming(faye_message)
+      subject.class.incoming(faye_message)
       expect(faye_message['error']).to eq 'AuthenticateError: Access token is invalid.'
     end
 
@@ -53,7 +53,7 @@ RSpec.describe V1::PublishLogic do
           "message"      => {},
         }
       }
-      subject.incoming(faye_message)
+      subject.class.incoming(faye_message)
       expect(faye_message['error']).to eq 'AuthenticateError: User is blocked.'
     end
 
@@ -66,7 +66,7 @@ RSpec.describe V1::PublishLogic do
           "message"      => {}
         }
       }
-      subject.incoming(faye_message)
+      subject.class.incoming(faye_message)
       expect(faye_message['error']).to eq 'PublishError: Message type is invalid.'
     end
 
@@ -79,7 +79,7 @@ RSpec.describe V1::PublishLogic do
           "message"      => ""
         }
       }
-      subject.incoming(faye_message)
+      subject.class.incoming(faye_message)
       expect(faye_message['error']).to eq 'PublishError: Message is invalid.'
     end
 
@@ -94,13 +94,13 @@ RSpec.describe V1::PublishLogic do
       }
       subject.class::MESSAGE_TYPES.each do |message_type|
         faye_message['data']['message_type'] = message_type
-        expect(subject).to receive("process_#{message_type}").with(user, faye_message)
-        subject.incoming(faye_message)
+        expect(subject.class).to receive("process_#{message_type}").with(user, faye_message)
+        subject.class.incoming(faye_message)
       end
     end
   end
 
-  describe '#process_message' do
+  describe '.process_message' do
 
     it 'Channel is invalid' do
       faye_message = {
@@ -111,7 +111,7 @@ RSpec.describe V1::PublishLogic do
           "message"      => {}
         }
       }
-      subject.send :process_message, user, faye_message
+      subject.class.send :process_message, user, faye_message
       expect(faye_message['error']).to eq 'PublishError: Channel is invalid.'
     end
 
@@ -124,7 +124,7 @@ RSpec.describe V1::PublishLogic do
           "message"      => { "recipient_type" => "users", "recipient_id" => 'xxxx' }
         }
       }
-      subject.send :process_message, user, faye_message
+      subject.class.send :process_message, user, faye_message
       expect(faye_message['error']).to eq 'PublishError: Message can not be sent to this channel.'
     end
 
@@ -144,7 +144,7 @@ RSpec.describe V1::PublishLogic do
               :headers => {'Accept'=>'application/json', 'Accept-Encoding'=>'gzip, deflate', 'Authorization'=>"Token token=\"#{user.access_tokens.first.token}\"", 'Content-Length'=>'103', 'Content-Type'=>'application/json', 'User-Agent'=>'Ruby'}).
          to_return(:status => 422, :body => "{\"error\":\"error\"}", :headers => {})
 
-        subject.send :process_message, user, faye_message
+        subject.class.send :process_message, user, faye_message
         expect(faye_message['error']).to eq 'error'
 
         stub_request(:post, "#{ENV['API_SERVER_URL']}/v1/messages").
@@ -152,7 +152,7 @@ RSpec.describe V1::PublishLogic do
               :headers => {'Accept'=>'application/json', 'Accept-Encoding'=>'gzip, deflate', 'Authorization'=>"Token token=\"#{user.access_tokens.first.token}\"", 'Content-Length'=>'103', 'Content-Type'=>'application/json', 'User-Agent'=>'Ruby'}).
          to_return(:status => 422, :body => "", :headers => {})
 
-        subject.send :process_message, user, faye_message
+        subject.class.send :process_message, user, faye_message
         expect(faye_message['error']).to eq 'Internal error'
       end
 
@@ -171,13 +171,13 @@ RSpec.describe V1::PublishLogic do
               :headers => {'Accept'=>'application/json', 'Accept-Encoding'=>'gzip, deflate', 'Authorization'=>"Token token=\"#{user.access_tokens.first.token}\"", 'Content-Length'=>'103', 'Content-Type'=>'application/json', 'User-Agent'=>'Ruby'}).
          to_return(:status => 200, :body => "{\"id\":\"asdasdsadasdsad\"}", :headers => {})
 
-        subject.send :process_message, user, faye_message
+        subject.class.send :process_message, user, faye_message
         expect(faye_message['data']['message']).to eq({ "id" => "asdasdsadasdsad" })
       end
     end
   end
 
-  describe '#process_instant_state' do
+  describe '.process_instant_state' do
 
     it 'Channel is invalid' do
       faye_message = {
@@ -188,7 +188,7 @@ RSpec.describe V1::PublishLogic do
           "message"      => { "state" => "typing" }
         }
       }
-      subject.send :process_instant_state, user, faye_message
+      subject.class.send :process_instant_state, user, faye_message
       expect(faye_message['error']).to eq 'PublishError: Channel is invalid.'
     end
 
@@ -201,7 +201,7 @@ RSpec.describe V1::PublishLogic do
           "message"      => { "state" => "typing" }
         }
       }
-      subject.send :process_instant_state, user, faye_message
+      subject.class.send :process_instant_state, user, faye_message
       expect(faye_message['data']).to eq({
         'message_type' => 'instant_state',
         'message' => {
@@ -216,7 +216,7 @@ RSpec.describe V1::PublishLogic do
     end
   end
 
-  describe '#process_mark_as_read' do
+  describe '.process_mark_as_read' do
 
     it 'Channel is invalid' do
       faye_message = {
@@ -228,7 +228,7 @@ RSpec.describe V1::PublishLogic do
           "message"      => { "id" => "xxxx" }
         }
       }
-      subject.send :process_mark_as_read, user, faye_message
+      subject.class.send :process_mark_as_read, user, faye_message
       expect(faye_message['error']).to eq 'PublishError: Channel is invalid.'
     end
 
@@ -241,7 +241,7 @@ RSpec.describe V1::PublishLogic do
           "message"      => { "id" => "" }
         }
       }
-      subject.send :process_mark_as_read, user, faye_message
+      subject.class.send :process_mark_as_read, user, faye_message
       expect(faye_message['error']).to eq 'PublishError: Message id is invalid.'
     end
 
@@ -262,7 +262,7 @@ RSpec.describe V1::PublishLogic do
               :headers => {'Accept'=>'application/json', 'Accept-Encoding'=>'gzip, deflate', 'Authorization'=>"Token token=\"#{user.access_tokens.first.token}\"", 'Content-Length'=>'29', 'Content-Type'=>'application/json', 'User-Agent'=>'Ruby'}).
          to_return(:status => 404, :body => "{\"error\":\"Message is not found\"}", :headers => {})
 
-        subject.send :process_mark_as_read, user, faye_message
+        subject.class.send :process_mark_as_read, user, faye_message
         expect(faye_message['error']).to eq 'Message is not found'
 
         stub_request(:patch, "#{ENV['API_SERVER_URL']}/v1/messages/xxxx/mark_as_read").
@@ -270,7 +270,7 @@ RSpec.describe V1::PublishLogic do
               :headers => {'Accept'=>'application/json', 'Accept-Encoding'=>'gzip, deflate', 'Authorization'=>"Token token=\"#{user.access_tokens.first.token}\"", 'Content-Length'=>'29', 'Content-Type'=>'application/json', 'User-Agent'=>'Ruby'}).
          to_return(:status => 404, :body => "", :headers => {})
 
-        subject.send :process_mark_as_read, user, faye_message
+        subject.class.send :process_mark_as_read, user, faye_message
         expect(faye_message['error']).to eq 'Internal error'
       end
 
@@ -289,7 +289,7 @@ RSpec.describe V1::PublishLogic do
               :headers => {'Accept'=>'application/json', 'Accept-Encoding'=>'gzip, deflate', 'Authorization'=>"Token token=\"#{user.access_tokens.first.token}\"", 'Content-Length'=>'29', 'Content-Type'=>'application/json', 'User-Agent'=>'Ruby'}).
           to_return(:status => 200, :body => "{\"recipient_type\":\"user\",\"recipient_id\":\"aaaa\",\"first_read\":true}", :headers => {})
 
-        subject.send :process_mark_as_read, user, faye_message
+        subject.class.send :process_mark_as_read, user, faye_message
         expect(faye_message['data']).to eq({
           'message_type' => 'mark_as_read',
           'message' => { 'id' => 'xxxx', 'recipient_type' => 'user', 'recipient_id' => 'aaaa', 'first_read' => true }
