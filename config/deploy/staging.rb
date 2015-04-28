@@ -11,7 +11,8 @@
 # server list. The second argument is a, or duck-types, Hash and is
 # used to set extended properties on the server.
 
-server '54.223.165.53', user: 'deploy', roles: %w{web app db}
+set :deploy_to, '/u/apps/faye_server_staging'
+server 'staging.catchchat-server.me', user: 'deploy', roles: %w{web app db}
 
 
 # Custom SSH Options

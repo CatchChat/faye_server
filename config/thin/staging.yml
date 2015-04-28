@@ -9,9 +9,10 @@ require: []
 environment: staging
 max_persistent_conns: 16384
 servers: 1
+port: 8000
 threaded: true
 no-epoll: true
 daemonize: true
 socket: tmp/sockets/thin.sock
-chdir: /u/apps/faye_server/current
+chdir: /u/apps/faye_server_staging/current
 tag: faye

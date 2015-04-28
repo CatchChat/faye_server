@@ -9,6 +9,7 @@ require: []
 environment: production
 max_persistent_conns: 16384
 servers: 1
+port: 8000
 threaded: true
 no-epoll: true
 daemonize: true
