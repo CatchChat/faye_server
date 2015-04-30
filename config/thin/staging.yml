@@ -13,6 +13,6 @@ port: 8000
 threaded: true
 no-epoll: true
 daemonize: true
-socket: tmp/sockets/thin.sock
+#socket: tmp/sockets/thin.sock
 chdir: /u/apps/faye_server_staging/current
 tag: faye
