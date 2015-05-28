@@ -41,8 +41,8 @@ describe FayeServer do
     it 'invalid version' do
       faye_message = {}
       expect(subject).to receive(:get_version).with(faye_message).and_return(nil)
-      expect(subject.send :check_version, faye_message).to eq nil
-      expect(faye_message['error']).to eq 'VersionError: Version is invalid.'
+      expect(subject.send :check_version, faye_message).to eq FayeServer::VERSIONS.last
+      expect(faye_message['error']).to eq nil
     end
 
     it 'success' do

@@ -45,8 +45,7 @@ class FayeServer
     if VERSIONS.include?(version)
       version
     else
-      faye_message['error'] = 'VersionError: Version is invalid.'
-      nil
+      VERSIONS.last
     end
   end
 
