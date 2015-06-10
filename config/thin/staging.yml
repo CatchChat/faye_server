@@ -9,6 +9,7 @@ require: []
 environment: staging
 max_persistent_conns: 16384
 servers: 1
+onebyone: true
 port: 8000
 threaded: true
 no-epoll: true
