@@ -72,7 +72,7 @@ module V1
           elsif json_response['error']
             faye_message['error'] = json_response['error']
           else
-            $logger.error "APIServerError: code is #{response.code}, body is #{response.body}"
+            Faye.logger.error "APIServerError: code is #{response.code}, body is #{response.body}"
             faye_message['error'] = "Internal error"
           end
         end
@@ -157,7 +157,7 @@ module V1
           elsif json_response['error']
             faye_message['error'] = json_response['error']
           else
-            $logger.error "APIServerError: code is #{response.code}, body is #{response.body}"
+            Faye.logger.error "APIServerError: code is #{response.code}, body is #{response.body}"
             faye_message['error'] = "Internal error"
           end
         end

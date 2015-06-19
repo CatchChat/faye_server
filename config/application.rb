@@ -18,8 +18,8 @@ require 'dotenv'
 Dotenv.load ".env.#{ENV['RACK_ENV']}", '.env'
 
 require 'logger'
-$logger = Logger.new("log/#{rack_env}.log")
-$logger.level = ENV['LOG_LEVEL'].to_i || Logger::DEBUG
+Faye.logger = Logger.new("log/#{rack_env}.log")
+Faye.logger.level = Faye::Logging::LOG_LEVELS[ENV['LOG_LEVEL'] ? ENV['LOG_LEVEL'].to_sym : :info]
 
 require 'newrelic_rpm'
 NewRelic::Agent.manual_start

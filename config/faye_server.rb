@@ -4,7 +4,7 @@ class FayeServer
   VERSIONS = %w(v1)
 
   def incoming(faye_message, callback)
-    $logger.info "Incoming: #{faye_message.inspect}"
+    Faye.logger.info "Incoming: #{faye_message.inspect}"
 
     if version = check_version(faye_message)
       faye_message['custom_data'] = { 'version' => version }
@@ -12,7 +12,7 @@ class FayeServer
     end
   rescue => e
     notice_error(e, faye_message)
-    $logger.error("Incoming: message: #{faye_message.inspect}\nerror: #{e.message}\n#{e.backtrace}")
+    Faye.logger.error("Incoming: message: #{faye_message.inspect}\nerror: #{e.message}\n#{e.backtrace}")
     faye_message['error'] = "Internal error"
   ensure
     faye_message['ext'] = faye_message.delete('custom_data') || {}
@@ -24,17 +24,17 @@ class FayeServer
     response = faye_message['ext']['response'] rescue nil
     faye_message['ext'] = response || {}
     content = "Outgoing: #{faye_message.inspect}"
-    faye_message['error'] ? $logger.error(content) : $logger.info(content)
+    faye_message['error'] ? Faye.logger.error(content) : Faye.logger.info(content)
     callback.call(faye_message)
   # server_logic_class(get_version(faye_message)).try(:outgoing, faye_message)
   # rescue => e
   #   notice_error(e, faye_message)
-  #   $logger.error("Outgoing: message: #{faye_message.inspect}\nerror: #{e.message}\n#{e.backtrace}")
+  #   Faye.logger.error("Outgoing: message: #{faye_message.inspect}\nerror: #{e.message}\n#{e.backtrace}")
   #   faye_message['error'] = "Internal error"
   # ensure
   #   not_reconnect_if_handshake_error(faye_message)
   #   content = "Outgoing: #{faye_message.inspect}"
-  #   faye_message['error'] ? $logger.error(content) : $logger.info(content)
+  #   faye_message['error'] ? Faye.logger.error(content) : Faye.logger.info(content)
   #   callback.call(faye_message)
   end
 
