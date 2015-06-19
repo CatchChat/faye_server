@@ -4,8 +4,6 @@ class FayeServer
   VERSIONS = %w(v1)
 
   def incoming(faye_message, callback)
-    Faye.logger.info "Incoming: #{faye_message.inspect}"
-
     if version = check_version(faye_message)
       faye_message['custom_data'] = { 'version' => version }
       server_logic_class(version).incoming(faye_message)
@@ -23,8 +21,6 @@ class FayeServer
     not_reconnect_if_handshake_error(faye_message)
     response = faye_message['ext']['response'] rescue nil
     faye_message['ext'] = response || {}
-    content = "Outgoing: #{faye_message.inspect}"
-    faye_message['error'] ? Faye.logger.error(content) : Faye.logger.info(content)
     callback.call(faye_message)
   # server_logic_class(get_version(faye_message)).try(:outgoing, faye_message)
   # rescue => e
@@ -33,8 +29,6 @@ class FayeServer
   #   faye_message['error'] = "Internal error"
   # ensure
   #   not_reconnect_if_handshake_error(faye_message)
-  #   content = "Outgoing: #{faye_message.inspect}"
-  #   faye_message['error'] ? Faye.logger.error(content) : Faye.logger.info(content)
   #   callback.call(faye_message)
   end
 
