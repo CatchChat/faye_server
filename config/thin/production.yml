@@ -8,7 +8,7 @@ max_conns: 16384
 require: []
 environment: production
 max_persistent_conns: 16384
-servers: 15
+servers: 25
 port: 8000
 onebyone: true
 threaded: true
