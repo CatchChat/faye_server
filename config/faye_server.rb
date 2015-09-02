@@ -4,6 +4,7 @@ class FayeServer
   VERSIONS = %w(v1)
 
   def incoming(faye_message, callback)
+    start_time = Time.now
     if version = check_version(faye_message)
       faye_message['custom_data'] = { 'version' => version }
       server_logic_class(version).incoming(faye_message)
@@ -15,13 +16,18 @@ class FayeServer
   ensure
     faye_message['ext'] = faye_message.delete('custom_data') || {}
     callback.call(faye_message)
+    end_time = Time.now
+    Faye.logger.info "******************** incoming perform time: #{end_time - start_time} ********************"
   end
 
   def outgoing(faye_message, callback)
+    start_time = Time.now
     not_reconnect_if_handshake_error(faye_message)
     response = faye_message['ext']['response'] rescue nil
     faye_message['ext'] = response || {}
     callback.call(faye_message)
+    end_time = Time.now
+    Faye.logger.info "******************** outgoing perform time: #{end_time - start_time} ********************"
   # server_logic_class(get_version(faye_message)).try(:outgoing, faye_message)
   # rescue => e
   #   notice_error(e, faye_message)
