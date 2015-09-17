@@ -213,7 +213,7 @@ module V1
       private
 
       def generate_request_headers(token)
-        { Authorization: "Token token=\"#{token}\"", content_type: :json, accept: :json, 'X-Faye-Version' => 'v1' }
+        { Authorization: "Token token=\"#{token}\"", content_type: :json, accept: :json }
       end
     end
   end
