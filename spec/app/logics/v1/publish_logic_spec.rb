@@ -141,7 +141,7 @@ RSpec.describe V1::PublishLogic do
 
         stub_request(:post, "#{ENV['API_SERVER_URL']}/v1/messages").
          with(:body => "{\"recipient_type\":\"User\",\"recipient_id\":\"ea8fb465c9fe1f7cab2b53fcf12b9b53\",\"send_to_faye_server\":false}",
-              :headers => {'Accept'=>'application/json', 'Accept-Encoding'=>'gzip, deflate', 'Authorization'=>"Token token=\"#{user.access_tokens.first.token}\"", 'Content-Type'=>'application/json', 'User-Agent'=>'Ruby'}).
+              :headers => {'Accept'=>'application/json', 'Accept-Encoding'=>'gzip, deflate', 'Authorization'=>"Token token=\"#{user.access_tokens.first.token}\"", 'Content-Type'=>'application/json', 'X-Faye-Version' => 'v1'}).
          to_return(:status => 422, :body => "{\"error\":\"error\"}", :headers => {})
 
         subject.class.send :process_message, user, faye_message
@@ -150,7 +150,7 @@ RSpec.describe V1::PublishLogic do
 
         stub_request(:post, "#{ENV['API_SERVER_URL']}/v1/messages").
          with(:body => "{\"recipient_type\":\"User\",\"recipient_id\":\"ea8fb465c9fe1f7cab2b53fcf12b9b53\",\"send_to_faye_server\":false}",
-              :headers => {'Accept'=>'application/json', 'Accept-Encoding'=>'gzip, deflate', 'Authorization'=>"Token token=\"#{user.access_tokens.first.token}\"", 'Content-Type'=>'application/json', 'User-Agent'=>'Ruby'}).
+              :headers => {'Accept'=>'application/json', 'Accept-Encoding'=>'gzip, deflate', 'Authorization'=>"Token token=\"#{user.access_tokens.first.token}\"", 'Content-Type'=>'application/json', 'X-Faye-Version' => 'v1'}).
          to_return(:status => 422, :body => "", :headers => {})
 
         subject.class.send :process_message, user, faye_message
@@ -170,7 +170,7 @@ RSpec.describe V1::PublishLogic do
 
         stub_request(:post, "#{ENV['API_SERVER_URL']}/v1/messages").
          with(:body => "{\"recipient_type\":\"User\",\"recipient_id\":\"ea8fb465c9fe1f7cab2b53fcf12b9b53\",\"send_to_faye_server\":false}",
-              :headers => {'Accept'=>'application/json', 'Accept-Encoding'=>'gzip, deflate', 'Authorization'=>"Token token=\"#{user.access_tokens.first.token}\"", 'Content-Type'=>'application/json', 'User-Agent'=>'Ruby'}).
+              :headers => {'Accept'=>'application/json', 'Accept-Encoding'=>'gzip, deflate', 'Authorization'=>"Token token=\"#{user.access_tokens.first.token}\"", 'Content-Type'=>'application/json', 'X-Faye-Version' => 'v1'}).
          to_return(:status => 200, :body => "{\"id\":\"asdasdsadasdsad\"}", :headers => {})
 
         subject.class.send :process_message, user, faye_message
@@ -262,7 +262,7 @@ RSpec.describe V1::PublishLogic do
 
         stub_request(:patch, "#{ENV['API_SERVER_URL']}/v1/messages/xxxx/mark_as_read").
          with(:body => "{\"send_to_faye_server\":false}",
-              :headers => {'Accept'=>'application/json', 'Accept-Encoding'=>'gzip, deflate', 'Authorization'=>"Token token=\"#{user.access_tokens.first.token}\"", 'Content-Type'=>'application/json', 'User-Agent'=>'Ruby'}).
+              :headers => {'Accept'=>'application/json', 'Accept-Encoding'=>'gzip, deflate', 'Authorization'=>"Token token=\"#{user.access_tokens.first.token}\"", 'Content-Type'=>'application/json', 'X-Faye-Version' => 'v1'}).
          to_return(:status => 404, :body => "{\"error\":\"Message is not found\"}", :headers => {})
 
         subject.class.send :process_mark_as_read, user, faye_message
@@ -271,7 +271,7 @@ RSpec.describe V1::PublishLogic do
 
         stub_request(:patch, "#{ENV['API_SERVER_URL']}/v1/messages/xxxx/mark_as_read").
          with(:body => "{\"send_to_faye_server\":false}",
-              :headers => {'Accept'=>'application/json', 'Accept-Encoding'=>'gzip, deflate', 'Authorization'=>"Token token=\"#{user.access_tokens.first.token}\"", 'Content-Type'=>'application/json', 'User-Agent'=>'Ruby'}).
+              :headers => {'Accept'=>'application/json', 'Accept-Encoding'=>'gzip, deflate', 'Authorization'=>"Token token=\"#{user.access_tokens.first.token}\"", 'Content-Type'=>'application/json', 'X-Faye-Version' => 'v1'}).
          to_return(:status => 404, :body => "", :headers => {})
 
         subject.class.send :process_mark_as_read, user, faye_message
@@ -291,7 +291,7 @@ RSpec.describe V1::PublishLogic do
 
         stub_request(:patch, "#{ENV['API_SERVER_URL']}/v1/messages/xxxx/mark_as_read").
           with(:body => "{\"send_to_faye_server\":false}",
-              :headers => {'Accept'=>'application/json', 'Accept-Encoding'=>'gzip, deflate', 'Authorization'=>"Token token=\"#{user.access_tokens.first.token}\"", 'Content-Type'=>'application/json', 'User-Agent'=>'Ruby'}).
+              :headers => {'Accept'=>'application/json', 'Accept-Encoding'=>'gzip, deflate', 'Authorization'=>"Token token=\"#{user.access_tokens.first.token}\"", 'Content-Type'=>'application/json', 'X-Faye-Version' => 'v1'}).
           to_return(:status => 200, :body => "{\"recipient_type\":\"user\",\"recipient_id\":\"aaaa\",\"first_read\":false}", :headers => {})
 
         subject.class.send :process_mark_as_read, user, faye_message
@@ -346,7 +346,7 @@ RSpec.describe V1::PublishLogic do
         }
 
         stub_request(:delete, "#{ENV['API_SERVER_URL']}/v1/messages/xxxx?send_to_faye_server=false").
-         with(:headers => {'Accept'=>'application/json', 'Accept-Encoding'=>'gzip, deflate', 'Authorization'=>"Token token=\"#{user.access_tokens.first.token}\"", 'Content-Type'=>'application/json', 'User-Agent'=>'Ruby'}).
+         with(:headers => {'Accept'=>'application/json', 'Accept-Encoding'=>'gzip, deflate', 'Authorization'=>"Token token=\"#{user.access_tokens.first.token}\"", 'Content-Type'=>'application/json', 'X-Faye-Version' => 'v1'}).
          to_return(:status => 404, :body => "{\"error\":\"Message is not found\"}", :headers => {})
 
         subject.class.send :process_message_deleted, user, faye_message
@@ -354,7 +354,7 @@ RSpec.describe V1::PublishLogic do
         expect(faye_message.has_key?('custom_data')).to eq false
 
         stub_request(:delete, "#{ENV['API_SERVER_URL']}/v1/messages/xxxx?send_to_faye_server=false").
-         with(:headers => {'Accept'=>'application/json', 'Accept-Encoding'=>'gzip, deflate', 'Authorization'=>"Token token=\"#{user.access_tokens.first.token}\"", 'Content-Type'=>'application/json', 'User-Agent'=>'Ruby'}).
+         with(:headers => {'Accept'=>'application/json', 'Accept-Encoding'=>'gzip, deflate', 'Authorization'=>"Token token=\"#{user.access_tokens.first.token}\"", 'Content-Type'=>'application/json', 'X-Faye-Version' => 'v1'}).
          to_return(:status => 404, :body => "", :headers => {})
 
         subject.class.send :process_message_deleted, user, faye_message
@@ -373,7 +373,7 @@ RSpec.describe V1::PublishLogic do
         }
 
         stub_request(:delete, "#{ENV['API_SERVER_URL']}/v1/messages/xxxx?send_to_faye_server=false").
-          with(:headers => {'Accept'=>'application/json', 'Accept-Encoding'=>'gzip, deflate', 'Authorization'=>"Token token=\"#{user.access_tokens.first.token}\"", 'Content-Type'=>'application/json', 'User-Agent'=>'Ruby'}).
+          with(:headers => {'Accept'=>'application/json', 'Accept-Encoding'=>'gzip, deflate', 'Authorization'=>"Token token=\"#{user.access_tokens.first.token}\"", 'Content-Type'=>'application/json', 'X-Faye-Version' => 'v1'}).
           to_return(:status => 200, :body => "{\"id\":\"xxxx\",\"recipient_id\":\"ea8fb465c9fe1f7cab2b53fcf12b9b53\",\"recipient_type\":\"User\",\"sender\":{\"id\":\"ea8fb465c9fe1f7cab2b53fcf12b9b53\",\"username\":\"username\",\"nickname\":\"nickname\"}}", :headers => {})
 
         subject.class.send :process_message_deleted, user, faye_message
