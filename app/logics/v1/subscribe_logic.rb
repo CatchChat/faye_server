@@ -9,7 +9,7 @@ module V1
       def incoming(faye_message)
         return unless user = authenticate_user(faye_message)
 
-        unless /\A\/(?<recipient_type>users|circles)\/(?<recipient_id>\S+)\/messages\z/ =~ faye_message['subscription']
+        unless /\A\/v1\/(?<recipient_type>users|circles)\/(?<recipient_id>\S+)\/messages\z/ =~ faye_message['subscription']
           return faye_message['error'] = 'SubscribeError: Channel is invalid.'
         end
 
