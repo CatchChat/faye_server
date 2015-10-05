@@ -62,7 +62,7 @@ describe V1::ServerLogic do
   end
 
   it '.find_logic_class' do
-    expect(subject.class.send :find_logic_class, '/users/xxxx/messages').to eq V1::PublishLogic
+    expect(subject.class.send :find_logic_class, '/v1/users/xxxx/messages').to eq V1::PublishLogic
     expect(subject.class.send :find_logic_class, '/meta/handshake').to eq V1::HandshakeLogic
     expect(subject.class.send :find_logic_class, '/meta/connect').to eq V1::ConnectLogic
     expect(subject.class.send :find_logic_class, '/meta/disconnect').to eq V1::DisconnectLogic

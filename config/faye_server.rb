@@ -28,14 +28,6 @@ class FayeServer
     callback.call(faye_message)
     end_time = Time.now
     Faye.logger.info "******************** outgoing perform time: #{end_time - start_time} ********************"
-  # server_logic_class(get_version(faye_message)).try(:outgoing, faye_message)
-  # rescue => e
-  #   notice_error(e, faye_message)
-  #   Faye.logger.error("Outgoing: message: #{faye_message.inspect}\nerror: #{e.message}\n#{e.backtrace}")
-  #   faye_message['error'] = "Internal error"
-  # ensure
-  #   not_reconnect_if_handshake_error(faye_message)
-  #   callback.call(faye_message)
   end
 
   private

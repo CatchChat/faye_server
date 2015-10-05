@@ -46,7 +46,7 @@ module V1
       #     message_type    message
       #     message
       def process_message(user, faye_message)
-        unless /\A\/(?<recipient_type>users|circles)\/(?<recipient_id>\S+)\/messages\z/ =~ faye_message['channel']
+        unless /\A\/v1\/(?<recipient_type>users|circles)\/(?<recipient_id>\S+)\/messages\z/ =~ faye_message['channel']
           return faye_message['error'] = 'PublishError: Channel is invalid.'
         end
 
@@ -97,7 +97,7 @@ module V1
       #         nickname
       #         username
       def process_instant_state(user, faye_message)
-        unless /\A\/(?<recipient_type>users|circles)\/(?<recipient_id>\S+)\/messages\z/ =~ faye_message['channel']
+        unless /\A\/v1\/(?<recipient_type>users|circles)\/(?<recipient_id>\S+)\/messages\z/ =~ faye_message['channel']
           return faye_message['error'] = 'PublishError: Channel is invalid.'
         end
 
@@ -131,7 +131,7 @@ module V1
       #       recipient_type
       #       recipient_id
       def process_mark_as_read(user, faye_message)
-        unless /\A\/users\/\S+\/messages\z/ =~ faye_message['channel']
+        unless /\A\/v1\/users\/\S+\/messages\z/ =~ faye_message['channel']
           return faye_message['error'] = 'PublishError: Channel is invalid.'
         end
 
@@ -184,7 +184,7 @@ module V1
       #         username
       #         nickname
       def process_message_deleted(user, faye_message)
-        unless /\A\/(?<recipient_type>users|circles)\/(?<recipient_id>\S+)\/messages\z/ =~ faye_message['channel']
+        unless /\A\/v1\/(?<recipient_type>users|circles)\/(?<recipient_id>\S+)\/messages\z/ =~ faye_message['channel']
           return faye_message['error'] = 'PublishError: Channel is invalid.'
         end
 

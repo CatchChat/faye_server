@@ -25,9 +25,9 @@ RSpec.describe V1::SubscribeLogic do
 
     it 'no permission' do
       user = create(:user)
-      faye_message = {"ext"=>{"access_token"=>user.access_tokens.first.token}, "clientId"=>"2np9pkowjpe3i7m12av5hznjf622vbh", "channel"=>"/meta/subscribe", "subscription"=>"/users/xxxx/messages"}
+      faye_message = {"ext"=>{"access_token"=>user.access_tokens.first.token}, "clientId"=>"2np9pkowjpe3i7m12av5hznjf622vbh", "channel"=>"/meta/subscribe", "subscription"=>"/v1/users/xxxx/messages"}
       subject.class.incoming(faye_message)
-      expect(faye_message['error']).to eq 'SubscribeError: You are no permission to subscribe /users/xxxx/messages.'
+      expect(faye_message['error']).to eq 'SubscribeError: You are no permission to subscribe /v1/users/xxxx/messages.'
     end
   end
 end

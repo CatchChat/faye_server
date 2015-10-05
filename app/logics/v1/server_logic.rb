@@ -33,7 +33,7 @@ module V1
           V1::SubscribeLogic
         when '/meta/unsubscribe'
           V1::UnsubscribeLogic
-        when /\A\/(users|circles)\/\S+\/messages\z/
+        when /\A\/v1\/(users|circles)\/\S+\/messages\z/
           V1::PublishLogic
         end
       end

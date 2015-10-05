@@ -6,7 +6,7 @@ RSpec.describe V1::PublishLogic do
   describe '.incoming' do
     it 'Publish token is invalid' do
       faye_message = {
-        "channel" => "/users/ea8fb465c9fe1f7cab2b53fcf12b9b53/messages",
+        "channel" => "/v1/users/ea8fb465c9fe1f7cab2b53fcf12b9b53/messages",
         "ext"     => {"publish_token"=>"invalid publish_token"},
         "data"    => {
           "message_type" => "message",
@@ -19,7 +19,7 @@ RSpec.describe V1::PublishLogic do
 
     it 'From api server' do
       faye_message = {
-        "channel" => "/users/ea8fb465c9fe1f7cab2b53fcf12b9b53/messages",
+        "channel" => "/v1/users/ea8fb465c9fe1f7cab2b53fcf12b9b53/messages",
         "ext"     => {"publish_token"=>ENV['PUBLISH_TOKEN']},
         "data"    => {
           "message_type" => "message",
@@ -32,7 +32,7 @@ RSpec.describe V1::PublishLogic do
 
     it 'Access token is invalid' do
       faye_message = {
-        "channel" => "/users/ea8fb465c9fe1f7cab2b53fcf12b9b53/messages",
+        "channel" => "/v1/users/ea8fb465c9fe1f7cab2b53fcf12b9b53/messages",
         "ext"     => {"access_token"=>"invalid access_token"},
         "data"    => {
           "message_type" => "message",
@@ -46,7 +46,7 @@ RSpec.describe V1::PublishLogic do
     it 'User is blocked' do
       user.update_column(:state, User.states[:blocked])
       faye_message = {
-        "channel" => "/users/ea8fb465c9fe1f7cab2b53fcf12b9b53/messages",
+        "channel" => "/v1/users/ea8fb465c9fe1f7cab2b53fcf12b9b53/messages",
         "ext"     => {"access_token"=>user.access_tokens.first.token},
         "data"    => {
           "message_type" => "message",
@@ -59,7 +59,7 @@ RSpec.describe V1::PublishLogic do
 
     it 'Message type is invalid' do
       faye_message = {
-        "channel" => "/users/ea8fb465c9fe1f7cab2b53fcf12b9b53/messages",
+        "channel" => "/v1/users/ea8fb465c9fe1f7cab2b53fcf12b9b53/messages",
         "ext"     => {"access_token"=>user.access_tokens.first.token},
         "data"    => {
           "message_type" => "invalid message_type",
@@ -72,7 +72,7 @@ RSpec.describe V1::PublishLogic do
 
     it 'PublishError: Message is invalid.' do
       faye_message = {
-        "channel" => "/users/ea8fb465c9fe1f7cab2b53fcf12b9b53/messages",
+        "channel" => "/v1/users/ea8fb465c9fe1f7cab2b53fcf12b9b53/messages",
         "ext"     => {"access_token"=>user.access_tokens.first.token},
         "data"    => {
           "message_type" => "message",
@@ -85,7 +85,7 @@ RSpec.describe V1::PublishLogic do
 
     it 'should send process method' do
       faye_message = {
-        "channel" => "/users/ea8fb465c9fe1f7cab2b53fcf12b9b53/messages",
+        "channel" => "/v1/users/ea8fb465c9fe1f7cab2b53fcf12b9b53/messages",
         "ext"     => {"access_token"=>user.access_tokens.first.token},
         "data"    => {
           "message_type" => "message",
@@ -104,7 +104,7 @@ RSpec.describe V1::PublishLogic do
 
     it 'Channel is invalid' do
       faye_message = {
-        "channel" => "/xxxx/ea8fb465c9fe1f7cab2b53fcf12b9b53/messages",
+        "channel" => "/v1/xxxx/ea8fb465c9fe1f7cab2b53fcf12b9b53/messages",
         "ext"     => {"access_token"=>user.access_tokens.first.token},
         "data"    => {
           "message_type" => "message",
@@ -117,7 +117,7 @@ RSpec.describe V1::PublishLogic do
 
     it 'Message can not be sent to this channel' do
       faye_message = {
-        "channel" => "/users/ea8fb465c9fe1f7cab2b53fcf12b9b53/messages",
+        "channel" => "/v1/users/ea8fb465c9fe1f7cab2b53fcf12b9b53/messages",
         "ext"     => {"access_token"=>user.access_tokens.first.token},
         "data"    => {
           "message_type" => "message",
@@ -131,7 +131,7 @@ RSpec.describe V1::PublishLogic do
     describe 'Send request to api server' do
       it 'error' do
         faye_message = {
-          "channel" => "/users/ea8fb465c9fe1f7cab2b53fcf12b9b53/messages",
+          "channel" => "/v1/users/ea8fb465c9fe1f7cab2b53fcf12b9b53/messages",
           "ext"     => {"access_token"=>user.access_tokens.first.token},
           "data"    => {
             "message_type" => "message",
@@ -160,7 +160,7 @@ RSpec.describe V1::PublishLogic do
 
       it 'success' do
         faye_message = {
-          "channel" => "/users/ea8fb465c9fe1f7cab2b53fcf12b9b53/messages",
+          "channel" => "/v1/users/ea8fb465c9fe1f7cab2b53fcf12b9b53/messages",
           "ext"     => {"access_token"=>user.access_tokens.first.token},
           "data"    => {
             "message_type" => "message",
@@ -184,7 +184,7 @@ RSpec.describe V1::PublishLogic do
 
     it 'Channel is invalid' do
       faye_message = {
-        "channel" => "/xxxx/ea8fb465c9fe1f7cab2b53fcf12b9b53/messages",
+        "channel" => "/v1/xxxx/ea8fb465c9fe1f7cab2b53fcf12b9b53/messages",
         "ext"     => {"access_token"=>user.access_tokens.first.token},
         "data"    => {
           "message_type" => "instant_state",
@@ -197,7 +197,7 @@ RSpec.describe V1::PublishLogic do
 
     it 'success' do
       faye_message = {
-        "channel" => "/users/ea8fb465c9fe1f7cab2b53fcf12b9b53/messages",
+        "channel" => "/v1/users/ea8fb465c9fe1f7cab2b53fcf12b9b53/messages",
         "ext"     => {"access_token"=>user.access_tokens.first.token},
         "data"    => {
           "message_type" => "instant_state",
@@ -223,7 +223,7 @@ RSpec.describe V1::PublishLogic do
 
     it 'Channel is invalid' do
       faye_message = {
-        "channel" => "/xxxx/ea8fb465c9fe1f7cab2b53fcf12b9b53/messages",
+        "channel" => "/v1/xxxx/ea8fb465c9fe1f7cab2b53fcf12b9b53/messages",
         "ext"     => {"access_token"=>user.access_tokens.first.token},
         "data"    => {
           "api_version"  => "v1",
@@ -237,7 +237,7 @@ RSpec.describe V1::PublishLogic do
 
     it 'Message id is invalid' do
       faye_message = {
-        "channel" => "/users/ea8fb465c9fe1f7cab2b53fcf12b9b53/messages",
+        "channel" => "/v1/users/ea8fb465c9fe1f7cab2b53fcf12b9b53/messages",
         "ext"     => {"access_token"=>user.access_tokens.first.token},
         "data"    => {
           "message_type" => "mark_as_read",
@@ -252,7 +252,7 @@ RSpec.describe V1::PublishLogic do
 
       it 'error' do
         faye_message = {
-          "channel" => "/users/ea8fb465c9fe1f7cab2b53fcf12b9b53/messages",
+          "channel" => "/v1/users/ea8fb465c9fe1f7cab2b53fcf12b9b53/messages",
           "ext"     => {"access_token"=>user.access_tokens.first.token},
           "data"    => {
             "message_type" => "mark_as_read",
@@ -281,7 +281,7 @@ RSpec.describe V1::PublishLogic do
 
       it 'success' do
         faye_message = {
-          "channel" => "/users/ea8fb465c9fe1f7cab2b53fcf12b9b53/messages",
+          "channel" => "/v1/users/ea8fb465c9fe1f7cab2b53fcf12b9b53/messages",
           "ext"     => {"access_token"=>user.access_tokens.first.token},
           "data"    => {
             "message_type" => "mark_as_read",
@@ -308,7 +308,7 @@ RSpec.describe V1::PublishLogic do
 
     it 'Channel is invalid' do
       faye_message = {
-        "channel" => "/xxxx/ea8fb465c9fe1f7cab2b53fcf12b9b53/messages",
+        "channel" => "/v1/xxxx/ea8fb465c9fe1f7cab2b53fcf12b9b53/messages",
         "ext"     => {"access_token"=>user.access_tokens.first.token},
         "data"    => {
           "api_version"  => "v1",
@@ -322,7 +322,7 @@ RSpec.describe V1::PublishLogic do
 
     it 'Message id is invalid' do
       faye_message = {
-        "channel" => "/users/ea8fb465c9fe1f7cab2b53fcf12b9b53/messages",
+        "channel" => "/v1/users/ea8fb465c9fe1f7cab2b53fcf12b9b53/messages",
         "ext"     => {"access_token"=>user.access_tokens.first.token},
         "data"    => {
           "message_type" => "message_deleted",
@@ -337,7 +337,7 @@ RSpec.describe V1::PublishLogic do
 
       it 'error' do
         faye_message = {
-          "channel" => "/users/ea8fb465c9fe1f7cab2b53fcf12b9b53/messages",
+          "channel" => "/v1/users/ea8fb465c9fe1f7cab2b53fcf12b9b53/messages",
           "ext"     => {"access_token"=>user.access_tokens.first.token},
           "data"    => {
             "message_type" => "message_deleted",
@@ -364,7 +364,7 @@ RSpec.describe V1::PublishLogic do
 
       it 'success' do
         faye_message = {
-          "channel" => "/users/ea8fb465c9fe1f7cab2b53fcf12b9b53/messages",
+          "channel" => "/v1/users/ea8fb465c9fe1f7cab2b53fcf12b9b53/messages",
           "ext"     => {"access_token"=>user.access_tokens.first.token},
           "data"    => {
             "message_type" => "message_deleted",
