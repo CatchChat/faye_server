@@ -121,13 +121,15 @@ module V1
       #   data
       #     message_type    mark_as_read
       #     message
-      #       id
+      #       max_id
+      #       recipient_id
+      #       recipient_type
       # Out faye_message:
       #   ext
       #   data
       #     message_type    mark_as_read
       #     message
-      #       id
+      #       max_id
       #       recipient_type
       #       recipient_id
       def process_mark_as_read(user, faye_message)
@@ -135,25 +137,29 @@ module V1
           return faye_message['error'] = 'PublishError: Channel is invalid.'
         end
 
-        message_id = faye_message['data']['message']['id'].to_s
-        return faye_message['error'] = 'PublishError: Message id is invalid.' if message_id == ''
-
-        api_url = "#{ENV['API_SERVER_URL']}/v1/messages/#{message_id}/mark_as_read"
+        max_id         = faye_message['data']['message']['max_id']
+        recipient_type = faye_message['data']['message']['recipient_type']
+        recipient_id   = faye_message['data']['message']['recipient_id']
+        api_url = "#{ENV['API_SERVER_URL']}/v1/#{recipient_type}/#{recipient_id}/messages/batch_mark_as_read"
         headers = generate_request_headers(faye_message['ext']['access_token'])
 
-        RestClient.patch(api_url, { 'send_to_faye_server' => false }.to_json, headers) do |response|
+        RestClient.patch(api_url, { 'max_id' => max_id, 'send_to_faye_server' => false }.to_json, headers) do |response|
           json_response = Hash(JSON.load(response.body)) rescue {}
           if response.code >= 200 && response.code < 300
-            faye_message['custom_data'] ||= {}
-            faye_message['custom_data']['publish'] = json_response['first_read']
-            faye_message['data'] = {
-              'message_type' => 'mark_as_read',
-              'message' => {
-                'id' => message_id,
-                'recipient_type' => json_response['recipient_type'],
-                'recipient_id' => json_response['recipient_id']
+            case recipient_type
+            when 'User'
+              faye_message['data'] = {
+                'message_type' => 'mark_as_read',
+                'message' => {
+                  'max_id' => max_id,
+                  'recipient_type' => 'User',
+                  'recipient_id' => user.encrypted_id
+                }
               }
-            }
+            else
+              faye_message['custom_data'] ||= {}
+              faye_message['custom_data']['publish'] = false
+            end
           elsif json_response['error']
             faye_message['error'] = json_response['error']
           else
