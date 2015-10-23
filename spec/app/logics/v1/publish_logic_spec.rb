@@ -228,7 +228,7 @@ RSpec.describe V1::PublishLogic do
         "data"    => {
           "api_version"  => "v1",
           "message_type" => "mark_as_read",
-          "message"      => { "max_id" => "1", "recipient_type" => "User", "recipient_id" => "1" }
+          "message"      => { "last_read_at" => "", "recipient_type" => "User", "recipient_id" => "1" }
         }
       }
       subject.class.send :process_mark_as_read, user, faye_message
@@ -279,12 +279,12 @@ RSpec.describe V1::PublishLogic do
         stub_request(:patch, "#{ENV['API_SERVER_URL']}/v1/User/1/messages/batch_mark_as_read").
          with(:body => %Q|{"max_id":"10","send_to_faye_server":false}|,
               :headers => {'Authorization'=>"Token token=\"#{user.access_tokens.first.token}\""}).
-          to_return(:status => 200, :body => "", :headers => {})
+          to_return(:status => 200, :body => "{\"last_read_at\":1445594381.191}", :headers => {})
 
         subject.class.send :process_mark_as_read, user, faye_message
         expect(faye_message['data']).to eq({
           'message_type' => 'mark_as_read',
-          'message' => { 'max_id' => '10', 'recipient_type' => 'User', 'recipient_id' => user.encrypted_id }
+          'message' => { 'last_read_at' => 1445594381.191, 'recipient_type' => 'User', 'recipient_id' => user.encrypted_id }
         })
       end
     end

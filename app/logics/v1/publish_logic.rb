@@ -129,7 +129,7 @@ module V1
       #   data
       #     message_type    mark_as_read
       #     message
-      #       max_id
+      #       last_read_at
       #       recipient_type
       #       recipient_id
       def process_mark_as_read(user, faye_message)
@@ -151,7 +151,7 @@ module V1
               faye_message['data'] = {
                 'message_type' => 'mark_as_read',
                 'message' => {
-                  'max_id' => max_id,
+                  'last_read_at' => json_response['last_read_at'],
                   'recipient_type' => 'User',
                   'recipient_id' => user.encrypted_id
                 }
