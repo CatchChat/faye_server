@@ -10,12 +10,13 @@ module V1
       def incoming(faye_message)
         data = faye_message['data']
         unless MESSAGE_TYPES.include?(data['message_type'])
-          return faye_message['error'] = "PublishError: Message type is invalid."
+          faye_message['error'] = "407:#{data['message_type']}:Message type is invalid"
+          return
         end
 
         if faye_message['ext'] && faye_message['ext']['publish_token']
           if faye_message['ext']['publish_token'] != ENV['PUBLISH_TOKEN']
-            faye_message['error'] = "PublishError: Publish token is invalid."
+            faye_message['error'] = "407:#{faye_message['ext']['publish_token']}:Publish token is invalid"
           end
           return
         end
@@ -23,7 +24,8 @@ module V1
         return unless user = authenticate_user(faye_message)
 
         unless data['message'].is_a?(Hash)
-          return faye_message['error'] = "PublishError: Message is invalid."
+          faye_message['error'] = "407::Message is invalid"
+          return
         end
 
         send "process_#{data['message_type']}", user, faye_message
@@ -47,14 +49,16 @@ module V1
       #     message
       def process_message(user, faye_message)
         unless /\A\/v1\/(?<recipient_type>users|circles)\/(?<recipient_id>\S+)\/messages\z/ =~ faye_message['channel']
-          return faye_message['error'] = 'PublishError: Channel is invalid.'
+          faye_message['error'] = Faye::Error.channel_invalid(faye_message['channel'])
+          return
         end
 
         message = faye_message['data']['message']
         if (recipient_type == 'users' && message['recipient_type'] != 'User') ||
           (recipient_type == 'circles' && message['recipient_type'] != 'Circle') ||
           message['recipient_id'] != recipient_id
-          return faye_message['error'] = 'PublishError: Message can not be sent to this channel.'
+          faye_message['error'] = Faye::Error.channel_forbidden(faye_message['channel'])
+          return
         end
 
         api_url = "#{ENV['API_SERVER_URL']}/v1/messages"
@@ -70,10 +74,10 @@ module V1
               'message' => json_response
             }
           elsif json_response['error']
-            faye_message['error'] = json_response['error']
+            faye_message['error'] = "407::#{json_response['error']}"
           else
             Faye.logger.error "APIServerError: code is #{response.code}, body is #{response.body}"
-            faye_message['error'] = "Internal error"
+            faye_message['error'] = Faye::Error.server_error
           end
         end
       end
@@ -98,7 +102,8 @@ module V1
       #         username
       def process_instant_state(user, faye_message)
         unless /\A\/v1\/(?<recipient_type>users|circles)\/(?<recipient_id>\S+)\/messages\z/ =~ faye_message['channel']
-          return faye_message['error'] = 'PublishError: Channel is invalid.'
+          faye_message['error'] = Faye::Error.channel_invalid(faye_message['channel'])
+          return
         end
 
         faye_message['data'] = {
@@ -134,7 +139,8 @@ module V1
       #       recipient_id
       def process_mark_as_read(user, faye_message)
         unless /\A\/v1\/users\/\S+\/messages\z/ =~ faye_message['channel']
-          return faye_message['error'] = 'PublishError: Channel is invalid.'
+          faye_message['error'] = Faye::Error.channel_invalid(faye_message['channel'])
+          return
         end
 
         max_id         = faye_message['data']['message']['max_id']
@@ -161,10 +167,10 @@ module V1
               faye_message['custom_data']['publish'] = false
             end
           elsif json_response['error']
-            faye_message['error'] = json_response['error']
+            faye_message['error'] = "407::#{json_response['error']}"
           else
             Faye.logger.error "APIServerError: code is #{response.code}, body is #{response.body}"
-            faye_message['error'] = "Internal error"
+            faye_message['error'] = Faye::Error.server_error
           end
         end
       end
@@ -191,11 +197,15 @@ module V1
       #         nickname
       def process_message_deleted(user, faye_message)
         unless /\A\/v1\/(?<recipient_type>users|circles)\/(?<recipient_id>\S+)\/messages\z/ =~ faye_message['channel']
-          return faye_message['error'] = 'PublishError: Channel is invalid.'
+          faye_message['error'] = Faye::Error.channel_invalid(faye_message['channel'])
+          return
         end
 
         message_id = faye_message['data']['message']['id'].to_s
-        return faye_message['error'] = 'PublishError: Message id is invalid.' if message_id == ''
+        if message_id == ''
+          faye_message['error'] = "407::Message id is invalid"
+          return
+        end
 
         api_url = "#{ENV['API_SERVER_URL']}/v1/messages/#{message_id}?send_to_faye_server=false"
         headers = generate_request_headers(faye_message['ext']['access_token'])
@@ -208,10 +218,10 @@ module V1
               'message' => json_response
             }
           elsif json_response['error']
-            faye_message['error'] = json_response['error']
+            faye_message['error'] = "407::#{json_response['error']}"
           else
             Faye.logger.error "APIServerError: code is #{response.code}, body is #{response.body}"
-            faye_message['error'] = "Internal error"
+            faye_message['error'] = Faye::Error.server_error
           end
         end
       end

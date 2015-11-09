@@ -6,28 +6,28 @@ RSpec.describe V1::SubscribeLogic do
     it 'Access token is invalid' do
       faye_message = {"ext"=>{"access_token"=>'invalid access_token'}, "clientId"=>"2np9pkowjpt3i7m12av5hznjf622vbh", "channel"=>"/meta/subscribe", "subscription"=>"/users/xxxx/messages"}
       subject.class.incoming(faye_message)
-      expect(faye_message['error']).to eq 'AuthenticateError: Access token is invalid.'
+      expect(faye_message['error']).to eq '401:invalid access_token:Access token is invalid'
     end
 
     it 'User is blocked' do
       user = create(:user, state: User.states[:blocked])
       faye_message = {"ext"=>{"access_token"=>user.access_tokens.first.token}, "clientId"=>"2np9pkowjpt3i7m12av5hznjf622vbh", "channel"=>"/meta/subscribe", "subscription"=>"/users/#{user.encrypted_id}/messages"}
       subject.class.incoming(faye_message)
-      expect(faye_message['error']).to eq 'AuthenticateError: User is blocked.'
+      expect(faye_message['error']).to eq '401:test-token:User is blocked'
     end
 
     it 'Channel is invalid' do
       user = create(:user)
       faye_message = {"ext"=>{"access_token"=>user.access_tokens.first.token}, "clientId"=>"2np9pkowjpe3i7m12av5hznjf622vbh", "channel"=>"/meta/subscribe", "subscription"=>"/xxxx/#{user.encrypted_id}/messages"}
       subject.class.incoming(faye_message)
-      expect(faye_message['error']).to eq 'SubscribeError: Channel is invalid.'
+      expect(faye_message['error']).to eq '405:/xxxx/e5d1c3604e0c4ee6ed5312e6416ef01f/messages:Invalid channel'
     end
 
     it 'no permission' do
       user = create(:user)
       faye_message = {"ext"=>{"access_token"=>user.access_tokens.first.token}, "clientId"=>"2np9pkowjpe3i7m12av5hznjf622vbh", "channel"=>"/meta/subscribe", "subscription"=>"/v1/users/xxxx/messages"}
       subject.class.incoming(faye_message)
-      expect(faye_message['error']).to eq 'SubscribeError: You are no permission to subscribe /v1/users/xxxx/messages.'
+      expect(faye_message['error']).to eq '403:/v1/users/xxxx/messages:Forbidden channel'
     end
   end
 end

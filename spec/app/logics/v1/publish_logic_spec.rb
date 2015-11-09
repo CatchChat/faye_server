@@ -14,7 +14,7 @@ RSpec.describe V1::PublishLogic do
         }
       }
       subject.class.incoming(faye_message)
-      expect(faye_message['error']).to eq 'PublishError: Publish token is invalid.'
+      expect(faye_message['error']).to eq "407:invalid publish_token:Publish token is invalid"
     end
 
     it 'From api server' do
@@ -40,7 +40,7 @@ RSpec.describe V1::PublishLogic do
         }
       }
       subject.class.incoming(faye_message)
-      expect(faye_message['error']).to eq 'AuthenticateError: Access token is invalid.'
+      expect(faye_message['error']).to eq '401:invalid access_token:Access token is invalid'
     end
 
     it 'User is blocked' do
@@ -54,7 +54,7 @@ RSpec.describe V1::PublishLogic do
         }
       }
       subject.class.incoming(faye_message)
-      expect(faye_message['error']).to eq 'AuthenticateError: User is blocked.'
+      expect(faye_message['error']).to eq '401:test-token:User is blocked'
     end
 
     it 'Message type is invalid' do
@@ -67,7 +67,7 @@ RSpec.describe V1::PublishLogic do
         }
       }
       subject.class.incoming(faye_message)
-      expect(faye_message['error']).to eq 'PublishError: Message type is invalid.'
+      expect(faye_message['error']).to eq "407:invalid message_type:Message type is invalid"
     end
 
     it 'PublishError: Message is invalid.' do
@@ -80,7 +80,7 @@ RSpec.describe V1::PublishLogic do
         }
       }
       subject.class.incoming(faye_message)
-      expect(faye_message['error']).to eq 'PublishError: Message is invalid.'
+      expect(faye_message['error']).to eq "407::Message is invalid"
     end
 
     it 'should send process method' do
@@ -112,7 +112,7 @@ RSpec.describe V1::PublishLogic do
         }
       }
       subject.class.send :process_message, user, faye_message
-      expect(faye_message['error']).to eq 'PublishError: Channel is invalid.'
+      expect(faye_message['error']).to eq '405:/v1/xxxx/ea8fb465c9fe1f7cab2b53fcf12b9b53/messages:Invalid channel'
     end
 
     it 'Message can not be sent to this channel' do
@@ -125,7 +125,7 @@ RSpec.describe V1::PublishLogic do
         }
       }
       subject.class.send :process_message, user, faye_message
-      expect(faye_message['error']).to eq 'PublishError: Message can not be sent to this channel.'
+      expect(faye_message['error']).to eq '403:/v1/users/ea8fb465c9fe1f7cab2b53fcf12b9b53/messages:Forbidden channel'
     end
 
     describe 'Send request to api server' do
@@ -145,7 +145,7 @@ RSpec.describe V1::PublishLogic do
          to_return(:status => 422, :body => "{\"error\":\"error\"}", :headers => {})
 
         subject.class.send :process_message, user, faye_message
-        expect(faye_message['error']).to eq 'error'
+        expect(faye_message['error']).to eq '407::error'
         expect(faye_message.has_key?('custom_data')).to eq false
 
         stub_request(:post, "#{ENV['API_SERVER_URL']}/v1/messages").
@@ -154,7 +154,7 @@ RSpec.describe V1::PublishLogic do
          to_return(:status => 422, :body => "", :headers => {})
 
         subject.class.send :process_message, user, faye_message
-        expect(faye_message['error']).to eq 'Internal error'
+        expect(faye_message['error']).to eq '500::Internal server error'
         expect(faye_message.has_key?('custom_data')).to eq false
       end
 
@@ -192,7 +192,7 @@ RSpec.describe V1::PublishLogic do
         }
       }
       subject.class.send :process_instant_state, user, faye_message
-      expect(faye_message['error']).to eq 'PublishError: Channel is invalid.'
+      expect(faye_message['error']).to eq '405:/v1/xxxx/ea8fb465c9fe1f7cab2b53fcf12b9b53/messages:Invalid channel'
     end
 
     it 'success' do
@@ -232,7 +232,7 @@ RSpec.describe V1::PublishLogic do
         }
       }
       subject.class.send :process_mark_as_read, user, faye_message
-      expect(faye_message['error']).to eq 'PublishError: Channel is invalid.'
+      expect(faye_message['error']).to eq '405:/v1/xxxx/ea8fb465c9fe1f7cab2b53fcf12b9b53/messages:Invalid channel'
     end
 
     describe 'Send request to api server' do
@@ -253,7 +253,7 @@ RSpec.describe V1::PublishLogic do
          to_return(:status => 404, :body => "{\"error\":\"Message is not found\"}", :headers => {})
 
         subject.class.send :process_mark_as_read, user, faye_message
-        expect(faye_message['error']).to eq 'Message is not found'
+        expect(faye_message['error']).to eq '407::Message is not found'
         expect(faye_message.has_key?('custom_data')).to eq false
 
         stub_request(:patch, "#{ENV['API_SERVER_URL']}/v1/User/1/messages/batch_mark_as_read").
@@ -262,7 +262,7 @@ RSpec.describe V1::PublishLogic do
          to_return(:status => 404, :body => "", :headers => {})
 
         subject.class.send :process_mark_as_read, user, faye_message
-        expect(faye_message['error']).to eq 'Internal error'
+        expect(faye_message['error']).to eq '500::Internal server error'
         expect(faye_message.has_key?('custom_data')).to eq false
       end
 
@@ -303,7 +303,7 @@ RSpec.describe V1::PublishLogic do
         }
       }
       subject.class.send :process_message_deleted, user, faye_message
-      expect(faye_message['error']).to eq 'PublishError: Channel is invalid.'
+      expect(faye_message['error']).to eq '405:/v1/xxxx/ea8fb465c9fe1f7cab2b53fcf12b9b53/messages:Invalid channel'
     end
 
     it 'Message id is invalid' do
@@ -316,7 +316,7 @@ RSpec.describe V1::PublishLogic do
         }
       }
       subject.class.send :process_message_deleted, user, faye_message
-      expect(faye_message['error']).to eq 'PublishError: Message id is invalid.'
+      expect(faye_message['error']).to eq '407::Message id is invalid'
     end
 
     describe 'Send request to api server' do
@@ -336,7 +336,7 @@ RSpec.describe V1::PublishLogic do
          to_return(:status => 404, :body => "{\"error\":\"Message is not found\"}", :headers => {})
 
         subject.class.send :process_message_deleted, user, faye_message
-        expect(faye_message['error']).to eq 'Message is not found'
+        expect(faye_message['error']).to eq '407::Message is not found'
         expect(faye_message.has_key?('custom_data')).to eq false
 
         stub_request(:delete, "#{ENV['API_SERVER_URL']}/v1/messages/xxxx?send_to_faye_server=false").
@@ -344,7 +344,7 @@ RSpec.describe V1::PublishLogic do
          to_return(:status => 404, :body => "", :headers => {})
 
         subject.class.send :process_message_deleted, user, faye_message
-        expect(faye_message['error']).to eq 'Internal error'
+        expect(faye_message['error']).to eq '500::Internal server error'
         expect(faye_message.has_key?('custom_data')).to eq false
       end
 

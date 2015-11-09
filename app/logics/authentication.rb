@@ -8,9 +8,9 @@ module Authentication
     end
 
     if user.nil?
-      faye_message['error'] = 'AuthenticateError: Access token is invalid.'
+      faye_message['error'] = Faye::Error.new(401, [token], 'Access token is invalid').to_s
     elsif user.blocked?
-      faye_message['error'] = 'AuthenticateError: User is blocked.'
+      faye_message['error'] = Faye::Error.new(401, [token], 'User is blocked').to_s
       user = nil
     end
 
