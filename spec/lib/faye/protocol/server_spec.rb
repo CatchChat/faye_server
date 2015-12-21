@@ -8,23 +8,23 @@ RSpec.describe Faye::Server do
     end
   end
 
-  describe '#process' do
-    it do
-      stub_const('FayeServer::VERSIONS', %w(v1 v2 v3))
-      original_messages = [
-        { 'channel' => '/users/abc123/messages' },
-        { 'channel' => '/meta/handshake' }
-      ]
+  # describe '#process' do
+  #   it do
+  #     stub_const('FayeServer::VERSIONS', %w(v1 v2 v3))
+  #     original_messages = [
+  #       { 'channel' => '/users/abc123/messages' },
+  #       { 'channel' => '/meta/handshake' }
+  #     ]
 
-      processed_messages = [
-        { 'channel' => '/v1/users/abc123/messages' },
-        { 'channel' => '/v2/users/abc123/messages' },
-        { 'channel' => '/v3/users/abc123/messages' },
-        { 'channel' => '/meta/handshake' }
-      ]
+  #     processed_messages = [
+  #       { 'channel' => '/v1/users/abc123/messages' },
+  #       { 'channel' => '/v2/users/abc123/messages' },
+  #       { 'channel' => '/v3/users/abc123/messages' },
+  #       { 'channel' => '/meta/handshake' }
+  #     ]
 
-      expect(subject).to receive(:process_without_dispatch).with(processed_messages, nil)
-      subject.process(original_messages, nil)
-    end
-  end
+  #     expect(subject).to receive(:process_without_dispatch).with(processed_messages, nil)
+  #     subject.process(original_messages, nil)
+  #   end
+  # end
 end
