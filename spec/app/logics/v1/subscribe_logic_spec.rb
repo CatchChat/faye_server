@@ -20,7 +20,7 @@ RSpec.describe V1::SubscribeLogic do
       user = create(:user)
       faye_message = {"ext"=>{"access_token"=>user.access_tokens.first.token}, "clientId"=>"2np9pkowjpe3i7m12av5hznjf622vbh", "channel"=>"/meta/subscribe", "subscription"=>"/xxxx/#{user.encrypted_id}/messages"}
       subject.class.incoming(faye_message)
-      expect(faye_message['error']).to eq '405:/xxxx/e5d1c3604e0c4ee6ed5312e6416ef01f/messages:Invalid channel'
+      expect(faye_message['error']).to eq "405:/xxxx/#{user.encrypted_id}/messages:Invalid channel"
     end
 
     it 'no permission' do
