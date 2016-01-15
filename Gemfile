@@ -1,4 +1,4 @@
-source "http://rubygems.org/"
+source "https://ruby.taobao.org/"
 gem 'faye', '~> 1.1.2'
 gem 'thin', '~> 1.6.3'
 gem 'faye-redis', '~> 0.2.0'
@@ -11,7 +11,7 @@ gem 'activesupport', '~> 4.2.4'
 gem 'mysql2', '~> 0.3.20'
 gem 'dotenv', '~> 2.0.2'
 gem 'rest-client', '~> 1.8.0'
-gem 'newrelic_rpm', '~> 3.12.1.298', require: false
+gem 'newrelic_rpm', '~> 3.14', '>= 3.14.1.311'
 
 group :development, :test do
   gem 'pry-byebug', '~> 3.1.0'

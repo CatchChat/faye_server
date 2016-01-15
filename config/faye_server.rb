@@ -61,10 +61,10 @@ class FayeServer
   def notice_error(error, faye_message)
     if access_token = faye_message['ext']['access_token'] rescue nil
       faye_message['ext']['access_token'] = User.encrypt_id(access_token)
-      NewRelic::Agent.notice_error(error, custom_params: faye_message)
+      NewRelic::Agent.notice_error(error, custom_params: { faye_message: faye_message.to_json })
       faye_message['ext']['access_token'] = access_token
     else
-      NewRelic::Agent.notice_error(error, custom_params: faye_message)
+      NewRelic::Agent.notice_error(error, custom_params: { faye_message: faye_message.to_json })
     end
   end
 end
