@@ -4,7 +4,6 @@ class FayeServer
   VERSIONS = %w(v1)
 
   def incoming(faye_message, callback)
-    ActiveRecord::Base.clear_active_connections!
     start_time = Time.now
     if version = check_version(faye_message)
       faye_message['custom_data'] = { 'version' => version }
