@@ -15,6 +15,4 @@ bayeux.add_websocket_extension(PermessageDeflate)
 Faye::WebSocket.load_adapter('thin')
 
 bayeux.add_extension(FayeServer.new)
-
-use ActiveRecord::ConnectionAdapters::ConnectionManagement
 run bayeux

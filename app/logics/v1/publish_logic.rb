@@ -8,6 +8,7 @@ module V1
 
     class << self
       def incoming(faye_message)
+        ActiveRecord::Base.clear_active_connections!
         data = faye_message['data']
         unless MESSAGE_TYPES.include?(data['message_type'])
           faye_message['error'] = "407:#{data['message_type']}:Message type is invalid"
