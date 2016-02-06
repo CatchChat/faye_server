@@ -12,7 +12,7 @@
 # used to set extended properties on the server.
 
 set :deploy_to, '/u/apps/faye_server_staging'
-server 'staging.catchchat-server.me', user: 'deploy', roles: %w{web app db}
+server 'staging-deploy', user: 'deploy', roles: %w{web app db}
 
 
 # Custom SSH Options

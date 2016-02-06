@@ -11,7 +11,7 @@
 # used to set extended properties on the server.
 
 set :deploy_to, '/u/apps/faye_server'
-server 'faye.catchchatchina.com', user: 'deploy', roles: %w{web app db}
+server 'faye-deploy', user: 'deploy', roles: %w{web app db}
 
 
 # Custom SSH Options
