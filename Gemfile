@@ -1,6 +1,6 @@
 source "https://ruby.taobao.org/"
 gem 'faye', '~> 1.1.2'
-gem 'thin', '~> 1.6.3'
+gem 'thin', '~> 1.6.4'
 gem 'faye-redis', '~> 0.2.0'
 gem 'permessage_deflate', '~> 0.1.1'
 gem 'capistrano', '~> 3.4.0'
