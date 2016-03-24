@@ -10,17 +10,16 @@ RSpec.describe Faye::Server do
 
   describe '#process' do
     it do
-      stub_const('FayeServer::VERSIONS', %w(v1 v2 v3))
       original_messages = [
-        { 'channel' => '/users/abc123/messages' },
-        { 'channel' => '/meta/handshake' }
+        { 'channel' => ['/users/abc123/messages', '/users/abc456/messages'] },
+        { 'channel' => ['/circles/abc123/messages', '/circles/abc456/messages'] }
       ]
 
       processed_messages = [
-        { 'channel' => '/v1/users/abc123/messages' },
-        { 'channel' => '/v2/users/abc123/messages' },
-        { 'channel' => '/v3/users/abc123/messages' },
-        { 'channel' => '/meta/handshake' }
+        { 'channel' => '/users/abc123/messages' },
+        { 'channel' => '/users/abc456/messages' },
+        { 'channel' => '/circles/abc123/messages' },
+        { 'channel' => '/circles/abc456/messages' }
       ]
 
       expect(subject).to receive(:process_without_dispatch).with(processed_messages, nil)

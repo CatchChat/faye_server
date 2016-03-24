@@ -58,7 +58,7 @@ RSpec.describe V1::PublishLogic do
         expect(faye_message['error']).to eq "407::Message is invalid"
       end
 
-      it 'should send process method' do
+      it 'should send process method when no error' do
         faye_message = {
           "channel" => "/v1/users/ea8fb465c9fe1f7cab2b53fcf12b9b53/messages",
           "ext"     => {"access_token"=>user.access_tokens.first.token},
@@ -118,27 +118,56 @@ RSpec.describe V1::PublishLogic do
       expect(faye_message['error']).to eq '405:/v1/xxxx/ea8fb465c9fe1f7cab2b53fcf12b9b53/messages:Invalid channel'
     end
 
-    it 'success' do
-      faye_message = {
-        "channel" => "/v1/users/ea8fb465c9fe1f7cab2b53fcf12b9b53/messages",
-        "ext"     => {"access_token"=>user.access_tokens.first.token},
-        "data"    => {
-          "message_type" => "instant_state",
-          "message"      => { "state" => "typing" }
-        }
-      }
-      subject.class.send :process_instant_state, user, faye_message
-      expect(faye_message['data']).to eq({
-        'message_type' => 'instant_state',
-        'message' => {
-          'state' => 'typing',
-          'user' => {
-            'id' => user.encrypted_id,
-            'username' => user.username,
-            'nickname' => user.nickname
+    describe 'success' do
+      it 'channel with version' do
+        faye_message = {
+          "channel" => "/v1/users/ea8fb465c9fe1f7cab2b53fcf12b9b53/messages",
+          "ext"     => {"access_token"=>user.access_tokens.first.token},
+          "data"    => {
+            "message_type" => "instant_state",
+            "message"      => { "state" => "typing" }
           }
         }
-      })
+
+        subject.class.send :process_instant_state, user, faye_message
+        expect(faye_message['channel']).to eq "/v1/users/ea8fb465c9fe1f7cab2b53fcf12b9b53/messages"
+        expect(faye_message['data']).to eq({
+          'message_type' => 'instant_state',
+          'message' => {
+            'state' => 'typing',
+            'user' => {
+              'id' => user.encrypted_id,
+              'username' => user.username,
+              'nickname' => user.nickname
+            }
+          }
+        })
+      end
+
+      it 'channel without version' do
+        faye_message = {
+          "channel" => "/users/ea8fb465c9fe1f7cab2b53fcf12b9b53/messages",
+          "ext"     => {"access_token"=>user.access_tokens.first.token},
+          "data"    => {
+            "message_type" => "instant_state",
+            "message"      => { "state" => "typing" }
+          }
+        }
+
+        subject.class.send :process_instant_state, user, faye_message
+        expect(faye_message['channel']).to eq "/v1/users/ea8fb465c9fe1f7cab2b53fcf12b9b53/messages"
+        expect(faye_message['data']).to eq({
+          'message_type' => 'instant_state',
+          'message' => {
+            'state' => 'typing',
+            'user' => {
+              'id' => user.encrypted_id,
+              'username' => user.username,
+              'nickname' => user.nickname
+            }
+          }
+        })
+      end
     end
   end
 end

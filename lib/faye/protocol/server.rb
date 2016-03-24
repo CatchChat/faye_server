@@ -10,14 +10,10 @@ module Faye
       original_messages = [messages].flatten
       messages = []
       original_messages.each do |message|
-        if /\A\/(users|circles)\/\S+\/messages\z/ =~ message['channel']
-          FayeServer::VERSIONS.each do |version|
-            _message = message.dup
-            _message['channel'] = "/#{version}#{_message['channel']}"
-            messages << _message
-          end
-        else
-          messages << message
+        Array(message['channel']).each do |channel|
+          _message = message.dup
+          _message['channel'] = channel
+          messages << _message
         end
       end
 
