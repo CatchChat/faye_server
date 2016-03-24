@@ -4,11 +4,20 @@ describe V1::ServerLogic do
 
   describe '.incoming' do
 
-    it 'publish' do
-      faye_message = { 'channel' => '/v1/users/xxxx/messages' }
-      expect(V1::PublishLogic).to receive(:incoming).with(faye_message)
-      subject.class.incoming(faye_message)
-      expect(faye_message['error']).to eq nil
+    describe 'publish' do
+      it 'channel with version' do
+        faye_message = { 'channel' => '/v1/users/xxxx/messages' }
+        expect(V1::PublishLogic).to receive(:incoming).with(faye_message)
+        subject.class.incoming(faye_message)
+        expect(faye_message['error']).to eq nil
+      end
+
+      it 'channel without version' do
+        faye_message = { 'channel' => '/users/xxxx/messages' }
+        expect(V1::PublishLogic).to receive(:incoming).with(faye_message)
+        subject.class.incoming(faye_message)
+        expect(faye_message['error']).to eq nil
+      end
     end
 
     it 'subscribe' do
