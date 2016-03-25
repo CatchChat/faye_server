@@ -11,9 +11,17 @@ module Faye
       messages = []
       original_messages.each do |message|
         Array(message['channel']).each do |channel|
-          _message = message.dup
-          _message['channel'] = channel
-          messages << _message
+          if /\A\/(users|circles)\/\S+\/messages\z/ =~ channel
+            FayeServer::VERSIONS.each do |version|
+              _message = message.dup
+              _message['channel'] = "/#{version}#{channel}"
+              messages << _message
+            end
+          else
+            _message = message.dup
+            _message['channel'] = channel
+            messages << _message
+          end
         end
       end
 

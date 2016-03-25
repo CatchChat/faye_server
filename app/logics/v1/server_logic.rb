@@ -21,14 +21,14 @@ module V1
       private
 
       def valid_channel?(channel)
-        %w(/meta/connect /meta/disconnect /meta/handshake /meta/subscribe /meta/unsubscribe).include?(channel) || /\A(\/v1)?\/users|circles\/\S+\/messages\z/ =~ channel
+        %w(/meta/connect /meta/disconnect /meta/handshake /meta/subscribe /meta/unsubscribe).include?(channel) || /\A(\/v1)?\/(users|circles)\/\S+\/messages\z/ =~ channel
       end
 
       def find_logic_class(channel)
         case channel
         when '/meta/subscribe'
           V1::SubscribeLogic
-        when /\A(\/v1)?\/users|circles\/\S+\/messages\z/
+        when /\A(\/v1)?\/(users|circles)\/\S+\/messages\z/
           V1::PublishLogic
         end
       end
