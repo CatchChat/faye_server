@@ -26,6 +26,7 @@ NewRelic::Agent.manual_start
 require 'db_connection'
 require 'encrypted_id'
 require 'access_token'
+require 'circle'
 require 'circles_user'
 require 'user'
 require_relative 'faye_server'

@@ -45,6 +45,8 @@ module V1
       #   data
       #     message_type    instant_state
       #     message
+      #       recipient_type
+      #       recipient_id
       #       state
       # Out faye_message:
       #   ext
@@ -52,21 +54,25 @@ module V1
       #     message_type    instant_state
       #     message
       #       state
+      #       recipient_type
+      #       recipient_id
       #       user
       #         id
       #         nickname
       #         username
       def process_instant_state(user, faye_message)
-        unless /\A(\/v1)?\/(?<recipient_type>users|circles)\/(?<recipient_id>\S+)\/messages\z/ =~ faye_message['channel']
+        unless /\A\/v1\/(?<recipient_type>users)\/(?<recipient_id>\S+)\/messages\z/ =~ faye_message['channel']
           faye_message['error'] = Faye::Error.channel_invalid(faye_message['channel'])
           return
         end
 
-        faye_message['channel'] = "/v1/#{recipient_type}/#{recipient_id}/messages"
+        message = faye_message['data']['message']
         faye_message['data'] = {
           'message_type' => 'instant_state',
           'message' => {
-            'state' => faye_message['data']['message']['state'],
+            'state' => message['state'],
+            'recipient_type' => message['recipient_type'],
+            'recipient_id' => message['recipient_id'],
             'user' => {
               'id' => user.encrypted_id,
               'username' => user.username,

@@ -1,4 +1,6 @@
 RSpec.describe Faye::Server do
+  let(:user) { create(:user) }
+  let(:circle) { create(:circle) }
 
   describe '#make_response' do
     it do
@@ -10,28 +12,31 @@ RSpec.describe Faye::Server do
 
   describe '#process' do
     it do
-      stub_const('FayeServer::VERSIONS', %w(v1 v2 v3))
+      user1 = create(:user)
+      circle.users << user << user1
+      stub_const('FayeServer::VERSIONS', %w(v1 v2))
       original_messages = [
-        { 'channel' => ['/users/abc123/messages', '/users/abc456/messages'] },
-        { 'channel' => ['/circles/abc123/messages', '/circles/abc456/messages'] },
-        { 'channel' => ['/v1/users/abc123/messages', '/v1/circles/abc123/messages'] }
+        { 'channel' => '/messages', 'data' => { 'message_type' => 'message', 'message' => { 'recipient_type' => 'User', 'recipient_id' => user.encrypted_id  } } },
+        { 'channel' => '/messages', 'data' => { 'message_type' => 'instant_state', 'message' => { 'recipient_type' => 'User', 'recipient_id' => user.encrypted_id  } } },
+        { 'channel' => '/messages', 'data' => { 'message_type' => 'message', 'message' => { 'recipient_type' => 'Circle', 'recipient_id' => circle.encrypted_id  } } },
+        { 'channel' => '/messages', 'data' => { 'message_type' => 'instant_state', 'message' => { 'recipient_type' => 'Circle', 'recipient_id' => circle.encrypted_id  } } },
+        { 'channel' => '/subscribe', 'data' => { 'message_type' => 'message', 'message' => { 'recipient_type' => 'Circle', 'recipient_id' => circle.encrypted_id  } } }
       ]
 
       processed_messages = [
-        { 'channel' => '/v1/users/abc123/messages' },
-        { 'channel' => '/v2/users/abc123/messages' },
-        { 'channel' => '/v3/users/abc123/messages' },
-        { 'channel' => '/v1/users/abc456/messages' },
-        { 'channel' => '/v2/users/abc456/messages' },
-        { 'channel' => '/v3/users/abc456/messages' },
-        { 'channel' => '/v1/circles/abc123/messages' },
-        { 'channel' => '/v2/circles/abc123/messages' },
-        { 'channel' => '/v3/circles/abc123/messages' },
-        { 'channel' => '/v1/circles/abc456/messages' },
-        { 'channel' => '/v2/circles/abc456/messages' },
-        { 'channel' => '/v3/circles/abc456/messages' },
-        { 'channel' => '/v1/users/abc123/messages' },
-        { 'channel' => '/v1/circles/abc123/messages' },
+        { 'channel' => "/v1/users/#{user.encrypted_id}/messages", 'data' => { 'message_type' => 'message', 'message' => { 'recipient_type' => 'User', 'recipient_id' => user.encrypted_id  } } },
+        { 'channel' => "/v2/users/#{user.encrypted_id}/messages", 'data' => { 'message_type' => 'message', 'message' => { 'recipient_type' => 'User', 'recipient_id' => user.encrypted_id  } } },
+        { 'channel' => "/v1/users/#{user.encrypted_id}/messages", 'data' => { 'message_type' => 'instant_state', 'message' => { 'recipient_type' => 'User', 'recipient_id' => user.encrypted_id  } } },
+        { 'channel' => "/v2/users/#{user.encrypted_id}/messages", 'data' => { 'message_type' => 'instant_state', 'message' => { 'recipient_type' => 'User', 'recipient_id' => user.encrypted_id  } } },
+        { 'channel' => "/v1/users/#{user.encrypted_id}/messages", 'data' => { 'message_type' => 'message', 'message' => { 'recipient_type' => 'Circle', 'recipient_id' => circle.encrypted_id  } } },
+        { 'channel' => "/v2/users/#{user.encrypted_id}/messages", 'data' => { 'message_type' => 'message', 'message' => { 'recipient_type' => 'Circle', 'recipient_id' => circle.encrypted_id  } } },
+        { 'channel' => "/v1/users/#{user1.encrypted_id}/messages", 'data' => { 'message_type' => 'message', 'message' => { 'recipient_type' => 'Circle', 'recipient_id' => circle.encrypted_id  } } },
+        { 'channel' => "/v2/users/#{user1.encrypted_id}/messages", 'data' => { 'message_type' => 'message', 'message' => { 'recipient_type' => 'Circle', 'recipient_id' => circle.encrypted_id  } } },
+        { 'channel' => "/v1/users/#{user.encrypted_id}/messages", 'data' => { 'message_type' => 'instant_state', 'message' => { 'recipient_type' => 'Circle', 'recipient_id' => circle.encrypted_id  } } },
+        { 'channel' => "/v2/users/#{user.encrypted_id}/messages", 'data' => { 'message_type' => 'instant_state', 'message' => { 'recipient_type' => 'Circle', 'recipient_id' => circle.encrypted_id  } } },
+        { 'channel' => "/v1/users/#{user1.encrypted_id}/messages", 'data' => { 'message_type' => 'instant_state', 'message' => { 'recipient_type' => 'Circle', 'recipient_id' => circle.encrypted_id  } } },
+        { 'channel' => "/v2/users/#{user1.encrypted_id}/messages", 'data' => { 'message_type' => 'instant_state', 'message' => { 'recipient_type' => 'Circle', 'recipient_id' => circle.encrypted_id  } } },
+        { 'channel' => '/subscribe', 'data' => { 'message_type' => 'message', 'message' => { 'recipient_type' => 'Circle', 'recipient_id' => circle.encrypted_id  } } }
       ]
 
       expect(subject).to receive(:process_without_dispatch).with(processed_messages, nil)

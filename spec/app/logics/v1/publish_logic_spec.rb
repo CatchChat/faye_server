@@ -104,10 +104,9 @@ RSpec.describe V1::PublishLogic do
   end
 
   describe '.process_instant_state' do
-
     it 'Channel is invalid' do
       faye_message = {
-        "channel" => "/v1/xxxx/ea8fb465c9fe1f7cab2b53fcf12b9b53/messages",
+        "channel" => "/users/ea8fb465c9fe1f7cab2b53fcf12b9b53/messages",
         "ext"     => {"access_token"=>user.access_tokens.first.token},
         "data"    => {
           "message_type" => "instant_state",
@@ -115,7 +114,7 @@ RSpec.describe V1::PublishLogic do
         }
       }
       subject.class.send :process_instant_state, user, faye_message
-      expect(faye_message['error']).to eq '405:/v1/xxxx/ea8fb465c9fe1f7cab2b53fcf12b9b53/messages:Invalid channel'
+      expect(faye_message['error']).to eq '405:/users/ea8fb465c9fe1f7cab2b53fcf12b9b53/messages:Invalid channel'
     end
 
     describe 'success' do
@@ -125,7 +124,7 @@ RSpec.describe V1::PublishLogic do
           "ext"     => {"access_token"=>user.access_tokens.first.token},
           "data"    => {
             "message_type" => "instant_state",
-            "message"      => { "state" => "typing" }
+            "message"      => { "state" => "typing", "recipient_type" => "users", "recipient_id" => "123" }
           }
         }
 
@@ -135,31 +134,8 @@ RSpec.describe V1::PublishLogic do
           'message_type' => 'instant_state',
           'message' => {
             'state' => 'typing',
-            'user' => {
-              'id' => user.encrypted_id,
-              'username' => user.username,
-              'nickname' => user.nickname
-            }
-          }
-        })
-      end
-
-      it 'channel without version' do
-        faye_message = {
-          "channel" => "/users/ea8fb465c9fe1f7cab2b53fcf12b9b53/messages",
-          "ext"     => {"access_token"=>user.access_tokens.first.token},
-          "data"    => {
-            "message_type" => "instant_state",
-            "message"      => { "state" => "typing" }
-          }
-        }
-
-        subject.class.send :process_instant_state, user, faye_message
-        expect(faye_message['channel']).to eq "/v1/users/ea8fb465c9fe1f7cab2b53fcf12b9b53/messages"
-        expect(faye_message['data']).to eq({
-          'message_type' => 'instant_state',
-          'message' => {
-            'state' => 'typing',
+            "recipient_type" => "users",
+            "recipient_id" => "123",
             'user' => {
               'id' => user.encrypted_id,
               'username' => user.username,
