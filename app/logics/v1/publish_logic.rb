@@ -30,6 +30,8 @@ module V1
               faye_message['error'] = "407:#{faye_message['ext']['publish_token']}:Publish token is invalid"
             end
           end
+
+          process_mark_as_read(faye_message) if data['message_type'] == 'mark_as_read'
         end
       end
 
@@ -79,6 +81,38 @@ module V1
               'nickname' => user.nickname
             }
           }
+        }
+      end
+
+      ## Process mark as read message
+      # In faye_message:
+      #   ext
+      #   data
+      #     message_type    mark_as_read
+      #     message
+      #       last_read_at
+      #       last_read_id
+      #       recipient_type
+      #       recipient_id
+      #       conversation
+      #         type
+      #         id
+      # Out faye_message:
+      #   ext
+      #   data
+      #     message_type    mark_as_read
+      #     message
+      #       last_read_at
+      #       last_read_id
+      #       recipient_type
+      #       recipient_id
+      def process_mark_as_read(faye_message)
+        message = faye_message['data']['message']
+        faye_message['data']['message'] = {
+          'last_read_at'   => message['last_read_at'],
+          'last_read_id'   => message['last_read_id'],
+          'recipient_type' => message['conversation']['type'],
+          'recipient_id'   => message['conversation']['id'],
         }
       end
     end

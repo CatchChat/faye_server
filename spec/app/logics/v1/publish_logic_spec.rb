@@ -88,17 +88,55 @@ RSpec.describe V1::PublishLogic do
         expect(faye_message['error']).to eq "407:invalid publish_token:Publish token is invalid"
       end
 
-      it 'success' do
-        faye_message = {
-          "channel" => "/v1/users/ea8fb465c9fe1f7cab2b53fcf12b9b53/messages",
-          "ext"     => {"publish_token"=>ENV['PUBLISH_TOKEN']},
-          "data"    => {
-            "message_type" => "message",
-            "message"      => {},
+      context 'message_type is mark_as_read' do
+        it 'success' do
+          faye_message = {
+            "channel" => "/v1/users/ea8fb465c9fe1f7cab2b53fcf12b9b53/messages",
+            "ext"     => {"publish_token"=>ENV['PUBLISH_TOKEN']},
+            "data"    => {
+              "message_type" => "mark_as_read",
+              "message" => {
+                "last_read_at" => 11111.111,
+                "last_read_id" => 11111,
+                "recipient_type" => "User",
+                "recipient_id" => "ea8fb465c9fe1f7cab2b53fcf12b9b53",
+                "conversation" => {
+                  "type" => "User",
+                  "id" => "ea8fb465c9fe1f7cab2b53fcf12b9b00"
+                }
+              },
+            }
           }
-        }
-        subject.class.incoming(faye_message)
-        expect(faye_message).to eq faye_message
+          subject.class.incoming(faye_message)
+          expect(faye_message).to eq({
+            "channel" => "/v1/users/ea8fb465c9fe1f7cab2b53fcf12b9b53/messages",
+            "ext"     => {"publish_token"=>ENV['PUBLISH_TOKEN']},
+            "data"    => {
+              "message_type" => "mark_as_read",
+              "message" => {
+                "last_read_at" => 11111.111,
+                "last_read_id" => 11111,
+                "recipient_type" => "User",
+                "recipient_id" => "ea8fb465c9fe1f7cab2b53fcf12b9b00"
+              },
+            }
+          })
+        end
+      end
+
+      context 'message_type is other' do
+        it 'success' do
+          faye_message = {
+            "channel" => "/v1/users/ea8fb465c9fe1f7cab2b53fcf12b9b53/messages",
+            "ext"     => {"publish_token"=>ENV['PUBLISH_TOKEN']},
+            "data"    => {
+              "message_type" => "message",
+              "message"      => {},
+            }
+          }
+          subject.class.incoming(faye_message)
+          expect(faye_message).to eq faye_message
+        end
       end
     end
   end
