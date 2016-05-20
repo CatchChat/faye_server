@@ -50,6 +50,9 @@ module Faye
       end
 
       result
+    rescue => ex
+      Faye.logger.error "#{ex.inspect}\nBacktrace:\n#{ex.backtrace * "\n"}"
+      []
     end
   end
 end
