@@ -12,8 +12,8 @@ servers: 1
 onebyone: true
 port: 8000
 threaded: true
-no-epoll: true
-daemonize: true
+no-epoll: false
+daemonize: false
 #socket: tmp/sockets/thin.sock
 chdir: /u/apps/faye_server_staging/current
 tag: faye

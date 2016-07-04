@@ -1,6 +1,0 @@
-[supervisord]
-nodaemon=true
-[program:faye_server.3000]
-command=bundle exec thin start --max-conns 16384 --max-persistent-conns 16384 --threaded -p 3000
-[program:faye_server.3001]
-command=bundle exec thin start --max-conns 16384 --max-persistent-conns 16384 --threaded -p 3001
