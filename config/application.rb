@@ -14,8 +14,11 @@ require 'faye/redis'
 require 'faye/websocket'
 require 'mysql2'
 require 'permessage_deflate'
-require 'dotenv'
-Dotenv.load ".env.#{ENV['RACK_ENV']}", '.env'
+
+if File.exist?(".env.#{ENV['RACK_ENV']}") || File.exist?('.env')
+  require 'dotenv'
+  Dotenv.load ".env.#{ENV['RACK_ENV']}", '.env'
+end
 
 require 'logger'
 Faye.logger = Logger.new("log/#{rack_env}.log")
